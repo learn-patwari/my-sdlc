@@ -8,6 +8,7 @@ using SprintForge.Infrastructure.Data;
 using SprintForge.Wpf.ViewModels;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SprintForge.Wpf;
 
@@ -16,8 +17,48 @@ public partial class App : System.Windows.Application
     private IHost? _host;
     private IServiceScope? _appScope;
 
+    private static readonly string CrashLogPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "SprintForge", "crash.log");
+
+    private static void WriteCrashLog(string context, Exception ex)
+    {
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(CrashLogPath)!);
+            File.AppendAllText(CrashLogPath,
+                $"[{DateTimeOffset.Now:o}] [{context}] {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}\n\n");
+        }
+        catch { /* last-resort log; swallow if disk is full */ }
+    }
+
     protected override async void OnStartup(StartupEventArgs e)
     {
+        // Wire up global exception handlers before anything else runs so every
+        // crash path is captured and logged rather than silently killing the process.
+        DispatcherUnhandledException += (_, args) =>
+        {
+            WriteCrashLog("DispatcherUnhandled", args.Exception);
+            System.Windows.MessageBox.Show(
+                $"An unexpected error occurred:\n\n{args.Exception.Message}\n\nDetails have been written to:\n{CrashLogPath}",
+                "SprintForge — Unexpected Error",
+                System.Windows.MessageBoxButton.OK,
+                System.Windows.MessageBoxImage.Error);
+            args.Handled = true; // prevent process termination for non-fatal UI exceptions
+        };
+
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            if (args.ExceptionObject is Exception ex)
+                WriteCrashLog("AppDomainUnhandled", ex);
+        };
+
+        TaskScheduler.UnobservedTaskException += (_, args) =>
+        {
+            WriteCrashLog("UnobservedTask", args.Exception);
+            args.SetObserved(); // prevent process termination
+        };
+
         base.OnStartup(e);
         try
         {
@@ -54,13 +95,23 @@ public partial class App : System.Windows.Application
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        _appScope?.Dispose();
-        if (_host is not null)
+        try
         {
-            await _host.StopAsync(TimeSpan.FromSeconds(5));
-            _host.Dispose();
+            _appScope?.Dispose();
+            if (_host is not null)
+            {
+                await _host.StopAsync(TimeSpan.FromSeconds(5));
+                _host.Dispose();
+            }
         }
-        base.OnExit(e);
+        catch (Exception ex)
+        {
+            WriteCrashLog("OnExit", ex);
+        }
+        finally
+        {
+            base.OnExit(e);
+        }
     }
 
     private static async Task EnsureDefaultProfileAsync(IServiceProvider sp)

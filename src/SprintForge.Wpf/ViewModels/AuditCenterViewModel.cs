@@ -6,9 +6,10 @@ using System.Collections.ObjectModel;
 
 namespace SprintForge.Wpf.ViewModels;
 
-public sealed partial class AuditCenterViewModel : ObservableObject
+public sealed partial class AuditCenterViewModel : ObservableObject, IDisposable
 {
     private readonly IAuditDashboardService _dashboard;
+    private CancellationTokenSource _cts = new();
     private IReadOnlyList<AuditRecord> _allRecords = [];
 
     [ObservableProperty]
@@ -35,17 +36,24 @@ public sealed partial class AuditCenterViewModel : ObservableObject
     public AuditCenterViewModel(IAuditDashboardService dashboard)
     {
         _dashboard = dashboard;
-        _ = LoadAsync();
+        _ = LoadAsync(_cts.Token);
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
-    public async Task LoadAsync()
+    public async Task LoadAsync(CancellationToken ct = default)
     {
         try
         {
             StatusMessage = "Loading…";
             var result = await _dashboard.GetTimelineAsync(pageSize: 200);
+            ct.ThrowIfCancellationRequested();
             if (result.IsSuccess)
             {
                 _allRecords = result.Value ?? [];
@@ -57,6 +65,10 @@ public sealed partial class AuditCenterViewModel : ObservableObject
             {
                 StatusMessage = $"Error: {result.Error}";
             }
+        }
+        catch (OperationCanceledException)
+        {
+            // ViewModel was disposed (user navigated away); silently discard.
         }
         catch (Exception ex)
         {
@@ -67,30 +79,34 @@ public sealed partial class AuditCenterViewModel : ObservableObject
     [RelayCommand]
     private async Task RefreshAsync()
     {
-        await LoadAsync();
+        await LoadAsync(_cts.Token);
     }
 
     [RelayCommand]
     private void ShowTab(string tab)
     {
         ActiveTab = tab;
-        _ = LoadTabAsync(tab);
+        // Cancel any in-flight load, then start fresh for the new tab.
+        _cts.Cancel();
+        _cts.Dispose();
+        _cts = new CancellationTokenSource();
+        _ = LoadTabAsync(tab, _cts.Token);
     }
 
-    private async Task LoadTabAsync(string tab)
+    private async Task LoadTabAsync(string tab, CancellationToken ct = default)
     {
         try
         {
             StatusMessage = "Loading…";
             var result = tab switch
             {
-                "Jira"      => await _dashboard.GetJiraChangesAsync(pageSize: 100),
-                "AI Prompts"=> await _dashboard.GetAiPromptsAsync(pageSize: 100),
-                "Approvals" => await _dashboard.GetApprovalHistoryAsync(100),
-                "Rollbacks" => await _dashboard.GetRollbackHistoryAsync(100),
-                _           => await _dashboard.GetTimelineAsync(pageSize: 200)
+                "Jira"       => await _dashboard.GetJiraChangesAsync(pageSize: 100),
+                "AI Prompts" => await _dashboard.GetAiPromptsAsync(pageSize: 100),
+                "Approvals"  => await _dashboard.GetApprovalHistoryAsync(100),
+                "Rollbacks"  => await _dashboard.GetRollbackHistoryAsync(100),
+                _            => await _dashboard.GetTimelineAsync(pageSize: 200)
             };
-
+            ct.ThrowIfCancellationRequested();
             if (result.IsSuccess)
             {
                 _allRecords = result.Value ?? [];
@@ -102,6 +118,10 @@ public sealed partial class AuditCenterViewModel : ObservableObject
             {
                 StatusMessage = $"Error: {result.Error}";
             }
+        }
+        catch (OperationCanceledException)
+        {
+            // Tab switched again before this one finished; discard silently.
         }
         catch (Exception ex)
         {

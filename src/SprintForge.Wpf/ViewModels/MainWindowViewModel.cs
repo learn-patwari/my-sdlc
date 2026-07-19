@@ -53,6 +53,10 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
         item.IsActive = true;
 
+        // Dispose the outgoing page if it owns resources (e.g. CancellationTokenSource).
+        if (CurrentPage is IDisposable outgoing)
+            outgoing.Dispose();
+
         var vm = _services.GetRequiredService(item.ViewModelType);
 
         if (vm is PlaceholderViewModel placeholder)
