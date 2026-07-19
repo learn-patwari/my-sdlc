@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SprintForge.Application.Configuration;
-using SprintForge.Domain.Common;
+using System.Collections.ObjectModel;
 
 namespace SprintForge.Wpf.ViewModels;
 
@@ -9,40 +9,92 @@ public sealed partial class SettingsViewModel : ObservableObject
 {
     private readonly IProfileStore _profileStore;
 
-    [ObservableProperty]
-    private string _jiraUrl = "https://jira.sdc.com";
+    // ── Tab navigation ──────────────────────────────────────────────────────
+    [ObservableProperty] private string _activeTab = "General";
 
-    [ObservableProperty]
-    private string _jiraUsername = "akshay.patwari@sdc.com";
+    // ── General ─────────────────────────────────────────────────────────────
+    [ObservableProperty] private string _profileName      = "Default";
+    [ObservableProperty] private string _workingDirectory = @"C:\Users\akshay.patwari\AppData\Roaming\SprintForge";
+    [ObservableProperty] private string _userDisplayName  = "Akshay Patwari";
+    [ObservableProperty] private string _userEmail        = "akshay.patwari@sdc.com";
+    [ObservableProperty] private int    _retentionDays    = 365;
 
-    [ObservableProperty]
-    private string _jiraApiToken = "";
+    // ── Jira ────────────────────────────────────────────────────────────────
+    [ObservableProperty] private string _jiraUrl               = "https://jira.sdc.com";
+    [ObservableProperty] private string _jiraUsername          = "akshay.patwari@sdc.com";
+    [ObservableProperty] private string _jiraApiToken          = "";
+    [ObservableProperty] private string _jiraProjectKeys       = "RBP, FNT, NOT, AUM";
+    [ObservableProperty] private string _jiraDefaultIssueType  = "Story";
+    [ObservableProperty] private string _jiraDefaultPriority   = "Medium";
+    [ObservableProperty] private string _jiraDefaultLabels     = "";
+    [ObservableProperty] private string _jiraDefaultComponents = "";
+    [ObservableProperty] private string _jiraStoryPointsField  = "customfield_10016";
+    [ObservableProperty] private string _jiraSprintField       = "customfield_10020";
+    [ObservableProperty] private string _jiraEpicLinkField     = "customfield_10014";
+    [ObservableProperty] private string _connectionStatus      = "Not tested";
+    [ObservableProperty] private bool   _isConnected;
 
-    [ObservableProperty]
-    private string _connectionStatus = "Not tested";
+    public IReadOnlyList<string> JiraIssueTypes { get; } = ["Story", "Task", "Sub-task", "Bug", "Epic"];
+    public IReadOnlyList<string> JiraPriorities  { get; } = ["Highest", "High", "Medium", "Low", "Lowest"];
 
-    [ObservableProperty]
-    private bool _isConnected;
+    // ── AI Provider ─────────────────────────────────────────────────────────
+    [ObservableProperty] private string _aiVendor      = "Anthropic";
+    [ObservableProperty] private string _aiEndpoint    = "https://api.anthropic.com";
+    [ObservableProperty] private string _aiApiKey      = "";
+    [ObservableProperty] private string _aiModel       = "claude-sonnet-5";
+    [ObservableProperty] private double _aiTemperature = 0.7;
+    [ObservableProperty] private int    _aiMaxTokens   = 8192;
 
-    [ObservableProperty]
-    private string _activeTab = "Integrations";
+    public IReadOnlyList<string> AiVendors       { get; } = ["Anthropic", "OpenAI", "Azure OpenAI", "Gemini", "Ollama"];
+    public IReadOnlyList<string> AnthropicModels { get; } = ["claude-sonnet-5", "claude-opus-4-8", "claude-haiku-4-5-20251001"];
+    public IReadOnlyList<string> OpenAiModels    { get; } = ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "o1-preview"];
 
-    // General tab
-    [ObservableProperty]
-    private string _profileName = "Default";
+    // ── Repositories ────────────────────────────────────────────────────────
+    public ObservableCollection<RepositoryEntry> Repositories { get; } = [];
+    [ObservableProperty] private string _newRepoName      = "";
+    [ObservableProperty] private string _newRepoUrl       = "";
+    [ObservableProperty] private string _newRepoBranch    = "main";
+    [ObservableProperty] private string _newRepoTechStack = "Java";
+    [ObservableProperty] private string _newRepoType      = "GitHub";
 
-    [ObservableProperty]
-    private string _workingDirectory = @"C:\Users\akshay.patwari\AppData\Roaming\SprintForge";
+    public IReadOnlyList<string> TechStacks { get; } =
+        ["Java", "Python", "TypeScript / React", "TypeScript / Angular", "Vue.js", "Go", "C# / .NET", "Other"];
+    public IReadOnlyList<string> RepoTypes { get; } = ["GitHub", "GitLab", "Bitbucket", "Azure DevOps"];
 
-    // Preferences tab
-    [ObservableProperty]
-    private string _minimumLogLevel = "Information";
+    // ── SRS Config ──────────────────────────────────────────────────────────
+    [ObservableProperty] private string _srsIdFormat            = "SRS-{PROJECT}-{NUMBER:D4}";
+    [ObservableProperty] private string _srsDefaultProject      = "";
+    [ObservableProperty] private string _srsDescriptionTemplate =
+        "## Overview\n{description}\n\n## Services Involved\n{services}\n\n## Functional Requirements\n{requirements}\n\n## Limitations & Out of Scope\n{limitations}";
+    [ObservableProperty] private string _srsInvolvedServices    = "";
+    [ObservableProperty] private string _srsLimitationsTemplate =
+        "The following are explicitly out of scope for this deliverable:\n- {item}";
 
-    [ObservableProperty]
-    private bool _autoSave = true;
+    // ── Sprint ──────────────────────────────────────────────────────────────
+    [ObservableProperty] private int    _sprintDurationDays       = 14;
+    [ObservableProperty] private int    _sprintDevelopmentDays    = 10;
+    [ObservableProperty] private int    _sprintBufferDays         = 2;
+    [ObservableProperty] private int    _sprintWorkingHoursPerDay = 8;
+    [ObservableProperty] private string _sprintPlanSource         = "Text";
+    [ObservableProperty] private string _sprintPlanText           = "";
+    [ObservableProperty] private string _confluenceUrl            = "";
+    [ObservableProperty] private string _confluenceUsername       = "";
+    [ObservableProperty] private string _confluenceSpaceKey       = "";
+    [ObservableProperty] private bool   _autoCreateSubtasks       = true;
+    [ObservableProperty] private string _defaultSubtaskTypes      = "Development, Code Review, Unit Tests, Documentation";
 
-    [ObservableProperty]
-    private int _retentionDays = 365;
+    public IReadOnlyList<string> SprintPlanSources { get; } = ["Text", "Confluence"];
+
+    // ── Testing ─────────────────────────────────────────────────────────────
+    [ObservableProperty] private int  _globalCoverageTarget    = 80;
+    [ObservableProperty] private int  _javaCoverageTarget      = 80;
+    [ObservableProperty] private int  _pythonCoverageTarget    = 80;
+    [ObservableProperty] private int  _uiCoverageTarget        = 70;
+    [ObservableProperty] private bool _failBuildOnCoverageMiss = true;
+
+    // ── Preferences ─────────────────────────────────────────────────────────
+    [ObservableProperty] private string _minimumLogLevel = "Information";
+    [ObservableProperty] private bool   _autoSave        = true;
 
     public IReadOnlyList<string> LogLevels { get; } =
         ["Verbose", "Debug", "Information", "Warning", "Error", "Fatal"];
@@ -50,10 +102,20 @@ public sealed partial class SettingsViewModel : ObservableObject
     public SettingsViewModel(IProfileStore profileStore)
     {
         _profileStore = profileStore;
+
+        Repositories.Add(new RepositoryEntry
+        {
+            Name = "retail-banking-platform", Url = "https://github.com/sdc/retail-banking-platform",
+            Branch = "main", TechStack = "Java", Type = "GitHub"
+        });
+        Repositories.Add(new RepositoryEntry
+        {
+            Name = "banking-ui", Url = "https://github.com/sdc/banking-ui",
+            Branch = "main", TechStack = "TypeScript / React", Type = "GitHub"
+        });
     }
 
-    [RelayCommand]
-    private void SetTab(string tab) => ActiveTab = tab;
+    [RelayCommand] private void SetTab(string tab) => ActiveTab = tab;
 
     [RelayCommand]
     private async Task TestJiraConnection()
@@ -65,15 +127,27 @@ public sealed partial class SettingsViewModel : ObservableObject
         IsConnected = true;
     }
 
-    [RelayCommand]
-    private void BrowseWorkingDirectory()
-    {
-        // Opens folder dialog on real implementation via platform service
-    }
+    [RelayCommand] private void BrowseWorkingDirectory() { }
 
     [RelayCommand]
-    private async Task SaveChanges()
+    private void AddRepository()
     {
-        await Task.Delay(500);
+        if (string.IsNullOrWhiteSpace(NewRepoName) || string.IsNullOrWhiteSpace(NewRepoUrl))
+            return;
+        Repositories.Add(new RepositoryEntry
+        {
+            Name      = NewRepoName,
+            Url       = NewRepoUrl,
+            Branch    = string.IsNullOrWhiteSpace(NewRepoBranch) ? "main" : NewRepoBranch,
+            TechStack = NewRepoTechStack,
+            Type      = NewRepoType
+        });
+        NewRepoName   = "";
+        NewRepoUrl    = "";
+        NewRepoBranch = "main";
     }
+
+    [RelayCommand] private void RemoveRepository(RepositoryEntry entry) => Repositories.Remove(entry);
+
+    [RelayCommand] private async Task SaveChanges() => await Task.Delay(500);
 }
