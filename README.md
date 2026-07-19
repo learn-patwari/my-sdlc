@@ -1,4 +1,4 @@
-# SDLC AI Copilot
+# SprintForge
 
 An enterprise-grade Windows desktop application that automates and manages the complete Software Development Life Cycle (SDLC) — AI-assisted document generation (SRS / SAD / SDD), Jira automation, sprint planning, repository analysis, and unit-test generation — built around a mandatory, immutable audit and approval framework.
 
@@ -55,11 +55,11 @@ The specification's 24 required output sections map to the documents below.
 Requires the .NET 8 SDK.
 
 ```bash
-dotnet build SdlcCopilot.sln
+dotnet build SprintForge.sln
 dotnet test
 ```
 
-The WPF project (`SdlcCopilot.Wpf`) targets `net8.0-windows` and builds on Windows only; all other projects (Domain, Application, Infrastructure, Tests) target `net8.0` and build cross-platform.
+The WPF project (`SprintForge.Wpf`) targets `net8.0-windows` and builds on Windows only; all other projects (Domain, Application, Infrastructure, Tests) target `net8.0` and build cross-platform.
 
 ## Development phases
 

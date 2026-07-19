@@ -25,7 +25,7 @@ interface ISecretStore {  // Windows DPAPI
 ```
 
 **Workflow:**
-1. On app startup, load active profile from `%APPDATA%\SdlcCopilot\profiles\active.json`.
+1. On app startup, load active profile from `%APPDATA%\SprintForge\profiles\active.json`.
 2. Validate against schema; if validation fails, show error banner and revert to last-known-good profile.
 3. For non-credential settings (template dir, sprint config), support `IOptionsMonitor<T>` hot-reload: file changes trigger a refresh without restart.
 4. Every profile save → audit record (PENDING) → approval (Approvals Center) → write (EXECUTING) → complete (COMPLETED with hash of new profile).

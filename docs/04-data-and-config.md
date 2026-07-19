@@ -160,7 +160,7 @@ Profiles are JSON documents validated against `config/profile.schema.json` (publ
     "coverageTargetPercent": 90,
     "frameworks": { "java": "junit5-mockito", "python": "pytest", "ui": "jest-rtl" }
   },
-  "workingDirectory": "D:/SdlcCopilot/Acme",
+  "workingDirectory": "D:/SprintForge/Acme",
   "documents": { "defaultFormat": "DOCX", "templateDir": "Templates" },
   "logging": { "level": "Information", "retentionDays": 90 },
   "audit": {

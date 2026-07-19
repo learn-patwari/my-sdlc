@@ -82,7 +82,7 @@ Log.Logger = new LoggerConfiguration()
   .Destructure.ByTransforming<JiraClient>(c => new { c.BaseUrl, Masked = "****" })
   .Filter.ByExcluding(Matching.WithProperty<string>("Token", _ => true))  // never log tokens
   .WriteTo.File(
-    path: Path.Combine(workingDir, "Logs", "sdlc-copilot-.log"),
+    path: Path.Combine(workingDir, "Logs", "sprintforge-.log"),
     rollingInterval: RollingInterval.Day,
     retainedFileCountLimit: settings.RetentionDays,
     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {CorrelationId} {Message:lj}{NewLine}{Exception}")
@@ -112,14 +112,14 @@ This allows filtering all log entries and audit events for one user action with 
 
 | Category | Examples |
 |---|---|
-| `SdlcCopilot.Audit` | Audit write success/failure, chain verification |
-| `SdlcCopilot.Jira` | HTTP requests, responses, errors |
-| `SdlcCopilot.Ai` | Prompt sent, response received, tokens used |
-| `SdlcCopilot.Repository` | Clone start/end, analysis progress |
-| `SdlcCopilot.Modules.Srs` | SRS generation steps |
-| `SdlcCopilot.Modules.Sprint` | Parse, validate, bulk create |
-| `SdlcCopilot.Security` | Secret access (handle only, never value), DPAPI operations |
-| `SdlcCopilot.Startup` | Initialization, profile load, host start |
+| `SprintForge.Audit` | Audit write success/failure, chain verification |
+| `SprintForge.Jira` | HTTP requests, responses, errors |
+| `SprintForge.Ai` | Prompt sent, response received, tokens used |
+| `SprintForge.Repository` | Clone start/end, analysis progress |
+| `SprintForge.Modules.Srs` | SRS generation steps |
+| `SprintForge.Modules.Sprint` | Parse, validate, bulk create |
+| `SprintForge.Security` | Secret access (handle only, never value), DPAPI operations |
+| `SprintForge.Startup` | Initialization, profile load, host start |
 
 ### Log retention
 
@@ -165,14 +165,14 @@ MSIX provides:
 
 `Package.appxmanifest` declares:
 - `Capabilities`: `privateNetworkClientServer` (Jira, AI), `documentsLibrary` (Working Directory).
-- Entry point: `SdlcCopilot.Wpf.exe`.
+- Entry point: `SprintForge.Wpf.exe`.
 - Start menu tile + taskbar pinning support.
 
 ### Installer fallback (EXE/MSI)
 
 For enterprises that cannot deploy MSIX: WiX-based MSI (via `WiX.Toolset` NuGet). MSI installs:
-- Application files to `%ProgramFiles%\SdlcCopilot\`.
-- Writes `%APPDATA%\SdlcCopilot\` on first run (profile + secrets directories).
+- Application files to `%ProgramFiles%\SprintForge\`.
+- Writes `%APPDATA%\SprintForge\` on first run (profile + secrets directories).
 - Creates Start Menu shortcut.
 - Registers in Windows Add/Remove Programs.
 

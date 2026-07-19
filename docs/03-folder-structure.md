@@ -6,21 +6,21 @@ Covers specification output section **§6 Folder Structure** — both the source
 
 ```
 my-sdlc/
-├── SdlcCopilot.sln
+├── SprintForge.sln
 ├── Directory.Build.props            # nullable enabled, warnings-as-errors, shared version
 ├── README.md
 ├── docs/                            # design package (see README doc map)
 ├── config/
 │   └── profile.schema.json          # published JSON Schema for configuration profiles
 ├── src/
-│   ├── SdlcCopilot.Domain/
+│   ├── SprintForge.Domain/
 │   │   ├── Audit/                   # AuditRecord, AuditAction, AuditStatus, ApprovalStatus
 │   │   ├── Approvals/               # ApprovalRequest, ApprovalDecision, ProposedChange
 │   │   ├── Documents/               # DocumentVersion, DocumentKind, ArtifactHash
 │   │   ├── Planning/                # WorkItem, WorkItemKind, Estimate, SprintCalendar
 │   │   ├── Configuration/           # Profile, JiraSettings, AiSettings, SprintSettings, …
 │   │   └── Common/                  # Ids, Result<T>, DomainException hierarchy
-│   ├── SdlcCopilot.Application/
+│   ├── SprintForge.Application/
 │   │   ├── Audit/                   # IAuditService, IAuditQueryService, AuditContext,
 │   │   │                            # IAuditedOperation, AuditUnavailableException
 │   │   ├── Approvals/               # IApprovalQueue, IApprovalGate (the write-gate)
@@ -31,7 +31,7 @@ my-sdlc/
 │   │   ├── Documents/               # IDocumentGenerator, IDocumentVersionStore, ExportFormat
 │   │   ├── Configuration/           # IProfileStore, ISecretStore, ProfileValidator
 │   │   └── Modules/                 # one folder per module use case (Srs/, Sad/, Sdd/, Sprint/, Tests/)
-│   ├── SdlcCopilot.Infrastructure/
+│   ├── SprintForge.Infrastructure/
 │   │   ├── Audit/                   # JsonlAuditWriter (hash chain), AuditDbContext, AuditIndexer
 │   │   ├── Security/                # DpapiSecretStore
 │   │   ├── Jira/                    # JiraClient (REST v3), JiraFieldMapper
@@ -40,14 +40,14 @@ my-sdlc/
 │   │   ├── Git/                     # LocalGitRepository (LibGit2Sharp), GitHub/GitLab/Bitbucket adapters
 │   │   ├── Documents/               # DocxGenerator, PdfGenerator, MarkdownGenerator, DrawioWriter
 │   │   └── Configuration/           # JsonProfileStore (schema-validated), options wiring
-│   └── SdlcCopilot.Wpf/             # net8.0-windows (Windows-only build)
+│   └── SprintForge.Wpf/             # net8.0-windows (Windows-only build)
 │       ├── App.xaml(.cs)            # generic-host bootstrap, DI composition root
 │       ├── Shell/                   # MainWindow, left nav rail, status bar, approvals badge
 │       ├── Modules/                 # one folder per screen: Home/, Srs/, Sad/, Sprint/, Sdd/,
 │       │                            # Repos/, Tests/, Jira/, Docs/, Audit/, Config/, Approvals/
 │       └── Common/                  # converters, behaviors, diff viewer control
 └── tests/
-    └── SdlcCopilot.Tests/
+    └── SprintForge.Tests/
         ├── Audit/                   # write-gate blocking, hash-chain integrity
         ├── Configuration/           # schema validation round-trips
         └── Security/                # DPAPI round-trip (Windows-only, skipped elsewhere)
@@ -88,6 +88,6 @@ All generated artifacts live under the user's configured Working Directory — e
 
 Notes:
 
-- Live profiles (with DPAPI-encrypted secrets) reside in `%APPDATA%\SdlcCopilot\profiles\` — outside the Working Directory so audit exports never carry credentials.
+- Live profiles (with DPAPI-encrypted secrets) reside in `%APPDATA%\SprintForge\profiles\` — outside the Working Directory so audit exports never carry credentials.
 - `index.db` lives beside the JSONL tree but is disposable: an `AuditIndexer` rebuild scans the JSONL files and reconstructs it, preserving the "files are the source of truth" property.
 - Every file written below `Documents/` is content-hashed; the hash is recorded in the corresponding audit record and in the version manifest (doc 09).

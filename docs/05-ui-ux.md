@@ -14,7 +14,7 @@ Covers specification output section **§9 UI/UX Wireframes and Screen Flow**.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  Profile: [Acme-Prod ▼]      SDLC AI Copilot       [Audit ⚠️]       │  ← Top bar
+│  Profile: [Acme-Prod ▼]      SprintForge       [Audit ⚠️]       │  ← Top bar
 ├─────────┬───────────────────────────────────────────────────────────┤
 │         │                                                             │
 │  Home   │                                                             │

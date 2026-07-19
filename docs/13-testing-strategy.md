@@ -17,7 +17,7 @@ Covers specification output section **§20 Testing Strategy** — unit, integrat
 
 ## 13.2 Unit tests
 
-### Target projects: `SdlcCopilot.Domain`, `SdlcCopilot.Application`
+### Target projects: `SprintForge.Domain`, `SprintForge.Application`
 
 Everything in Domain is pure C# with zero external dependencies — testable without mocks.
 
@@ -149,7 +149,7 @@ public class AiReplayTests {
 
 ## 13.3 Integration tests
 
-### Target: `SdlcCopilot.Infrastructure`
+### Target: `SprintForge.Infrastructure`
 
 Integration tests hit real implementations with controlled external dependencies.
 
@@ -290,7 +290,7 @@ public class ApprovalsViewModelTests {
 [WindowsOnlyFact]
 public async Task SrsToJira_HappyPath_E2E() {
   // Launch the app
-  var app = Application.Launch("SdlcCopilot.Wpf.exe");
+  var app = Application.Launch("SprintForge.Wpf.exe");
   var mainWindow = app.GetMainWindow(Automation);
 
   // Navigate to SRS module
@@ -332,10 +332,10 @@ For CI: E2E tests run on a Windows agent with a test Jira Cloud instance (creden
 
 | Project | Target | Enforcement |
 |---|---|---|
-| `SdlcCopilot.Domain` | 95% | Required gate in CI |
-| `SdlcCopilot.Application` | 90% | Required gate in CI |
-| `SdlcCopilot.Infrastructure` | 80% | Required gate in CI |
-| `SdlcCopilot.Wpf` (ViewModels only) | 70% | Advisory (UI automation covers the gap) |
+| `SprintForge.Domain` | 95% | Required gate in CI |
+| `SprintForge.Application` | 90% | Required gate in CI |
+| `SprintForge.Infrastructure` | 80% | Required gate in CI |
+| `SprintForge.Wpf` (ViewModels only) | 70% | Advisory (UI automation covers the gap) |
 
 Coverage is measured via `coverlet` (Coverlet.Collector) and reported as `lcov` for GitHub Actions coverage summary.
 

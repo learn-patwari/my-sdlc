@@ -8,18 +8,18 @@ Covers specification output sections **§3 High-Level Solution Architecture**, *
 
 ```mermaid
 flowchart TB
-    subgraph Presentation["SdlcCopilot.Wpf — Presentation (MVVM)"]
+    subgraph Presentation["SprintForge.Wpf — Presentation (MVVM)"]
         V[Views XAML] --> VM[ViewModels]
     end
-    subgraph Application["SdlcCopilot.Application — Use cases & contracts"]
+    subgraph Application["SprintForge.Application — Use cases & contracts"]
         UC[Module use-case services]
         P[Ports: IAuditService, IAiProvider, ISdlcTool,\nIRepositoryProvider, IDocumentGenerator, IProfileStore]
         GATE[Audit write-gate pipeline]
     end
-    subgraph Domain["SdlcCopilot.Domain — Entities & invariants"]
+    subgraph Domain["SprintForge.Domain — Entities & invariants"]
         E[AuditRecord, ApprovalRequest, DocumentVersion,\nWorkItem, SprintCalendar, Profile]
     end
-    subgraph Infrastructure["SdlcCopilot.Infrastructure — Adapters"]
+    subgraph Infrastructure["SprintForge.Infrastructure — Adapters"]
         J[Jira REST v3 client]
         AI[AI provider adapters]
         GIT[Git adapters]
@@ -119,7 +119,7 @@ Properties this guarantees structurally:
 | Packaging (MSIX + MSI/EXE fallback) | ✅ both | ⚠️ MSIX-centric | ✅ | ✅ |
 | Fit for audit-heavy, offline-capable enterprise app | ✅ | ✅ | ⚠️ larger attack surface | ⚠️ |
 
-WPF wins on ecosystem maturity and enterprise control coverage (virtualized grids for the audit dashboard, diff viewers, docking). The Clean Architecture split keeps >85% of the codebase UI-framework-agnostic, so a later WinUI 3 or cross-platform (Avalonia) presentation layer is a bounded rewrite of `SdlcCopilot.Wpf` only.
+WPF wins on ecosystem maturity and enterprise control coverage (virtualized grids for the audit dashboard, diff viewers, docking). The Clean Architecture split keeps >85% of the codebase UI-framework-agnostic, so a later WinUI 3 or cross-platform (Avalonia) presentation layer is a bounded rewrite of `SprintForge.Wpf` only.
 
 ## 2.6 Module topology
 

@@ -6,7 +6,7 @@ Covers specification output sections **§22 Future Enhancement Roadmap**, **§23
 
 ## 15.1 Phased development plan (§23)
 
-Each phase has explicit entry criteria, exit criteria, and a testable milestone. Phases are sequential; each phase's work is delivered to the `claude/sdlc-copilot-architecture-*` branch series and reviewed before the next begins.
+Each phase has explicit entry criteria, exit criteria, and a testable milestone. Phases are sequential; each phase's work is delivered to the `claude/sprintforge-architecture-*` branch series and reviewed before the next begins.
 
 ---
 

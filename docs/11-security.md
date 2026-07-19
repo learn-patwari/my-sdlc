@@ -25,7 +25,7 @@ Covers specification output section **§16 Security Architecture**.
 
 ### Storage layout
 
-Ciphertext blobs are stored in `%APPDATA%\SdlcCopilot\secrets\<handle-id>.bin`. The `handle-id` matches the `secretRef` value in the profile (`dpapi:jira-token-acme` → `jira-token-acme.bin`).
+Ciphertext blobs are stored in `%APPDATA%\SprintForge\secrets\<handle-id>.bin`. The `handle-id` matches the `secretRef` value in the profile (`dpapi:jira-token-acme` → `jira-token-acme.bin`).
 
 ### Implementation
 
@@ -34,7 +34,7 @@ class DpapiSecretStore : ISecretStore {
   private readonly string _secretsDir;
 
   public DpapiSecretStore(IOptions<AppPaths> paths) {
-    _secretsDir = paths.Value.SecretsDir;  // %APPDATA%\SdlcCopilot\secrets\
+    _secretsDir = paths.Value.SecretsDir;  // %APPDATA%\SprintForge\secrets\
     Directory.CreateDirectory(_secretsDir);
   }
 
@@ -144,8 +144,8 @@ services.AddHttpClient<IJiraClient, JiraClient>()
 | Data | Location | Protection |
 |---|---|---|
 | Plaintext secrets | Memory only (transient) | DPAPI encryption at rest; zeroed after use |
-| Ciphertext secrets | `%APPDATA%\SdlcCopilot\secrets\` | OS file ACLs (per-user); DPAPI content |
-| Profile JSON | `%APPDATA%\SdlcCopilot\profiles\` | OS file ACLs; no secrets in profiles |
+| Ciphertext secrets | `%APPDATA%\SprintForge\secrets\` | OS file ACLs (per-user); DPAPI content |
+| Profile JSON | `%APPDATA%\SprintForge\profiles\` | OS file ACLs; no secrets in profiles |
 | Audit JSONL | Working Directory / Audit / | OS file ACLs; hash-chained integrity |
 | SQLite index | Working Directory / Audit / index.db | OS file ACLs; rebuildable from JSONL |
 | Generated docs | Working Directory / Documents / | OS file ACLs; content-hashed |
