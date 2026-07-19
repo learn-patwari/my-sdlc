@@ -238,7 +238,7 @@
             <Border Grid.Column="1" Background="{StaticResource BgCardBrush}"
                     BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1,0,0,0"
                     Padding="16">
-
+                <Grid>
                 <!-- Empty state -->
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
                            Text="Select an issue to view details"
@@ -311,6 +311,7 @@
                     <Button Content="Transition Status" Style="{StaticResource PrimaryButton}"
                             HorizontalAlignment="Stretch"/>
                 </StackPanel>
+                </Grid>
             </Border>
         </Grid>
     </DockPanel>
