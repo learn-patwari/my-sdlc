@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SprintForge Beta — MSIX Application Manifest
+  See docs/12-operations.md §19 (MSIX/Installer Packaging) for the full packaging plan.
+
+  To build the MSIX package on Windows:
+    1. Open the SprintForge.sln in Visual Studio 2022
+    2. Set the startup project to SprintForge.Package (this .wapproj)
+    3. Configuration Manager → set Platform to x64
+    4. Right-click SprintForge.Package → Publish → Create App Packages…
+    5. Choose "Sideloading" for enterprise distribution or "Microsoft Store" for public release
+    6. Sign with an enterprise code-signing certificate (see docs/11-security.md §Signing)
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap mp rescap">
+
+  <Identity
+    Name="SprintForge.Beta"
+    Publisher="CN=SDC, O=Software Development Company, C=IN"
+    Version="1.0.0.0"
+    ProcessorArchitecture="x64" />
+
+  <mp:PhoneIdentity PhoneProductId="00000000-0000-0000-0000-000000000000" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+
+  <Properties>
+    <DisplayName>SprintForge Beta</DisplayName>
+    <PublisherDisplayName>SDC</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <!-- Requires Windows 10 1809 (build 17763) or later for WinUI 3 / .NET 8 support -->
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="$targetentrypoint$">
+
+      <uap:VisualElements
+        DisplayName="SprintForge Beta"
+        Description="AI-Powered SDLC Copilot — Requirements, Architecture, Sprint Planning, Test Generation"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+      </uap:VisualElements>
+
+      <Extensions>
+        <!-- Register as a handler for .sfprofile files (SprintForge profile format) -->
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="sfprofile">
+            <uap:SupportedFileTypes>
+              <uap:FileType>.sfprofile</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <!-- Local filesystem access for working directory, audit logs, and profile files -->
+    <rescap:Capability Name="broadFileSystemAccess" />
+
+    <!-- Network access for Jira, AI providers, Git hosting APIs -->
+    <Capability Name="internetClient" />
+    <Capability Name="internetClientServer" />
+    <Capability Name="privateNetworkClientServer" />
+
+    <!-- Windows DPAPI secret store (per-user credential encryption) -->
+    <!-- No extra capability needed — DPAPI is available to all desktop apps -->
+  </Capabilities>
+
+</Package>

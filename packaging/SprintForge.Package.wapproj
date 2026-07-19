@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SprintForge Beta — Windows Application Packaging Project (.wapproj)
+  This project produces a signed MSIX bundle for enterprise distribution.
+
+  Prerequisites (Windows build agent):
+  - Visual Studio 2022 v17.8+ with "Windows application packaging tools" workload
+  - Windows 10 SDK 10.0.22621.0 or later
+  - Code-signing certificate (.pfx) configured in signing-config.json (never committed)
+
+  See docs/12-operations.md §19 for full packaging and signing instructions.
+-->
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{A6B8C3D2-1234-4567-89AB-CDEF01234567}</ProjectGuid>
+    <ProjectTypeGuids>{C7167F0D-BC9F-4E6E-AFE1-012AC2547577};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <UseDotNetNativeToolchain Condition="'$(Configuration)'=='Release'">true</UseDotNetNativeToolchain>
+    <PackageCertificateKeyFile>SprintForge.Beta_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+
+  <!-- Reference to the main WPF application project -->
+  <ItemGroup>
+    <ProjectReference Include="..\src\SprintForge.Wpf\SprintForge.Wpf.csproj">
+      <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Placeholder assets — replace with actual artwork before release -->
+    <Content Include="Assets\Square150x150Logo.png" />
+    <Content Include="Assets\Square44x44Logo.png" />
+    <Content Include="Assets\Wide310x150Logo.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\SplashScreen.png" />
+  </ItemGroup>
+
+  <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.props" Condition="Exists('$(WapProjPath)\Microsoft.DesktopBridge.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\Microsoft.DesktopBridge.targets" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\Microsoft.DesktopBridge.targets')" />
+
+</Project>

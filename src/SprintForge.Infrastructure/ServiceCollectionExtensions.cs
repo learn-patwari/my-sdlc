@@ -9,6 +9,10 @@ using SprintForge.Application.Configuration;
 using SprintForge.Application.Documents;
 using SprintForge.Application.Planning;
 using SprintForge.Application.Repositories;
+using SprintForge.Application.Rollback;
+using SprintForge.Application.Tests;
+using SprintForge.Infrastructure.Rollback;
+using SprintForge.Infrastructure.Tests;
 using SprintForge.Application.Security;
 using SprintForge.Application.Sdlc;
 using SprintForge.Infrastructure.Ai;
@@ -116,6 +120,19 @@ public static class ServiceCollectionExtensions
             sp.GetRequiredService<ISdlcTool>(),
             sp.GetRequiredService<IApprovalGate>(),
             sp.GetRequiredService<AuditedOperationRunner>()));
+
+        // ── Unit Test Generator (M7) ───────────────────────────────────────────
+        services.AddScoped<ITestGenerationService>(sp => new UnitTestGeneratorService(
+            sp.GetRequiredService<IAiOrchestrator>(),
+            sp.GetRequiredService<IApprovalGate>(),
+            sp.GetRequiredService<AuditedOperationRunner>(),
+            sp.GetRequiredService<IDocumentVersionStore>()));
+
+        // ── Rollback ───────────────────────────────────────────────────────────
+        services.AddScoped<IRollbackService, RollbackService>();
+
+        // ── Audit Dashboard (Audit Center full views) ──────────────────────────
+        services.AddScoped<IAuditDashboardService, AuditDashboardService>();
 
         // ── Repository integration ─────────────────────────────────────────────
         services.AddScoped<IRepositoryAnalyzer, FileSystemRepositoryAnalyzer>();
