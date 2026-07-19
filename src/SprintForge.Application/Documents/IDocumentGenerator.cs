@@ -46,4 +46,11 @@ public sealed record DocumentDraft
     public string? JiraIssueKey { get; init; }
     public required string CorrelationId { get; init; }
     public required DateTimeOffset GeneratedAt { get; init; }
+
+    /// <summary>
+    ///   Optional additional artifacts generated alongside the primary markdown,
+    ///   keyed by filename (e.g., "architecture.drawio" → mxGraph XML content).
+    ///   Saved alongside document.md in the version directory.
+    /// </summary>
+    public IReadOnlyDictionary<string, string>? AdditionalFiles { get; init; }
 }

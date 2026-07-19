@@ -65,6 +65,12 @@ public sealed class FileSystemDocumentVersionStore : IDocumentVersionStore
                 TemplateUsed = draft.TemplateUsed
             };
 
+            if (draft.AdditionalFiles is not null)
+            {
+                foreach (var (fileName, fileContent) in draft.AdditionalFiles)
+                    await File.WriteAllTextAsync(Path.Combine(versionDir, fileName), fileContent, Encoding.UTF8, ct).ConfigureAwait(false);
+            }
+
             var versionJson = System.Text.Json.JsonSerializer.Serialize(version, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
             await File.WriteAllTextAsync(Path.Combine(versionDir, "version.json"), versionJson, Encoding.UTF8, ct).ConfigureAwait(false);
 

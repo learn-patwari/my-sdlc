@@ -74,9 +74,29 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IDocumentVersionStore>(sp =>
             new FileSystemDocumentVersionStore(workingDirectory, sp.GetRequiredService<ILogger<FileSystemDocumentVersionStore>>()));
 
-        services.AddScoped<IDocumentGenerator, SrsDocumentGenerator>();
+        // draw.io writer (stateless, singleton)
+        services.AddSingleton<IDrawioWriter, DrawioWriter>();
+
+        // SRS
+        services.AddScoped<SrsDocumentGenerator>();
         services.AddScoped<ISrsService>(sp => new SrsService(
-            sp.GetRequiredService<IDocumentGenerator>(),
+            sp.GetRequiredService<SrsDocumentGenerator>(),
+            sp.GetRequiredService<IDocumentVersionStore>(),
+            sp.GetRequiredService<IApprovalGate>(),
+            sp.GetRequiredService<AuditedOperationRunner>()));
+
+        // SAD
+        services.AddScoped<SadDocumentGenerator>();
+        services.AddScoped<ISadService>(sp => new SadService(
+            sp.GetRequiredService<SadDocumentGenerator>(),
+            sp.GetRequiredService<IDocumentVersionStore>(),
+            sp.GetRequiredService<IApprovalGate>(),
+            sp.GetRequiredService<AuditedOperationRunner>()));
+
+        // SDD
+        services.AddScoped<SddDocumentGenerator>();
+        services.AddScoped<ISddService>(sp => new SddService(
+            sp.GetRequiredService<SddDocumentGenerator>(),
             sp.GetRequiredService<IDocumentVersionStore>(),
             sp.GetRequiredService<IApprovalGate>(),
             sp.GetRequiredService<AuditedOperationRunner>()));
