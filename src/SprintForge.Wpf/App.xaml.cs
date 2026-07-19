@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace SprintForge.Wpf;
 
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
     private IHost? _host;
 
