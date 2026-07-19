@@ -10,20 +10,24 @@ namespace SprintForge.Wpf;
 public partial class App : System.Windows.Application
 {
     private IHost? _host;
+    private IServiceScope? _appScope;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-
         try
         {
             _host = Host.CreateDefaultBuilder()
                 .ConfigureServices(ConfigureServices)
                 .Build();
-
             await _host.StartAsync();
 
-            var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+            // Single scope for the app lifetime — correct for a single-user desktop app.
+            // Scoped services (EF Core DbContext, audit dashboard, SRS service) are all
+            // resolvable from this scope without "resolve scoped from root" exceptions.
+            _appScope = _host.Services.CreateScope();
+
+            var mainWindow = _appScope.ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
         catch (Exception ex)
@@ -39,6 +43,7 @@ public partial class App : System.Windows.Application
 
     protected override async void OnExit(ExitEventArgs e)
     {
+        _appScope?.Dispose();
         if (_host is not null)
         {
             await _host.StopAsync(TimeSpan.FromSeconds(5));
@@ -61,13 +66,16 @@ public partial class App : System.Windows.Application
             profilesRootPath: Path.Combine(appData, "profiles"),
             workingDirectory: appData);
 
-        // ViewModels
-        services.AddTransient<MainWindowViewModel>();
-        services.AddTransient<DashboardViewModel>();
-        services.AddTransient<SettingsViewModel>();
-        services.AddTransient<PlaceholderViewModel>();
-
         // Shell
         services.AddTransient<MainWindow>();
+        services.AddTransient<MainWindowViewModel>();
+
+        // Screen ViewModels
+        services.AddTransient<DashboardViewModel>();
+        services.AddTransient<SettingsViewModel>();
+        services.AddTransient<SrsGeneratorViewModel>();
+        services.AddTransient<ApprovalsViewModel>();
+        services.AddTransient<AuditCenterViewModel>();
+        services.AddTransient<PlaceholderViewModel>();
     }
 }

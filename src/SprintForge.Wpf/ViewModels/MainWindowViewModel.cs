@@ -20,7 +20,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
         NavItems =
         [
             new NavigationItem { Label = "Dashboard",       Icon = "⊞",  ViewModelType = typeof(DashboardViewModel) },
-            new NavigationItem { Label = "SRS Generator",   Icon = "📄",  ViewModelType = typeof(PlaceholderViewModel) },
+            new NavigationItem { Label = "SRS Generator",   Icon = "📄",  ViewModelType = typeof(SrsGeneratorViewModel) },
             new NavigationItem { Label = "SAD",             Icon = "🏗",  ViewModelType = typeof(PlaceholderViewModel) },
             new NavigationItem { Label = "SDD",             Icon = "📐",  ViewModelType = typeof(PlaceholderViewModel) },
             new NavigationItem { Label = "Sprint Planning", Icon = "📅",  ViewModelType = typeof(PlaceholderViewModel) },
@@ -28,7 +28,8 @@ public sealed partial class MainWindowViewModel : ObservableObject
             new NavigationItem { Label = "Unit Tests",      Icon = "✓",   ViewModelType = typeof(PlaceholderViewModel) },
             new NavigationItem { Label = "Jira",            Icon = "🎯",  ViewModelType = typeof(PlaceholderViewModel) },
             new NavigationItem { Label = "Documents",       Icon = "📁",  ViewModelType = typeof(PlaceholderViewModel) },
-            new NavigationItem { Label = "Audit Center",    Icon = "🔍",  ViewModelType = typeof(PlaceholderViewModel) },
+            new NavigationItem { Label = "Approvals",       Icon = "✅",  ViewModelType = typeof(ApprovalsViewModel) },
+            new NavigationItem { Label = "Audit Center",    Icon = "🔍",  ViewModelType = typeof(AuditCenterViewModel) },
             new NavigationItem { Label = "Settings",        Icon = "⚙",   ViewModelType = typeof(SettingsViewModel) },
         ];
 

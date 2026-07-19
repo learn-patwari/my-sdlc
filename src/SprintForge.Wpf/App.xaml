@@ -167,6 +167,15 @@
             <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
                 <views:SettingsView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SrsGeneratorViewModel}">
+                <views:SrsGeneratorView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ApprovalsViewModel}">
+                <views:ApprovalsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AuditCenterViewModel}">
+                <views:AuditCenterView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type vm:PlaceholderViewModel}">
                 <views:PlaceholderView/>
             </DataTemplate>

@@ -1,0 +1,364 @@
+<UserControl x:Class="SprintForge.Wpf.Views.AuditCenterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ── Header ──────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Audit Center" FontSize="22" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+            <Button Grid.Column="1" Content="↻ Refresh"
+                    Command="{Binding RefreshCommand}"
+                    Style="{StaticResource OutlineButton}" Padding="12,8"/>
+        </Grid>
+
+        <!-- ── Search + tabs ───────────────────────────────────────── -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,0,0,12"/>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Button Content="Timeline" Command="{Binding ShowTabCommand}" CommandParameter="Timeline"
+                        Padding="14,7" Margin="0,0,6,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActiveTab}" Value="Timeline">
+                                    <Setter Property="Background" Value="{StaticResource AccentPurpleBrush}"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource AccentPurpleBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Jira" Command="{Binding ShowTabCommand}" CommandParameter="Jira"
+                        Padding="14,7" Margin="0,0,6,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActiveTab}" Value="Jira">
+                                    <Setter Property="Background" Value="{StaticResource AccentPurpleBrush}"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource AccentPurpleBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="AI Prompts" Command="{Binding ShowTabCommand}" CommandParameter="AI Prompts"
+                        Padding="14,7" Margin="0,0,6,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActiveTab}" Value="AI Prompts">
+                                    <Setter Property="Background" Value="{StaticResource AccentPurpleBrush}"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource AccentPurpleBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Approvals" Command="{Binding ShowTabCommand}" CommandParameter="Approvals"
+                        Padding="14,7" Margin="0,0,6,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActiveTab}" Value="Approvals">
+                                    <Setter Property="Background" Value="{StaticResource AccentPurpleBrush}"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource AccentPurpleBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Rollbacks" Command="{Binding ShowTabCommand}" CommandParameter="Rollbacks"
+                        Padding="14,7">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActiveTab}" Value="Rollbacks">
+                                    <Setter Property="Background" Value="{StaticResource AccentPurpleBrush}"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource AccentPurpleBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- ── Table + detail ──────────────────────────────────────── -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="340"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Table -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}"
+                    BorderThickness="1" CornerRadius="8">
+                <DockPanel>
+                    <!-- Column headers -->
+                    <Grid DockPanel.Dock="Top" Background="{StaticResource BgElevatedBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="155"/>
+                            <ColumnDefinition Width="110"/>
+                            <ColumnDefinition Width="145"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Timestamp" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="12,8"/>
+                        <TextBlock Grid.Column="1" Text="User" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="8"/>
+                        <TextBlock Grid.Column="2" Text="Action" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="8"/>
+                        <TextBlock Grid.Column="3" Text="Module" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="8"/>
+                        <TextBlock Grid.Column="4" Text="Status" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="8"/>
+                    </Grid>
+
+                    <!-- Rows via ListBox for built-in selection -->
+                    <ListBox ItemsSource="{Binding Records}"
+                             SelectedItem="{Binding SelectedRecord, Mode=TwoWay}"
+                             Background="Transparent" BorderThickness="0"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             VirtualizingPanel.IsVirtualizing="True">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource BgElevatedBrush}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource BgElevatedBrush}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="155"/>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="145"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding UtcTimestamp, StringFormat='{}{0:dd MMM HH:mm:ss}'}"
+                                               FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"
+                                               Padding="12,8" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding UserName}"
+                                               FontSize="12" Foreground="{StaticResource TextPrimaryBrush}"
+                                               Padding="8" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Action}"
+                                               FontSize="12" Foreground="{StaticResource TextPrimaryBrush}"
+                                               Padding="8" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding Module}"
+                                               FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"
+                                               Padding="8" VerticalAlignment="Center"/>
+                                    <Border Grid.Column="4" Margin="8,4" Padding="8,3"
+                                            CornerRadius="4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="{StaticResource BgElevatedBrush}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                        <Setter Property="Background" Value="#052E16"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Failed">
+                                                        <Setter Property="Background" Value="#2D0707"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Started">
+                                                        <Setter Property="Background" Value="#0F2040"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding Status}" FontSize="11">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                            <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Failed">
+                                                            <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="Started">
+                                                            <Setter Property="Foreground" Value="{StaticResource AccentBlueBrush}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Detail pane -->
+            <Border Grid.Column="2"
+                    Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}"
+                    BorderThickness="1" CornerRadius="8">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="16">
+                    <StackPanel>
+                        <!-- Empty state -->
+                        <TextBlock Text="Select a record to view details."
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   HorizontalAlignment="Center" Margin="0,40,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedRecord}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!-- Record detail -->
+                        <StackPanel>
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedRecord}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+
+                            <TextBlock Text="{Binding SelectedRecord.Action}"
+                                       FontSize="15" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Audit ID"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1"
+                                           Text="{Binding SelectedRecord.AuditId}"
+                                           FontSize="11" FontFamily="Cascadia Code, Consolas, monospace"
+                                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8" TextWrapping="Wrap"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Module"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1"
+                                           Text="{Binding SelectedRecord.Module}"
+                                           FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Status"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1"
+                                           Text="{Binding SelectedRecord.Status}"
+                                           FontSize="12" Foreground="{StaticResource SuccessBrush}" Margin="0,0,0,8"/>
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Time"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="3" Grid.Column="1"
+                                           Text="{Binding SelectedRecord.UtcTimestamp, StringFormat='{}{0:dd MMM yyyy HH:mm:ss}'}"
+                                           FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Duration"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="4" Grid.Column="1"
+                                           Text="{Binding SelectedRecord.DurationMs, StringFormat='{}{0} ms'}"
+                                           FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="User"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="5" Grid.Column="1"
+                                           Text="{Binding SelectedRecord.UserName}"
+                                           FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+                            </Grid>
+
+                            <TextBlock Text="Inputs" FontSize="12" FontWeight="Medium"
+                                       Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,6"/>
+                            <Border Background="{StaticResource BgElevatedBrush}"
+                                    BorderBrush="{StaticResource BorderColorBrush}"
+                                    BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,12">
+                                <TextBlock Text="{Binding SelectedRecord.InputsJson}"
+                                           FontSize="11" FontFamily="Cascadia Code, Consolas, monospace"
+                                           Foreground="{StaticResource TextMutedBrush}" TextWrapping="Wrap"/>
+                            </Border>
+
+                            <!-- Error (when failed) -->
+                            <Border Background="#2D0707" BorderBrush="{StaticResource ErrorBrush}"
+                                    BorderThickness="1" CornerRadius="6" Padding="10">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedRecord.Status}" Value="Failed">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock Text="{Binding SelectedRecord.ErrorMessage}"
+                                           FontSize="12" Foreground="{StaticResource ErrorBrush}" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- ── Status bar ───────────────────────────────────────────── -->
+        <TextBlock Grid.Row="3" Text="{Binding StatusMessage}"
+                   Foreground="{StaticResource TextMutedBrush}"
+                   FontSize="12" Margin="0,12,0,0"/>
+    </Grid>
+</UserControl>
