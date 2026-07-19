@@ -1,10 +1,11 @@
-# SprintForge — UI Requirements
+# SprintForge Beta — UI Requirements
 
 ## 1. Application identity
 
-**Name:** SprintForge  
+**Name:** SprintForge Beta  
 **Type:** Windows desktop application (.NET 8 + WPF)  
 **Purpose:** Enterprise SDLC automation tool — AI-assisted document generation (SRS, SAD, SDD), Jira sprint planning, repository analysis, and unit test generation with a mandatory audit and approval framework.  
+**Tagline:** "AI-Powered SDLC Copilot — Accelerate delivery. Ensure quality."  
 **Primary users:** Software engineers, tech leads, architects, scrum masters in enterprise environments.  
 **Core UX principle:** Nothing writes to Jira, repositories, or the file system without explicit user approval through the Approvals Center. The tool generates and previews; the user decides.
 
@@ -12,165 +13,211 @@
 
 ## 2. Design system
 
-### 2.1 Color palette
+### 2.1 Color palette — dark theme (primary)
 
-| Token | Light mode | Dark mode | Usage |
+Dark navy with purple brand accent. Dark theme is the default and primary mode.
+
+| Token | Value | Usage |
+|---|---|---|
+| `--bg-base` | `#080C18` | Outermost window background |
+| `--bg-surface` | `#0D1117` | Page / content area background |
+| `--bg-card` | `#111827` | Card and panel backgrounds |
+| `--bg-elevated` | `#1A2235` | Hover states, elevated cards, tooltips |
+| `--bg-sidebar` | `#0B1120` | Left navigation rail background |
+| `--bg-input` | `#0F1629` | Input field backgrounds |
+| `--border` | `#1E2D45` | Card borders, dividers, input borders |
+| `--border-subtle` | `#152033` | Subtle separators inside panels |
+| `--accent-purple` | `#7C3AED` | Primary CTA, active nav item, brand |
+| `--accent-purple-hover` | `#6D28D9` | Button hover, active hover |
+| `--accent-blue` | `#3B82F6` | Links, info states, secondary actions |
+| `--text-primary` | `#F1F5F9` | Headings, values, primary text |
+| `--text-secondary` | `#94A3B8` | Labels, descriptions, nav inactive |
+| `--text-muted` | `#64748B` | Timestamps, placeholders, captions |
+| `--text-disabled` | `#374151` | Disabled controls |
+| `--success` | `#22C55E` | Connected, Done, pass, Approve |
+| `--success-bg` | `#052E16` | Success chip / row background |
+| `--warning` | `#F59E0B` | In-progress, pending, validation |
+| `--warning-bg` | `#2D1B00` | Warning chip / row background |
+| `--error` | `#EF4444` | High priority, failed, rejected |
+| `--error-bg` | `#2D0707` | Error chip / row background |
+| `--diff-added-bg` | `#052E16` | Diff viewer: added row background |
+| `--diff-added-text` | `#4ADE80` | Diff viewer: added row text / tag |
+| `--diff-removed-bg` | `#2D0707` | Diff viewer: removed row background |
+| `--diff-removed-text` | `#F87171` | Diff viewer: removed row text / tag |
+| `--diff-modified-bg` | `#2D1F07` | Diff viewer: modified row background |
+| `--diff-modified-text` | `#FCD34D` | Diff viewer: modified row text / tag |
+| `--code-bg` | `#0A0F1C` | Code blocks, prompt preview areas |
+| `--audit-badge` | `#EF4444` | Approvals badge, integrity alert |
+
+### 2.2 Color palette — light theme (secondary)
+
+Light theme uses the same semantic token names; swap to lighter values while keeping the purple brand accent.
+
+| Token | Light value |
+|---|---|
+| `--bg-base` | `#F8FAFC` |
+| `--bg-surface` | `#FFFFFF` |
+| `--bg-card` | `#F1F5F9` |
+| `--bg-elevated` | `#E2E8F0` |
+| `--bg-sidebar` | `#1E293B` |
+| `--bg-input` | `#FFFFFF` |
+| `--border` | `#E2E8F0` |
+| `--text-primary` | `#0F172A` |
+| `--text-secondary` | `#64748B` |
+| `--text-muted` | `#94A3B8` |
+| `--accent-purple` | `#7C3AED` (same) |
+| `--success` | `#16A34A` |
+| `--warning` | `#D97706` |
+| `--error` | `#DC2626` |
+
+### 2.3 Brand identity
+
+**Logo construction:**
+- Icon: A rounded square (~28×28px) with a purple-to-violet gradient (`#7C3AED` → `#4F46E5`), containing a white "S" letterform in bold sans-serif.
+- Wordmark: "sprintforge" in lowercase, clean sans-serif (Inter or Segoe UI), `--text-primary`, weight 600, tracked slightly wide.
+- Beta badge: "beta" in small caps or uppercase, muted purple chip (`rgba(124,58,237,0.2)` bg, `#A78BFA` text), placed top-right of the wordmark.
+- Tagline (login screen only): "AI-Powered SDLC Copilot" in `--text-secondary`, 12px, below the wordmark.
+
+### 2.4 Typography
+
+| Role | Font stack | Size | Weight |
 |---|---|---|---|
-| `--primary` | `#2563EB` (blue-600) | `#3B82F6` (blue-500) | Primary actions, active nav item, links |
-| `--primary-hover` | `#1D4ED8` | `#2563EB` | Button hover |
-| `--success` | `#16A34A` (green-600) | `#22C55E` | Completed status, approve |
-| `--warning` | `#D97706` (amber-600) | `#F59E0B` | Pending, queued, validation warnings |
-| `--danger` | `#DC2626` (red-600) | `#EF4444` | Failed, rejected, errors, integrity alerts |
-| `--surface` | `#FFFFFF` | `#1E1E2E` | Main workspace background |
-| `--surface-raised` | `#F8FAFC` | `#252535` | Cards, panels, input areas |
-| `--surface-overlay` | `#F1F5F9` | `#2D2D3F` | Hover states, alternate rows |
-| `--border` | `#E2E8F0` | `#3A3A50` | Dividers, input borders |
-| `--text-primary` | `#0F172A` | `#F1F5F9` | Main body text |
-| `--text-secondary` | `#64748B` | `#94A3B8` | Labels, hints, metadata |
-| `--text-disabled` | `#CBD5E1` | `#4A5568` | Disabled controls |
-| `--nav-bg` | `#1E293B` (slate-800) | `#111827` | Left navigation rail background |
-| `--nav-text` | `#94A3B8` | `#9CA3AF` | Nav item text (inactive) |
-| `--nav-active` | `#FFFFFF` | `#F9FAFB` | Nav item text (active) |
-| `--nav-active-bg` | `#2563EB` | `#2563EB` | Nav item background (active) |
-| `--audit-badge` | `#EF4444` | `#EF4444` | Approvals badge, integrity alert |
-| `--diff-add` | `#DCFCE7` | `#14532D` | Added lines in diff viewer |
-| `--diff-remove` | `#FEE2E2` | `#7F1D1D` | Removed lines in diff viewer |
-| `--code-bg` | `#F8FAFC` | `#1A1A2E` | Code/prompt preview areas |
+| App title / wordmark | `Inter, 'Segoe UI', system-ui` | 18px | SemiBold 600 |
+| Screen heading | Inter, Segoe UI | 22px | SemiBold 600 |
+| Section heading | Inter, Segoe UI | 16px | SemiBold 600 |
+| Card title / nav label | Inter, Segoe UI | 14px | Medium 500 |
+| Body / labels | Inter, Segoe UI | 14px | Regular 400 |
+| Secondary / metadata | Inter, Segoe UI | 12px | Regular 400 |
+| Caption / timestamp | Inter, Segoe UI | 11px | Regular 400 |
+| KPI number | Inter, Segoe UI | 28–32px | Bold 700 |
+| Code / prompts / JSONL | `'Cascadia Code', Consolas, monospace` | 13px | Regular 400 |
+| Badge / chip text | Inter, Segoe UI | 11px | Medium 500 |
 
-### 2.2 Typography
-
-| Role | Font | Size | Weight |
-|---|---|---|---|
-| App title | Segoe UI | 16px | SemiBold 600 |
-| Screen heading | Segoe UI | 22px | SemiBold 600 |
-| Section heading | Segoe UI | 15px | SemiBold 600 |
-| Body / labels | Segoe UI | 13px | Regular 400 |
-| Secondary / metadata | Segoe UI | 12px | Regular 400 |
-| Code / prompts / JSONL | Cascadia Code, Consolas | 12px | Regular 400 |
-| Badge / chip text | Segoe UI | 11px | Medium 500 |
-| Status bar | Segoe UI | 11px | Regular 400 |
-
-### 2.3 Spacing
+### 2.5 Spacing
 
 Base unit: `4px`. Use multiples: `4, 8, 12, 16, 20, 24, 32, 40, 48`.  
-Nav rail width: `200px` (expanded), `48px` (collapsed).  
-Top bar height: `48px`.  
-Status bar height: `28px`.  
-Workspace padding: `24px`.
+Nav rail width: `220px` (expanded), `56px` (collapsed to icons only).  
+Top bar height: `56px`.  
+Workspace padding: `24px`.  
+Card padding: `16px`.  
+Section gap: `16px`.
 
-### 2.4 Border radius
+### 2.6 Border radius
 
 | Element | Radius |
 |---|---|
-| Buttons (primary/secondary) | `6px` |
-| Input fields | `6px` |
-| Cards / panels | `8px` |
-| Badges / chips | `12px` (pill) |
-| Modals / drawers | `10px` |
-| Status indicators (dot) | `50%` |
+| Buttons (primary/secondary) | `8px` |
+| Input fields | `8px` |
+| Cards / panels | `10px` |
+| Badges / chips | `999px` (pill) |
+| Modals / drawers | `12px` |
+| Status indicator dot | `50%` |
+| Architecture diagram nodes | `8px` |
+| Nav active state pill | `8px` |
 
-### 2.5 Elevation / shadows
+### 2.7 Elevation / shadows
+
+Dark theme shadows are more pronounced due to dark backgrounds.
 
 | Level | Usage | Shadow |
 |---|---|---|
-| 0 | Nav rail, status bar | None |
-| 1 | Cards, list rows (hover) | `0 1px 3px rgba(0,0,0,0.08)` |
-| 2 | Panels, dropdowns | `0 4px 12px rgba(0,0,0,0.12)` |
-| 3 | Toasts | `0 8px 24px rgba(0,0,0,0.16)` |
+| 0 | Nav rail, top bar | None |
+| 1 | Cards (resting) | `0 1px 3px rgba(0,0,0,0.4)` |
+| 2 | Elevated cards, dropdowns, panels | `0 4px 16px rgba(0,0,0,0.6)` |
+| 3 | Modals, toasts | `0 8px 32px rgba(0,0,0,0.8)` |
 
-### 2.6 Icons
+### 2.8 Icons
 
-Use **Fluent UI System Icons** (Microsoft's open icon set, consistent with Windows 11 design language). Sizes: `16px` (inline), `20px` (nav, toolbar), `24px` (section headers).
+Use **Fluent UI System Icons** (Microsoft open icon set, consistent with Windows 11). Sizes: `16px` inline, `20px` nav/toolbar, `24px` section headers.
 
-Key icons:
-- Home: `home`
+Nav icons (filled variant when active, regular when inactive):
+- Dashboard: `grid_dots`
 - SRS: `document_text`
 - SAD: `diagram`
-- Sprint: `calendar_agenda`
-- SDD: `code`
-- Repos: `branch`
-- Tests: `beaker`
+- Sprint Planner: `calendar_agenda`
+- SDD: `code_block`
+- Repository Analyzer: `branch`
+- Unit Tests: `beaker`
 - Jira: `ticket_diagonal`
-- Docs: `folder`
-- Audit: `history`
-- Config: `settings`
-- Approvals: `checkmark_circle`
-- Approve: `checkmark` (green)
-- Reject: `dismiss` (red)
-- Cancel: `arrow_undo`
-- Pending: `clock`
-- Completed: `checkmark_circle_filled` (green)
-- Failed: `error_circle` (red)
-- Queued: `arrow_right_circle`
-- Integrity OK: `shield_checkmark` (green)
-- Integrity Error: `shield_error` (red)
-- AI: `sparkle`
-- Jira link: `link`
-- Download: `arrow_download`
-- Refresh: `arrow_clockwise`
-- Expand/Collapse: `chevron_right` / `chevron_down`
+- Documents: `folder`
+- Audit Center: `history`
+- Settings: `settings`
+
+Action icons: `sparkle` AI, `checkmark` approve, `dismiss` reject, `arrow_undo` rollback, `arrow_download` export, `arrow_clockwise` refresh, `play` replay, `shield_checkmark` integrity OK, `shield_error` integrity fail, `person` user, `bell` notifications, `search` search.
 
 ---
 
 ## 3. Shell layout
 
-The shell is the persistent container. It never changes structure across screens.
+The shell is the persistent container. It renders identically across all screens.
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│  [≡]  SprintForge                Profile: [Acme-Prod ▼]  [🛡 ✓]  [⚙]   │  48px top bar
-├────────────┬─────────────────────────────────────────────────────────────┤
-│            │                                                              │
-│  🏠 Home   │                                                              │
-│            │                                                              │
-│  📄 SRS    │                                                              │
-│  🔷 SAD    │                                                              │
-│  📅 Sprint │              WORKSPACE  (module screen renders here)        │
-│  💻 SDD    │                                                              │
-│  🌿 Repos  │                                                              │
-│  🧪 Tests  │                                                              │
-│  🎫 Jira   │                                                              │
-│  📁 Docs   │                                                              │
-│  📋 Audit  │                                                              │
-│  ⚙ Config  │                                                              │
-│            │                                                              │
-│  ─────     │                                                              │
-│  [◀ Hide]  │                                                              │
-├────────────┴─────────────────────────────────────────────────────────────┤
-│  ⊙ Jira: Connected  |  ✦ AI: Ready  |  [⏱ Approvals: 3]  |  v1.0.0    │  28px status bar
-└──────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TOP BAR (56px, --bg-base border-bottom --border)                            │
+│  [sprintforge β]  [Retail Banking Platform ▼]  [● AI Active ▼]   [🔍]  [🔔][👤] │
+├──────────────────┬──────────────────────────────────────────────────────────┤
+│ LEFT NAV (220px) │                                                           │
+│ --bg-sidebar     │   CONTENT AREA  (--bg-surface)                           │
+│                  │                                                           │
+│  ● Dashboard     │                                                           │
+│    SRS           │                                                           │
+│    SAD           │                                                           │
+│    SDD           │                                                           │
+│    Sprint…       │                                                           │
+│    Repo…         │                                                           │
+│    Unit Tests    │                                                           │
+│    Jira          │                                                           │
+│    Documents     │                                                           │
+│    Audit Center  │                                                           │
+│    Settings      │                                                           │
+│                  │                                                           │
+│  ─── (divider) ──│                                                           │
+│  ◀  Collapse     │                                                           │
+└──────────────────┴──────────────────────────────────────────────────────────┘
 ```
 
 ### 3.1 Top bar
-- **Left:** hamburger icon `[≡]` to collapse/expand the nav rail; app name "SprintForge" in SemiBold.
-- **Center:** `Profile: [Acme-Prod ▼]` — dropdown selector. Options: switch profile, New Profile, Clone, Delete. Switching profile is an audited write queued to the Approvals Center.
-- **Right (left to right):**
-  - Audit health shield icon — green `🛡✓` when chain intact, red `🛡⚠` when integrity check failed (clicking opens Audit Dashboard → integrity report).
-  - Settings gear `⚙` — quick link to Configuration screen.
+
+Height: `56px`. Background: `--bg-base`. Bottom border: `1px solid --border`.
+
+**Left section:**
+- Logo: purple gradient "S" icon (24×24px) + "sprintforge" wordmark + small "β" beta badge.
+
+**Center-left section:**
+- **Platform context selector:** dropdown pill `[Retail Banking Platform ▼]` in `--bg-card`, `--text-primary`, `8px` radius. Switches the active project context across all modules.
+- **AI Copilot status chip:** `[● AI Active]` (green dot when connected, amber when connecting, red when unavailable). Click to open AI provider status details.
+
+**Right section (left to right):**
+- **Search:** `[🔍 Search  Ctrl+F]` — compact input or icon that expands on focus. Global search across documents, Jira issues, audit events.
+- **Audit integrity shield:** `🛡✓` green when chain intact; `🛡⚠` red when integrity check failed. Clicking opens Audit Center → integrity report tab.
+- **Notifications bell:** `🔔` with red badge count. Clicking shows notification dropdown: pending approvals, completed AI operations, connection alerts.
+- **User profile:** avatar circle + name `[Akshay Patwari ▼]`. Click → dropdown: profile settings, switch profile, sign out.
 
 ### 3.2 Left navigation rail
-- Dark background (`--nav-bg`).
-- Each item: `20px` icon + label.
-- Active item: `--nav-active-bg` background, `--nav-active` text, left border accent `3px solid --primary`.
-- Hover: `--surface-overlay` tint (lighter than active).
-- Collapsed state: icons only, `48px` wide; tooltips on hover.
-- Bottom: `[◀ Hide]` / `[▶ Show]` toggle.
-- Group separator (thin line) between core modules and Config.
 
-### 3.3 Status bar
-- Fixed at bottom, `28px` height, small text `11px`.
-- Segments (left to right, separated by `|`):
-  - `⊙ Jira: Connected` (green dot) / `⊙ Jira: Disconnected` (red dot) / `↻ Jira: Syncing` (spinning).
-  - `✦ AI: Ready` / `✦ AI: Unavailable`.
-  - **Approvals badge:** `[⏱ Approvals: 3]` — amber background pill; clicking navigates to Approvals Center. Updates in real time. Shows `0` when queue is empty (neutral color).
-  - App version `v1.0.0` right-aligned.
+Background: `--bg-sidebar`.  
+Width: `220px` expanded, `56px` collapsed.
 
-### 3.4 Toast notifications
-- Non-blocking; slide in from bottom-right.
-- Auto-dismiss after `5 seconds`; hover pauses timer.
-- Types: Info (blue), Success (green), Warning (amber), Error (red).
-- Example: "✓ SRS queued for approval" (Info); "✗ Jira connection failed" (Error).
-- Max 3 visible at once; older ones push up.
+**Item anatomy (expanded):** `20px` icon (Fluent) + `14px` label text, `16px` horizontal padding, `40px` item height.
+
+**Active item:** Rounded pill background in `--accent-purple`, white icon + `--text-primary` label. No left border accent.
+
+**Inactive item:** `--text-secondary` icon + label. Hover: `--bg-elevated` background.
+
+**Collapsed state:** Icons only (`20px`), centered. Tooltips on hover show label.
+
+**Bottom of nav rail:**
+- Thin `--border-subtle` divider.
+- `◀ Collapse` / `▶ Expand` toggle button.
+- **SprintForge Copilot** entry: sparkle icon + "Copilot" label. Click opens the AI Copilot side panel.
+
+### 3.3 Toast notifications
+
+Non-blocking; slide in from bottom-right corner.  
+Auto-dismiss after `5 seconds`; hover pauses timer.  
+Types: Info (blue), Success (green), Warning (amber), Error (red).  
+Max 3 visible at once.  
+Example: "✓ SRS queued for approval" / "✗ Jira connection failed".
 
 ---
 
@@ -178,277 +225,404 @@ The shell is the persistent container. It never changes structure across screens
 
 ---
 
-### Screen 1: Home
+### Screen 1: Login & Configuration Setup
 
-**Purpose:** Dashboard overview; orientation point after app launch.
+**Purpose:** Authenticate and configure environment on first launch or profile switch.
 
-**Layout:** `2-column grid` with stat cards on top, recent activity below.
-
-**Components:**
-
-**Stats row (4 cards, equal width):**
-| Card | Content |
-|---|---|
-| Active Profile | Profile name + last modified date |
-| Workspace | Working directory path + size used |
-| Jira Projects | Count of configured projects |
-| Repos | Count of configured repositories |
-
-**Recent Audit Events (last 10):**
-- Table with columns: `Time`, `Module`, `Action`, `Status` (colored chip), `Jira Issue`.
-- Each row is clickable → opens Audit Dashboard filtered to that event.
-- Status chips: `Completed` (green), `Failed` (red), `Pending` (amber), `Queued` (blue).
-
-**Quick Actions row (icon buttons):**
-- `+ New SRS`, `+ New Sprint Plan`, `Scan Repos`, `Open Audit`, `Configure`.
-
-**Pending Approvals banner (conditional):**
-- Shown only when there are items in the queue.
-- Amber background, full-width: `"⏱ 3 items waiting for approval"` + `[Open Approvals Center]` button.
-
----
-
-### Screen 2: SRS Generator
-
-**Purpose:** Generate a Software Requirements Specification from a brief description.
-
-**Layout:** Three-zone vertical split.
+**Layout:** Two-column card — login on left, environment setup on right — centered on `--bg-base`.
 
 ```
-┌─ ZONE 1: INPUT (collapsible) ──────────────────────────────────────────┐
-│  SRS ID:          [PROJ-1234_________________________]                 │
-│  Brief Desc:      [__________________________________________]          │
-│                   [__________________________________________]          │
-│  Template:        [Default SRS ▼]  [Preview Template]                  │
-│  Impacted Svcs:   [payments, auth, gateway] [+ Add]                   │
-│  Out of Scope:    [__________________________________________]          │
-│  Limitations:     [__________________________________________]          │
-│                                                          [Generate ✦]  │
-├─ ZONE 2: PREVIEW ──────────────────────────────────────────────────────┤
-│  Versions: [v001 ▼]  [Compare v001 vs v002]  [Restore to v001]        │
-│  ─────────────────────────────────────────────────────────────────────  │
-│  # SRS: PROJ-1234 — Payment Processing System                         │
-│                                                                        │
-│  ## 1. Functional Requirements                                         │
-│  - FR-001: The system shall...                                         │
-│  ...                                                                   │
-│                                                                        │
-│  [⚠ NEEDS-CLARIFICATION: Specify authentication method]               │
-│                                                                        │
-├─ ZONE 3: ACTIONS ──────────────────────────────────────────────────────┤
-│  [↺ Regenerate]  [↓ DOCX]  [↓ PDF]  [↓ MD]                           │
-│                                    [Submit for Approval →]            │
-└────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                           (--bg-base full window)                            │
+│   ┌─────────────────────────┐   ┌────────────────────────────────────────┐  │
+│   │  [S] sprintforge β      │   │  Configure Your Environment            │  │
+│   │  AI-Powered SDLC…       │   │  Set up integrations and preferences   │  │
+│   │                         │   │                                        │  │
+│   │  [Sign In] [SSO Login]  │   │  ┌──────────┐ ┌──────────┐ ┌───────┐  │  │
+│   │                         │   │  │ Jira ✓   │ │ AI Prov  │ │ Git ✓ │  │  │
+│   │  Email                  │   │  │Connected │ │OpenAI-4o │ │GitHub │  │  │
+│   │  [___________________]  │   │  └──────────┘ └──────────┘ └───────┘  │  │
+│   │                         │   │  ┌──────────┐ ┌──────────┐ ┌───────┐  │  │
+│   │  Password               │   │  │ Work Dir │ │ Sprint   │ │ Tmpl  │  │  │
+│   │  [•••••••••••]  [👁]    │   │  │128 GB Fr │ │SPR-34    │ │12 Tmp │  │  │
+│   │                         │   │  └──────────┘ └──────────┘ └───────┘  │  │
+│   │  ☐ Remember me  Forgot? │   │  ┌──────────┐ ┌──────────────────────┐ │  │
+│   │                         │   │  │ Security │ │ Audit & Compliance   │ │  │
+│   │  [    Sign In   →    ]  │   │  │SSO Enable│ │Audit Logging Enabled │ │  │
+│   │                         │   │  │Role:Arch │ │Immutable & Encrypted │ │  │
+│   │  or continue with       │   │  └──────────┘ └──────────────────────┘ │  │
+│   │  [⊞][G][○][✦]          │   │                                        │  │
+│   │                         │   │         [Save & Continue  →]           │  │
+│   │  v0.1.0-beta            │   │                                        │  │
+│   └─────────────────────────┘   └────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
 **Component details:**
 
-- **SRS ID field:** text input with prefix label; auto-suggests from configured Jira projects.
-- **Brief Description:** multiline text area, `4 rows` minimum, expandable.
-- **Template dropdown:** lists files from configured template directory; "Preview Template" opens a read-only modal.
-- **Impacted Services:** tag input (type + Enter to add); values from repo analysis autocomplete.
-- **Generate button:** primary blue; shows spinner + "Generating…" while AI runs; cancellable via `✕`.
-- **Version selector:** dropdown; shows version number + timestamp + note. Latest is default.
-- **Preview area:** scrollable markdown renderer; `NEEDS-CLARIFICATION` markers shown as amber inline alert boxes with `[Resolve]` link — blocks "Submit for Approval" until all resolved.
-- **Compare button:** opens a side-by-side diff modal.
-- **Submit for Approval:** primary green; disabled when `NEEDS-CLARIFICATION` markers exist; clicking queues to Approvals Center and shows a success toast.
+- **Login card:** `--bg-card`, `10px` radius, `32px` padding, `360px` wide, `--border` border.
+- **Tabs:** "Sign In" / "SSO Login" — pill toggle, `--accent-purple` active state.
+- **Email / Password fields:** `--bg-input`, `--border`, `8px` radius. Password field has eye-toggle `[👁]` to reveal.
+- **Sign In button:** full-width, `--accent-purple` background, white text, `8px` radius.
+- **Social icons:** equal-width buttons with `--border` border — Microsoft `⊞`, Google `G`, GitHub `○`, Anthropic `✦`.
+- **Configuration panel:** `--bg-card`, `10px` radius. 8 configuration tile cards in 4-column × 2-row grid. Each tile: icon + title + status line or value.
+- **Tile status:** `● Connected` (green dot) or value text. Connected tiles show a green pill chip.
+- **Save & Continue button:** full-width in config panel, `--accent-purple`.
 
 ---
 
-### Screen 3: SAD Generator (Software Architecture Document)
+### Screen 2: Main Dashboard
 
-**Purpose:** Generate architecture diagrams and the SAD document.
+**Purpose:** Overview of SDLC health, sprint progress, AI recommendations, and recent activity.
 
-**Layout:** Three-zone (same pattern as SRS).
+**Layout:** Full-width KPI row → two-column below (chart left, recommendations right) → recent activity row → SprintForge Copilot panel.
 
-**Zone 1 — Input:**
-- Jira ticket key (text input with lookup icon).
-- Architecture style (dropdown: Microservices, Monolith, Serverless, Event-Driven, Hybrid).
-- Technology stack (tag input; pre-filled from config, editable).
-- Services to include (multi-select checkbox list from repo analyzer results).
-- Diagram type checkboxes: `☑ Architecture`, `☑ Deployment`, `☑ Component`, `☐ Sequence`.
+```
+┌─ 6 KPI STAT CARDS (equal width, --bg-card) ────────────────────────────────┐
+│  Requirements  │ Designs  │ Code Services │ Unit Tests  │ Jira Issues │ Sprint│
+│  128           │ 24       │ 36            │ 1,248  82%  │ 56   🔴12   │  68%  │
+│  This Sprint   │ +5 ▲     │ 3 Impacted⚠  │ Coverage○   │ High Prio   │ ○On T │
+│  +12 ▲         │          │               │             │             │       │
+└────────────────────────────────────────────────────────────────────────────┘
 
-**Zone 2 — Preview (tabbed):**
-- **Diagram tab:** renders Draw.io XML as an interactive diagram preview (or "XML preview" if rendering unavailable, with info banner "PNG export requires draw.io CLI").
-- **SAD Document tab:** markdown document preview.
+┌─ Sprint Burndown (left 55%) ───────┐  ┌─ AI Recommendations (right 45%) ──┐
+│  ╲ Ideal (dashed)                 │  │  ✦ 12 requirements are incomplete │
+│     ╲ Actual (solid)              │  │  ✦ 3 services have high complexity│
+│       ╲___                        │  │  ✦ Test coverage below 65%        │
+│  Jul14   Jul21   Aug1             │  │  ✦ 3 Jira issues are blocked      │
+└────────────────────────────────────┘  └────────────────────────────────────┘
 
-**Zone 3 — Actions:**
-- `[↓ Draw.io XML]` `[↓ PNG Preview]` `[↓ SAD DOCX]` `[Submit for Approval →]`
+┌─ Recent Activity (full width) ─────────────────────────────────────────────┐
+│  Just now    SRS generated for 'Customer Service'                 [View]   │
+│  25 min ago  SAD published for 'Payment Service'                  [View]   │
+│  56 Jira issues synced successfully                               [View]   │
+│  65 min ago  Unit tests generated for 'Auth Service'              [View]   │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ SprintForge Copilot ─────────────────────────────────────────────────────┐
+│  ✦ Good morning, Akshay! How can I help you today?        [Add Copilot +] │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+**KPI card anatomy:**
+- Background: `--bg-card`, `10px` radius, `--border` border.
+- Large number: `28–32px`, bold, `--text-primary`.
+- Sub-label: `12px`, `--text-secondary`.
+- Trend badge: small pill — green `+N ▲` for positive, red for negative, orange for warnings.
+- Unit Tests card: includes a circular progress ring (`82%`) rendered in green with `--accent-purple` track.
+- Sprint Progress card: large circular gauge (`68%`) in `--accent-purple`, "On Track" label in green.
+
+**Sprint Burndown chart:**
+- Background: `--bg-card`. Line chart: Ideal (dashed, `--text-muted`), Actual (solid, `--accent-purple`).
+- X-axis: dates (Jul 14 → Aug 1). Y-axis: story points. Grid lines in `--border-subtle`.
+
+**AI Recommendations:**
+- Background: `--bg-card`. Numbered list with `✦` sparkle prefix and `[View]` link on each item. Title bar with "AI Recommendations" label.
+
+**Recent Activity:**
+- Background: `--bg-card`. Rows: relative timestamp + description + `[View]` link. Alternating `--bg-elevated` row hover.
+
+**SprintForge Copilot panel:**
+- Background: `--bg-card` with `--accent-purple` left border accent (4px). Greeting text + `[Add Copilot +]` button. Opens a full side-panel chat interface.
 
 ---
 
-### Screen 4: Sprint Planning
+### Screen 3: SRS Generator Workspace
+
+**Purpose:** Generate a Software Requirements Specification from an input brief.
+
+**Layout:** Top breadcrumb + toolbar → three-panel content → right side approval panel.
+
+```
+Breadcrumb: SRS ›  Retail Banking Platform ›  Account Management ›  Input Requirements
+
+Toolbar: [Template ▼] [SRS v0.1 Standard ▼]  [Auto Save ◉]  [Stored] [Found] [Compare] [History]
+─────────────────────────────────────────────────────────────────────────────────────
+┌──────────────────────┬──────────────────────┬──────────────────┬──────────────────┐
+│ 1. Input             │ 2. AI Generated SRS  │ 3. Diff Viewer   │ Approval Panel   │
+│ Requirements         │ (Preview)            │                  │                  │
+│                      │                      │  Status          │ [Avatar]         │
+│ B I U ≡ ─ 🔗 {}     │ 1. Introduction      │  Pending Review  │ Neha Verma       │
+│                      │                      │  ──────────────  │ Reviewer         │
+│ 1. Introduction      │ The system enables   │  Added ▌FR-01   │                  │
+│                      │ customers to securely│  Added ▌FR-02   │ [Comment here…]  │
+│ The system shall…    │ view account balances│  Modified▌FR-03 │                  │
+│                      │ in real time…        │  Modified▌FR-04 │ [  Approve   ]   │
+│ 2. Functional        │                      │  ──────────────  │ [Request Changes]│
+│ Requirements         │ 2. Functional        │  Req  │Req│Desc  │ [   Reject   ]   │
+│                      │ Requirements         │  FR-01│…  │…     │                  │
+│ FR-01  View Balance  │                      │  FR-02│…  │…     │ Impacted (3):    │
+│ FR-02  Transfer…     │ FR-001 The system…   │                  │ Account Service  │
+│ FR-03  Beneficiary…  │                      │                  │ Payment Service  │
+│ FR-04  Statement…    │                      │                  │ Notification Svc │
+│                      │                      │                  │                  │
+│ 1024 words [Analyze] │                      │                  │ [Send for Review]│
+└──────────────────────┴──────────────────────┴──────────────────┴──────────────────┘
+```
+
+**Panel 1 — Input Requirements:**
+- Rich text editor with formatting toolbar: Bold, Italic, Underline, lists, horizontal rule, link, code block.
+- Supports structured sections (numbered headings).
+- Word count displayed at bottom left.
+- `[Analyze]` button sends content to AI for brief validation before generation.
+
+**Panel 2 — AI Generated SRS (Preview):**
+- Scrollable markdown-rendered document.
+- `NEEDS-CLARIFICATION` markers appear as amber inline boxes — block Submit until resolved.
+- Version selector at top if multiple versions exist: `[SRS v0.1 Standard ▼]`.
+
+**Panel 3 — Diff Viewer:**
+- Three row types with distinct backgrounds:
+  - **Added:** `--diff-added-bg` background, left green border accent, green "Added" pill tag.
+  - **Removed:** `--diff-removed-bg` background, left red border accent, red "Removed" pill tag.
+  - **Modified:** `--diff-modified-bg` background, left amber border accent, amber "Modified" pill tag.
+- Table format: Req ID | Requirement | Description.
+
+**Right — Approval Panel (280px):**
+- Reviewer avatar + name + role label.
+- Status chip: "Pending Review" (amber) / "Approved" (green) / "Changes Requested" (orange).
+- Comments textarea.
+- Action buttons: `[Approve]` (green filled), `[Request Changes]` (outline), `[Reject]` (red text).
+- Impacted Services list.
+- `[Send for Review]` primary button at bottom.
+
+---
+
+### Screen 4: SAD Generator (Software Architecture Document)
+
+**Purpose:** Generate architecture diagrams and the SAD document from a Jira ticket.
+
+**Layout:** Breadcrumb + tabs → three-panel (component tree | diagram canvas | document preview).
+
+```
+Breadcrumb: SAD ›  Retail Banking Platform ›  Payment Service
+
+Tabs: [Architecture View] [Draw.io] [Document Preview]    [toolbar icons] [◀][▶]
+─────────────────────────────────────────────────────────────────────────────────
+┌───────────────────┬────────────────────────────────────┬────────────────────┐
+│ Components        │  Architecture Diagram Canvas        │ Generated Files    │
+│                   │                                     │                    │
+│ ▼ API Gateway     │  ┌─────────────┐                   │ payment-svc.md     │
+│   Payment Service │  │  API Gateway│────────────────── │ payment-diagram.xml│
+│   ▼ Controller    │  └──────┬──────┘    sync →         │ payment-api.yaml   │
+│     Service       │         │                           │ draw-io-model.xml  │
+│     Repository    │  ┌──────▼──────┐  ┌─────────────┐ │                    │
+│   Payment Process │  │Payment Svc  │─▶│Payment Proc │ │ Document Preview   │
+│   Adapter         │  └──────┬──────┘  └─────────────┘ │                    │
+│   Service         │    async │         ┌─────────────┐ │ 1. Overview        │
+│   Database        │  ┌──────▼──────┐  │Notification │ │ This document      │
+│   Redis Cache     │  │  Database   │  │   Service   │ │ describes the      │
+│   Kafka           │  │(PostgreSQL) │  └─────────────┘ │ Payment Service…   │
+│                   │  └─────────────┘                   │                    │
+│                   │  ┌────────────┐  ┌──────────────┐ │ 2. Architecture    │
+│                   │  │Redis Cache │  │    Kafka     │ │ Diagram            │
+│                   │  └────────────┘  └──────────────┘ │                    │
+│                   │                                     │ 3. Components      │
+│   [View all ▼]    │                                     │ Version 1.0 ▼      │
+└───────────────────┴────────────────────────────────────┴────────────────────┘
+[↓ Draw.io XML]  [↓ PNG Preview]  [↓ SAD DOCX]          [Submit for Approval →]
+```
+
+**Component tree (240px):**
+- Hierarchical expand/collapse. `--bg-sidebar` background. Active service highlighted in `--accent-purple` tint.
+
+**Diagram canvas (flex center):**
+- Interactive mxGraph XML renderer (or static SVG fallback).
+- Node styles:
+  - Services: `--accent-blue` border, `--bg-card` fill, rounded, white label.
+  - Messaging (Kafka): amber/orange tint.
+  - Storage (DB, Redis): dark gray, lighter text.
+- Arrow styles: sync = solid, async = dashed, cache = dotted, DB = solid dark.
+- Toolbar: zoom in/out, fit to screen, export buttons.
+
+**Generated Files + Document Preview (280px):**
+- File list with file-type icons and names. Clickable to download.
+- Preview panel: first 3 sections of the SAD document as prose. Version selector `v1.0 ▼` + last-updated timestamp.
+
+---
+
+### Screen 5: Sprint Planner
 
 **Purpose:** Import a sprint plan, generate work items, validate estimates, push to Jira.
 
-**Layout:** Three-zone with a validation step between zones 1 and 2.
+**Layout:** Sprint selector + capacity chips → two-panel (backlog tree | Gantt timeline).
 
-**Zone 1 — Import:**
+```
+Sprint: [SPR-34 (Jul 14 – Jul 27) ▼]
+
+[Capacity: 160 pts]  [Committed: 142 pts]  [Completed: 0]  [Remaining: 142 pts]  [Utilization: 89%]
+─────────────────────────────────────────────────────────────────────────────────────────
+┌────────────────────────────────────────────┬──────────────────────────────────────────┐
+│ Sprint Backlog                             │ Sprint Timeline                          │
+│                                            │                                          │
+│ Task / Subtask       Type  Assign  Est  St │ Jul14  Jul18  Jul22  Jul26  Aug1         │
+│ ─────────────────── ───── ─────── ─── ── │ ─────────────────────────────────────    │
+│ ▼ RB-101 Implement                        │ ████████████████████ Impl fund transfer  │
+│   fund transfer(15p) Epic                 │                                          │
+│   ▶ Develop API     Dev   R.Sharma 5p ✓  │   ████ RB-102 Develop API               │
+│   ▶ Develop API     Dev   P.Singh  5p ↻  │         ██████ RB-102 Develop API       │
+│   ▶ Unit Tests      Test  N.Verma  3p ↻  │               ████ Unit Tests            │
+│   ▶ Code Review     Dev   A.Patel  2p ○  │                    ██ Code Review        │
+│                                            │                                          │
+│ ▶ RB-102 Add manage                       │   ████ RB-103 Add manage benficiaries   │
+│   beneficiaries(8p) Story                 │                                          │
+│                                            │                                          │
+│ ▶ RB-103 Add API    Story                 │                                          │
+└────────────────────────────────────────────┴──────────────────────────────────────────┘
+[Export as Excel]                                                 [Push to Jira →]
+```
+
+**Capacity chips:** Pill badges in a horizontal row. `Capacity` (neutral), `Committed` (blue), `Completed` (green), `Remaining` (amber), `Utilization %` (color-coded: green <80%, amber 80-95%, red >95%).
+
+**Sprint Backlog tree:**
+- Hierarchical rows: Epic > Story > Task/Subtask with indent levels.
+- Columns: Task/Subtask summary | Type badge (DEV/TST/DOC/REVIEW) | Assignee | Estimate | Status | Jira Issue.
+- Status icons: ✓ Done (green), ↻ In Progress (blue), ○ To Do (muted). Status chips on hover expand to full label.
+- Validation: subtasks exceeding budget shown with `⚠` icon and `--warning` text. Full amber validation banner if any violations.
+
+**Sprint Timeline (Gantt):**
+- Date column headers: day numbers. Horizontal bars colored by status. Task label inside or beside bar. Jira issue number linked.
+
+**Zone 1 — Import (shown before backlog is generated):**
 ```
 Import source:
-  ○ Confluence Page  [Page URL: ___________________] [Fetch]
-  ● Markdown         [paste or drag .md file]
-  ○ Excel File       [Browse…]  filename.xlsx
-  ○ Word File        [Browse…]
-  ○ Plain Text       [paste text area]
-
-                                          [Parse & Generate ✦]
+  ○ Confluence Page   [Page URL: ___________] [Fetch]
+  ● Markdown          [paste or drag .md file]
+  ○ Excel File        [Browse…]
+  ○ Word File         [Browse…]
+  ○ Plain Text        [paste text area]
+                                        [Parse & Generate ✦]
 ```
-
-**Zone 2 — Validation banner (conditional, amber):**
-```
-⚠ 3 subtasks exceed the configured dev-day budget (7 days / 56 hours).
-  [Show only oversized items]  [Dismiss and continue anyway]
-```
-
-**Zone 2 — Work item tree:**
-```
-▼ EPIC: Payment Processing Feature
-  ▼ STORY: User Authentication [8 SP] [Est: 5d]
-      ☑ DEV: Implement login API          [2d]  ✓
-      ☑ DEV: Implement token refresh       [1d]  ✓
-      ⚠ TST: Write unit tests             [10d] ✗ EXCEEDS BUDGET
-      ☑ DOC: Update API docs              [0.5d] ✓
-  ▼ STORY: Payment Gateway Integration [13 SP] [Est: 7d]
-      ...
-```
-
-- Tree with expand/collapse.
-- Each item has: type badge (`STORY`, `TASK`, `DEV`, `TST`, `DOC`, `REVIEW`, `DEPLOY`), summary, estimate, status icon.
-- Click a row to open detail side-panel (right side): full description, acceptance criteria, labels, components, story points, epic link.
-- Inline edit of estimate directly in the tree row.
-
-**Zone 3 — Actions:**
-- `[Export as Excel]` `[Push to Jira →]` (queues entire plan as a batch to Approvals Center).
 
 ---
 
-### Screen 5: SDD Generator (Software Detailed Design)
+### Screen 6: Repository Analyzer
 
-**Purpose:** Search for existing SDDs first, then generate new if needed.
+**Purpose:** Scan repositories and identify services, dependencies, code metrics, and impacted files.
 
-**Layout:** Three-zone; with a mandatory search step before generation.
+**Layout:** Header + scan controls → three-panel (file explorer | dependency graph | code insights).
 
-**Zone 1 — Search & Input:**
 ```
-Service / Class name:  [PaymentService________________] [🔍 Search Jira]
-
-─── Search Results ────────────────────────────────────────
-  ✓ Found 1 existing SDD:
-  │ PROJ-890  PaymentService SDD  (Updated: 2024-11-10)  [View] [Reuse]
-  └──────────────────────────────────────────────────────
-
-  [Proceed to generate new SDD anyway]
-
-Repository:    [payments-api ▼]
-Format:        [DOCX ▼]
+[retail-banking-platform]  Branch: [main ▼]   Scan: 30 Jul 2025 10:30 AM  [Pause] [Rescan]
+─────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────┬──────────────────────────────────┬─────────────────────────────────┐
+│ Project Explorer      │ Dependency Graph                  │ Code Insights                   │
+│                       │                                   │                                 │
+│ 🔍 Search files…      │                                   │ Impacted Files (13)             │
+│                       │    ┌─────────────┐                │                                 │
+│ ▼ retail-banking-plat │    │  api-gateway│                │ PaymentService.java      ●      │
+│   ▼ api-gateway       │    └──────┬──────┘                │ PaymentController.java   ●      │
+│     api-service       │           │                       │ PaymentRepository.java   ●      │
+│   ▼ payment-service   │  ┌────────▼───────┐ ┌──────────┐ │ AccountClient.java       ●      │
+│     payment-svc       │  │payment-service │→│account   │ │ AccountService.java      ●      │
+│   ▼ account-service   │  └────────┬───────┘ └──────────┘ │ + 6 more                        │
+│     account-svc       │    async  │                       │                                 │
+│   ▼ notification-svc  │  ┌────────▼───────┐               │ Complexity          12.4        │
+│   ▼ document-service  │  │notification-svc│───▶ AWS SES  │ (large red number)              │
+│                       │  └────────────────┘               │                                 │
+│                       │                                   │ Duplication         8.2%         │
+│                       │                                   │ Good (yellow)                   │
+│                       │                                   │                                 │
+│                       │                                   │ Test Coverage                   │
+│                       │                                   │ Needs Improvement ⚠             │
+│                       │                                   │                                 │
+│                       │                                   │ Technical Debt      2.6 days    │
+└───────────────────────┴──────────────────────────────────┴─────────────────────────────────┘
+[Export Impact Report]                                       [Generate SDD for selected service]
 ```
 
-- Search Jira button triggers live search across all configured projects.
-- Search results list with issue key, title, last updated; `[View]` opens in Jira, `[Reuse]` loads existing SDD into the preview zone.
-- "Proceed to generate new SDD" link appears after search completes.
-- If no existing SDD found: automatically shows "No existing SDD found. Ready to generate."
+**Project Explorer:** File tree with expand/collapse. File-type icons. Search input at top. Background `--bg-sidebar`.
 
-**Zone 2 — Preview (tabbed):**
-- **SDD Document tab:** markdown document with all sections (purpose, methods, dependencies, error handling, edge cases, sequence diagrams in mermaid).
-- **Coverage Matrix tab:** table showing methods (rows) × test case types (columns) with coverage prediction.
+**Dependency Graph:** Node-link diagram rendered inline. Nodes: rounded rectangles in `--bg-card` with `--accent-blue` border for services. External services shown in dashed outline. Arrow labels: sync (solid), async (dashed).
 
-**Zone 3 — Actions:**
-- `[↓ DOCX]` `[↓ PDF]` `[Submit for Approval →]` `[Attach to Jira]`
+**Code Insights panel:**
+- Impacted Files: list with red dot `●` indicator. File names in `--text-secondary`.
+- Metric cards (stacked): metric name + large bold number + quality label (colored).
+  - Complexity: `12.4` in `--error` (red).
+  - Duplication: `8.2%` in `--warning` (amber), "Good" label.
+  - Test Coverage: status label "Needs Improvement" in `--warning`.
+  - Technical Debt: `2.6 days` in `--text-primary`.
 
 ---
 
-### Screen 6: Repository Analysis
+### Screen 7: SDD & Unit Test Generator
 
-**Purpose:** Scan repositories and identify services, dependencies, and impacted files.
+**Purpose:** Generate software detailed designs and unit tests for selected services.
 
-**Layout:** Two-pane — left selector + right results.
+**Layout:** Left service selector → center test cases + coverage → right document preview.
 
-**Left pane (280px):**
 ```
-Repositories
-─────────────
-☑ payments-api    (Java)
-☑ frontend-app    (TypeScript)
-☐ infra-config    (Python)
-
-Branch: [main ▼]
-
-[🔍 Scan Selected]
-```
-
-**Right pane — Results (after scan):**
-
-Tabs:
-1. **Overview** — summary cards: `12 Services`, `4 Controllers`, `8 DTOs`, `3 External Calls`.
-2. **Services** — flat list or tree of all detected CodeUnits, each with kind badge (`SERVICE`, `CONTROLLER`, `REPOSITORY`, `DTO`, `UTIL`, `MODEL`, `CONFIG`) + file path.
-3. **Dependencies** — mermaid diagram of service-to-service calls rendered inline.
-4. **External Calls** — table of detected external HTTP/DB calls: caller, endpoint, type (REST, DB, Kafka, Redis).
-5. **Impact Analysis** — text input "Describe change:" → `[Recommend impacted files]` → ranked list of affected services with explanation.
-
-**Actions:** `[Export Impact Report]` `[Generate SDD for selected service]` (shortcut to SDD Generator pre-filled).
-
----
-
-### Screen 7: Unit Test Generator
-
-**Purpose:** Generate unit tests for a service/class targeting a configured coverage percentage.
-
-**Layout:** Three-zone.
-
-**Zone 1 — Input:**
-```
-Repository:       [payments-api ▼]
-Service / Class:  [PaymentService_________] (autocomplete from repo analysis)
-Test Framework:   [JUnit 5 + Mockito ▼]
-Coverage Target:  [──────────●──────] 90%
-
-Test types:
-  ☑ Positive (happy path)
-  ☑ Negative (invalid input)
-  ☑ Boundary (edge values)
-  ☑ Exception handling
-  ☑ Mock dependencies
-
-                                          [Generate Tests ✦]
+Tabs: [SDD] [Unit Test Generator ●]
+─────────────────────────────────────────────────────────────────────────────────
+┌──────────────────┬────────────────────────────────────────┬───────────────────┐
+│ Services         │ Generated Test Cases — Payment Service  │ SDD Preview       │
+│                  │                                         │                   │
+│ 🔍 Search…       │ Test Name            Prio  Status  Cov  │ 1. Overview       │
+│                  │ ─────────────────── ────  ──────  ───  │                   │
+│ Account Service  │ testHandle_Valid     High  Passed   ●   │ This document…    │
+│ ● Payment Svc    │ testFundTransfer_In  High  Passed   ●   │                   │
+│ Notification Svc │ testHandle_Limit…   Med   Passed   ●   │ 2. Design Details │
+│ Audit Service    │ testPayment_Invalid  High  Failed   ●   │                   │
+│ API Service      │ testPayment_Timeout  Med   Passed   ●   │ Payment flows     │
+│                  │                                         │ through…          │
+│                  │  Coverage Overview                      │                   │
+│                  │  ┌──────────────────────┐               │                   │
+│                  │  │                      │               │                   │
+│                  │  │      88%             │               │                   │
+│                  │  │      Good            │               │                   │
+│                  │  │ ○ green ring         │               │ Generated Files:  │
+│                  │  └──────────────────────┘               │ payment-svc-sdd   │
+│                  │  Lines Covered:  1,248                  │ payment-tests.json│
+│                  │  Lines Missed:   166                    │ test-report.html  │
+│                  │  Total Lines:    1,414                  │                   │
+│                  │                                         │ [View all]        │
+└──────────────────┴────────────────────────────────────────┴───────────────────┘
+[↓ Download Tests]  [↓ Download SDD]              [Submit for Approval →]
 ```
 
-**Zone 2 — Preview (tabbed):**
-- **Test Code tab:** syntax-highlighted code in the selected framework. Scrollable.
-- **Coverage Matrix tab:** table showing methods (rows) × test case types (columns); predicted coverage %.
-- **Summary tab:** `Predicted coverage: 91%`, `Test count: 24`, `Mocked dependencies: 3`.
+**Service selector (200px):** Scrollable list. Selected item highlighted in `--accent-purple` tint + left purple border. Search input at top.
 
-**Zone 3 — Actions:**
-- `[↓ Save to repo]` (queues to Approvals Center) `[↓ Download]` `[Submit for Approval →]`
+**Test Cases table:** Columns: Test Name | Priority (High/Med/Low chip) | Status (Passed=green, Failed=red chip) | Coverage (colored dot). Sortable columns.
+
+**Coverage donut:** SVG ring chart. Green ring on `--bg-card`. Percentage + quality label ("Good" / "Fair" / "Low") centered inside ring. Stats below.
+
+**SDD Document Preview:** Prose sections. Generated files list with file-type icons. Scrollable.
 
 ---
 
 ### Screen 8: Jira Integration
 
-**Purpose:** Search Jira, view issues, perform bulk updates — all writes queued to Approvals Center.
+**Purpose:** Search Jira, view issues, perform operations — all writes queued to Approvals Center.
 
-**Layout:** Two-pane — query builder top, results list + detail bottom.
+**Layout:** Top query bar → results list (left) + detail pane (right).
 
-**Query bar (top):**
 ```
-[project IN (PROJ, PLAT) AND status != Done AND issuetype = Story  ▼ JQL]  [Run ▶]
+[project IN (RBP, FNT) AND status != Done AND issuetype = Story  ▼ JQL]  [▶ Run]
+[Visual Builder ⇄ JQL Text]
+─────────────────────────────────────────────────────────────────────────────────
+┌─────────────────────────────────┬───────────────────────────────────────────┐
+│ Results (56)          [Select all] │ RB-101  Implement fund transfer API    │
+│                                │                                           │
+│ ● RB-101 Implement fund…  ↻    │ Status:    In Progress                   │
+│   RB-102 Add manage bene  ○    │ Assignee:  Rahul Sharma                  │
+│   RB-103 Download state   ○    │ Story Pts: 8                             │
+│   RB-104 Real-time update ↻    │ Sprint:    SPR-34                        │
+│   RB-105 Security enhanc  ●    │ Labels:    payments, backend, enhance    │
+│   ...                          │                                           │
+│                                │ SprintForge History:                     │
+│                                │  ● SDD attached — 28 Jul  [01ARZ…]      │
+│                                │  ● Description updated — 25 Jul [01ARZ…]│
+│                                │                                           │
+│ [Select all] Bulk: [Transition ▼] │ [Transition Status] [Update SPs]      │
+│ [Apply]                        │ [Attach SDD]  [Link to Epic]             │
+└─────────────────────────────────┴───────────────────────────────────────────┘
 ```
-Toggle between visual chip-based builder and raw JQL text editor.
 
-**Results list (left, virtualized):**
-```
-┌───────────────────────────────────────┐
-│ PROJ-1234  Payment Auth  │ In Progress│
-│ PROJ-1235  Gateway Setup │ To Do      │
-│ ...                                   │
-└───────────────────────────────────────┘
-[Select all]  [Clear]  Bulk actions: [Transition ▼] [Apply]
-```
+**Query bar:** Chip-based visual builder or raw JQL toggle. `[▶ Run]` in `--accent-purple`.
 
-**Detail pane (right, shown on row click):**
-- Issue summary, description, status, assignee, story points, sprint, labels, components.
-- **SprintForge history** section: list of all updates made by this tool (with audit ID links).
-- Action buttons: `[Transition Status]` `[Update Story Points]` `[Attach SDD]` `[Link to Epic]` — all queue to Approvals Center.
+**Results list (virtualized):** Issue key + summary + status icon. Click → detail pane. Multi-select with Ctrl+Click.
+
+**Detail pane:** Full issue fields. "SprintForge History" section lists this tool's prior actions with audit ID links.
 
 ---
 
@@ -456,114 +630,88 @@ Toggle between visual chip-based builder and raw JQL text editor.
 
 **Purpose:** Browse, compare, export, and manage all generated document versions.
 
-**Layout:** Left tree + right version list + bottom preview strip.
+**Layout:** Left tree (220px) + right version list + bottom preview.
 
-**Left tree:**
 ```
-▼ SRS
-  ▼ PROJ-1234 (v3)
-  ▼ PROJ-1100 (v1)
-▼ SAD
-  ▼ PROJ-1234 (v2)
-▼ SDD
-  ▼ PaymentService (v4)
-  ▼ AuthService (v1)
-▼ Tests
-  ▼ PaymentService (v2)
+┌───────────────────┬──────────────────────────────────────────────────────────┐
+│ Document Tree     │ Versions — SRS: PROJ-1234 (Payment Processing)           │
+│                   │                                                           │
+│ ▼ SRS             │ Ver    Date         Format         Hash      Actions      │
+│   ▼ PROJ-1234 (3) │ v003 ★ 2025-07-28  DOCX, PDF, MD  abc123   [↓][Compare] │
+│   ▼ PROJ-1100 (1) │ v002   2025-07-27  DOCX            def456   [↓][Compare] │
+│ ▼ SAD             │ v001   2025-07-26  DOCX            ghi789   [↓][Restore] │
+│   ▼ PROJ-1234 (2) │                                                           │
+│ ▼ SDD             │ ─────────────────────────────────────────────────────── │
+│   ▼ PaymentSvc(4) │ Document Preview (v003)                                  │
+│   ▼ AuthSvc (1)   │ ┌──────────────────────────────────────────────────────┐│
+│ ▼ Tests           │ │ # SRS: PROJ-1234 — Payment Processing System         ││
+│   ▼ PaymentSvc(2) │ │ ## 1. Functional Requirements                        ││
+│                   │ │ - FR-001: The system shall support real-time...       ││
+│                   │ └──────────────────────────────────────────────────────┘│
+└───────────────────┴──────────────────────────────────────────────────────────┘
+[Compare v2 vs v3]  [Restore to v2]  [↓ Export PDF]  [↓ Export DOCX]  [🔗 Attach to Jira]
 ```
 
-**Right — Version list (for selected document):**
-| Version | Date | Format | Hash | Audit ID | Actions |
-|---|---|---|---|---|---|
-| v003 (latest) | 2024-12-16 | DOCX, PDF, MD | abc123 | 01ARZ… | Download, Compare |
-| v002 | 2024-12-15 | DOCX | def456 | 01ARZ… | Download, Compare, Restore |
-| v001 | 2024-12-14 | DOCX | ghi789 | 01ARZ… | Download, Compare, Restore |
+**Document tree:** Folder tree with expand/collapse. Each document entry shows `(count)` of versions.
 
-**Bottom preview strip (on version click):** first page preview of the document (thumbnail).
+**Version list table:** Version number (latest marked `★`), date, format chips (DOCX/PDF/MD as colored pills), hash truncated, action buttons.
 
-**Actions:**
-- `[Compare v2 vs v3]` → opens Compare modal (side-by-side diff).
-- `[Restore to v2]` → queues "create new version from v2" to Approvals Center.
-- `[↓ Export as PDF]` / `[↓ Export as DOCX]` / `[↓ Export as MD]`.
-- `[🔗 Attach to Jira issue]` → queues attachment to Approvals Center.
+**Preview strip:** Read-only markdown render of selected version. Scrollable.
 
 ---
 
-### Screen 10: Audit Dashboard
+### Screen 10: Audit Center
 
 **Purpose:** Complete, searchable, filterable history of every action the application has taken.
 
-**Layout:** Tabs across top, filter bar, master list (left), detail pane (right).
+**Layout:** Top search/filter bar → full-width event table → right detail pane (slides in).
 
-**Filter bar:**
 ```
-[Module: All ▼]  [Action: All ▼]  [Status: All ▼]  [From: 2024-12-01] [To: 2024-12-16]
-[CorrelationId: _______________]  [Jira Issue: _______]  [🔍 Search]  [Clear]
-```
-
-**Tabs:**
-
-**1. Timeline** — newest-first flat list:
-```
-2024-12-15 14:30:05  SRS    SrsGeneration     ● Completed    PROJ-1234  [▶ Details]
-2024-12-15 14:30:01  AI     Prompt            ● Completed    —          [▶ Details]
-2024-12-15 14:29:50  Jira   Search            ● Completed    PROJ       [▶ Details]
-2024-12-15 14:28:00  System AppStart          ● Completed    —          [▶ Details]
+[🔍 Search audit logs…]  [Filters ▼]  [14 Jul 2025 – 25 Jul 2026 ▼]  [Users ▼]  [Modules ▼]  [⤢]
+─────────────────────────────────────────────────────────────────────────────────────────────────────
+Timestamp            User              Action          Module      Entity          Status
+──────────────────── ──────────────── ─────────────── ─────────── ─────────────── ──────────
+30 Jul 10:36 AM      Akshay Patwari   SRS Generation  SRS         Account Mgmt    ● Completed
+30 Jul 10:35 AM      Neha Verma        SAD Published   SAD         Payment Service ● Completed
+30 Jul 10:22 AM      Rahul Sharma      Unit Tests Gen  Unit Tests  Payment Svc     ● Completed
+30 Jul 09:58 AM      Priya Singh       Jira Update     Jira        RB-102          ● Completed
+30 Jul 09:45 AM      AI Copilot        Code Committed  Repository  payment-service ● Completed
+15 Jul 09:08 AM      Akshay Patwari   Backup Generated System     Backup          ● Completed
 ```
 
-**2. Tree** — parent/child event hierarchy (correlation ID grouping):
+Status chips: full colored pill badges. Module tags: colored module-specific chips (SRS=blue, SAD=teal, Jira=orange, Tests=green, etc.).
+
+**Detail pane (slides in from right on row click, 400px):**
 ```
-▼ [corr_abc123] SRS Generation  14:28–14:30  ● Completed
-  ├─ AI Prompt (SrsAgent)                     ● Completed  tokens: 1,240
-  ├─ Approval: Update Jira PROJ-1234          ✓ Approved
-  │   └─ Jira: UpdateDescription              ● Completed
-  └─ Document: Save SRS-PROJ-1234.docx        ● Completed
-```
-
-**3. Sessions** — one row per app session (launch to close); expand to see all events.
-
-**4. Jira** — all Jira-related events; columns: action, issue key, project, status, time.
-
-**5. AI Prompts** — all AI calls; columns: agent, model, tokens, cost, time, status.  
-Click row to see: full rendered prompt, AI response, model config.  
-`[▶ Replay]` button re-runs the identical request.
-
-**6. Files** — all generated/modified files; columns: document ID, version, format, hash, size, date, audit ID.
-
-**7. Approvals** — full approval history (not the live queue — that's the Approvals Center screen).
-
-**8. Rollbacks** — all rollback operations.
-
-**Detail pane (right, opens on any row click):**
-```
-─── Audit Event ─────────────────────────────────────────
-Audit ID:    01ARZ3NDEKTSV4RRFFQ69G5FAV
-Module:      SRS
-Action:      SrsGeneration
-Status:      ● Completed
-User:        akshay.patwari
-Machine:     ACME-DEV-01
-Time (UTC):  2024-12-15 09:00:05
-Time (IST):  2024-12-15 14:30:05
-Duration:    12,450 ms  |  Retries: 0
+─── Audit Event ──────────────────────────────────────────
+Audit ID:    01ARZ3NDEKTSV4RRFFQ69G5FAV           [Copy]
+Module:      SRS                Status:  ● Completed
+Action:      SrsGeneration      Duration: 12,450 ms
+User:        akshay.patwari     Retries:  0
+Machine:     ACME-DEV-01        Time (UTC): 2025-07-30 05:06
 
 Inputs:
-  Brief:     "Payment processing system..."
-  SRS ID:    PROJ-1234
-  Template:  Default SRS
+  Brief:    "Account management system..."
+  SRS ID:   PROJ-1234
+  Template: Default SRS
 
 Output Files:
-  📄 SRS-PROJ-1234.docx   SHA: abc123...  [↓ Download]
-  📄 SRS-PROJ-1234.pdf    SHA: def456...  [↓ Download]
+  📄 SRS-PROJ-1234.docx   SHA: abc123  [↓]
+  📄 SRS-PROJ-1234.pdf    SHA: def456  [↓]
+
+AI Call:
+  Model: claude-sonnet-5   Tokens: 1,240   Temp: 0.2
 
 Linked Events:
-  ↓ AI Prompt  01ARZ...FAU  [View]
-  ↓ Approval   01ARZ...FAX  [View]
-  ↓ Jira Update 01ARZ...FAW [View]
+  ↓ AI Prompt   01ARZ…FAU  [View]
+  ↓ Approval    01ARZ…FAX  [View]
+  ↓ Jira Update 01ARZ…FAW  [View]
 
-[🔁 Rollback]  [📋 Copy Audit ID]  [↗ View in Jira]
-─────────────────────────────────────────────────────────
+[🔁 Rollback]   [📋 Copy ID]   [↗ Open in Jira]
+──────────────────────────────────────────────────
 ```
+
+**Tabs (above table):** Timeline | Tree | Sessions | Jira | AI Prompts | Files | Approvals | Rollbacks.
 
 ---
 
@@ -571,110 +719,119 @@ Linked Events:
 
 **Purpose:** The only place writes happen. All write operations queue here; nothing executes until the user decides.
 
-**Layout:** Header stats bar + scrollable approval item list.
-
-**Header stats bar:**
-```
-Queue: 3 pending   |   Today: 12 approved, 2 rejected   |   [Approve All]  [Cancel All]
-```
-
-**Approval item card (one per queued operation):**
+**Layout:** Header stats bar + scrollable list of approval item cards.
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│  ⏱ PENDING   [SRS]  Jira: Update description — PROJ-1234               │
-│  Queued: 2024-12-15 14:30:00   Audit ID: 01ARZ3NDEKTSV4RRFFQ69G5FAV   │
-├─────────────────────────────────────────────────────────────────────────┤
-│  CURRENT VALUE                    │  PROPOSED VALUE                     │
-│  (empty)                          │  # SRS: PROJ-1234                   │
-│                                   │  This SRS describes the payment...  │
-│                                   │  ## Functional Requirements         │
-│                                   │  - FR-001: The system shall...      │
-├─────────────────────────────────────────────────────────────────────────┤
-│  ✦ AI Explanation:                                                      │
-│  Generated from brief description using Default SRS template.          │
-│  Model: claude-sonnet-5  |  Tokens: 1,240  |  Temp: 0.2               │
-├─────────────────────────────────────────────────────────────────────────┤
-│  Affected:                                                              │
-│  📋 Jira field: description (PROJ-1234)                                │
-│  📄 File: Documents/SRS/PROJ-1234/v001/SRS-PROJ-1234.docx             │
-├─────────────────────────────────────────────────────────────────────────┤
-│  [✓ Approve]  [✎ Modify]  [✗ Reject]  [✕ Cancel]                      │
-└─────────────────────────────────────────────────────────────────────────┘
+Queue: 3 pending  |  Today: 12 approved, 2 rejected  |  [Approve All]  [Cancel All]
+──────────────────────────────────────────────────────────────────────────────────────
 ```
 
-**Batch item card (Sprint Planning — grouped):**
-
+**Individual approval card:**
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│  ⏱ BATCH   [Sprint]  Jira: Create 32 work items  — Sprint 14           │
-│  Batch ID: batch_20241215_001   Queued: 14:25:00                       │
-├─────────────────────────────────────────────────────────────────────────┤
-│  ▼ PROJ-2345  Story: User Auth Integration    [8 SP]  [5d]             │
-│    ▼ PROJ-2346  DEV: Implement login          [2d]                     │
-│    ▼ PROJ-2347  DEV: Token refresh            [1d]                     │
-│    ▼ PROJ-2348  TST: Unit tests               [1d]                     │
-│  ▼ PROJ-2349  Story: Payment Gateway          [13 SP] [7d]             │
-│    ... (28 more)                                      [Show all ▼]     │
-├─────────────────────────────────────────────────────────────────────────┤
-│  [✓ Approve All in Batch]  [✎ Review individually]  [✗ Reject Batch]  │
-└─────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────┐
+│ ⏱ PENDING   [SRS]   Jira: Update description — PROJ-1234                      │
+│ Queued: 30 Jul 2025 10:36 AM    Audit ID: 01ARZ3NDEKTSV4RRFFQ69G5FAV  [Copy] │
+├───────────────────────────────────┬────────────────────────────────────────────┤
+│ Current Values                    │ Proposed Values (AI Suggested)             │
+│                                   │                                            │
+│ Summary: Implement fund transfer  │ Summary: Implement fund transfer API       │
+│          API                      │         with validation                    │
+│                                   │                                            │
+│ Priority: High                    │ Priority: High                             │
+│                                   │                                            │
+│ Assignee: Rahul Sharma            │ Assignee: Rahul Sharma                     │
+│                                   │                                            │
+│ Story Pts: 8                      │ Story Pts: 13                              │
+│                                   │                                            │
+│ Labels: payments, backend         │ Labels: payments, backend, enhancement     │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│ ✦ AI Explanation                                                                │
+│ It has analysed the requirements and identified the need to change Story        │
+│ Points from 8 to 13 due to additional validation work…                         │
+│                                                                                 │
+│ Affected Files (3):   PaymentService.java   PaymentController.java   +1        │
+│                                                                                 │
+│ Ask a comment (optional): [_____________________________________________]       │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│ [✓ Approve]           [✎ Modify]           [✗ Reject]                          │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Post-decision states (shown inline, replacing action buttons):**
+**Card anatomy:**
+- Header: status chip (amber "PENDING") + module tag + description + audit ID.
+- Two-column diff: Current Values left, Proposed Values (AI Suggested) right. Changed fields highlighted.
+- AI Explanation: `--bg-elevated` panel with sparkle icon, prose explanation, model/token metadata.
+- Affected Files: horizontal list of file names.
+- Comment field: optional textarea.
+- Actions: `[✓ Approve]` (green filled) | `[✎ Modify]` (outline) | `[✗ Reject]` (red text).
 
-- `● Executing…` with spinner
-- `✓ Completed` in green with timestamp
-- `✗ Failed` in red with error message + `[Retry]` + `[View Error Details]`
-- `✗ Rejected` in red with timestamp
-- `✕ Cancelled` in grey with timestamp
+**Batch approval card:**
+```
+┌────────────────────────────────────────────────────────────────────────────────┐
+│ ⏱ BATCH   [Sprint]   Jira: Create 32 work items — Sprint 34                   │
+│ Batch ID: batch_20250730_001   Queued: 10:25:00                               │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ ▼ STORY  RB-201  User Auth Integration [8 SP] [5d]                            │
+│   ▶ DEV  RB-202  Implement login       [2d]                                   │
+│   ▶ DEV  RB-203  Token refresh         [1d]                                   │
+│   ▶ TST  RB-204  Unit tests            [1d]                                   │
+│ ▼ STORY  RB-205  Payment Gateway [13 SP] [7d]                                 │
+│   ... (28 more)                                              [Show all ▼]     │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ [✓ Approve All in Batch]     [✎ Review individually]     [✗ Reject Batch]    │
+└────────────────────────────────────────────────────────────────────────────────┘
+```
 
-**Modify flow:**
-- Clicking `[✎ Modify]` expands an in-place edit area below the diff.
-- User edits the proposed value inline.
-- Saving the modification creates a new audit record (original is marked Cancelled; modified version is a new Pending item).
+**Post-decision states (replace action row):**
+- `↻ Executing…` with spinner (blue)
+- `✓ Completed at 10:37 AM` (green)
+- `✗ Failed — [error message]  [Retry]  [View Error]` (red)
+- `✗ Rejected at 10:37 AM` (red muted)
+- `✕ Cancelled` (gray)
 
 ---
 
-### Screen 12: Configuration
+### Screen 12: Settings
 
-**Purpose:** Manage all application settings in named profiles.
+**Purpose:** Manage all application settings organized in named profiles.
 
-**Layout:** Profile selector at top + 9-tab editor below.
+**Layout:** Left: General / Integrations tabs (200px) → Right: sub-tab content area.
 
-**Profile bar:**
 ```
-Active profile:  [Acme-Prod ▼]   [+ New]  [Clone]  [Delete]  [Import]  [Export]
-```
-
-**Tabs:** `Jira` | `AI` | `Templates` | `Working Dir` | `Sprint` | `Repos` | `Preferences` | `Logging` | `Audit`
-
----
-
-**Jira tab:**
-```
-Server URL:    [https://acme.atlassian.net___________________________]
-API Dialect:   [Jira Cloud v3 ▼]
-Username:      [user@acme.com_____]
-Auth mode:     [API Token ▼]
-Token:         [•••••••••••••••••]  [👁 Show]  [Clear]
-
-Projects:      [PROJ]  [PLAT]  [+ Add project]  [Sync from Jira]
-Components:    [payments]  [auth]  [+ Add]
-Labels:        [ai-generated]  [+ Add]
-
-Issue Types:   Story → [Story___]  Task → [Task___]  Subtask → [Sub-task___]
-Custom Fields:
-  Story Points: [customfield_10016_]  [🔍 Lookup field ID]
-  Sprint:       [customfield_10020_]
-  Epic Link:    [customfield_10014_]
-
-                   [🔌 Test Connection]  ●  Connection OK (verified 2 hours ago)
-
-[Save]  [Cancel]
+┌────────────────────┬─────────────────────────────────────────────────────────┐
+│ ● General          │ Integrations                                            │
+│   Integrations     │ [Jira ●] [AI Provider] [Git Repository] [CI/CD] [Reposi]│
+│                    │ ─────────────────────────────────────────────────────── │
+│                    │ Repositories                                             │
+│                    │   Jira URL:      [https://jira.sdc.com_______________]  │
+│                    │   Project Key(s):[RBP, FNT, NOT, AUM_________________]  │
+│                    │                                                          │
+│                    │ Username:        [akshay.patwari@sdc.com______________]  │
+│                    │ API Token:       [•••••••••••••••••••••••]  [👁 Show]   │
+│                    │                                                          │
+│                    │ Jira Settings                                            │
+│                    │   API Dialect:   [Jira Cloud v3 ▼]                      │
+│                    │   Auth Mode:     [API Token ▼]                           │
+│                    │                                                          │
+│                    │ Advanced  [▼]                                            │
+│                    │                                                          │
+│                    │   [🔌 Test Connection]  ● Connected                     │
+│                    │                                                          │
+│                    │                              [Save Changes]              │
+└────────────────────┴─────────────────────────────────────────────────────────┘
 ```
 
-**AI tab:**
+**Left tabs:** `General` | `Integrations` — vertical tab list, `--accent-purple` active indicator. Width: `200px`.
+
+**Integrations horizontal sub-tabs:** Jira | AI Provider | Git Repository | CI/CD | Artifact Repository. Pill tab style, `--accent-purple` active.
+
+**Form fields:** `--bg-input` background, `--border` border, `8px` radius. Labels above fields in `--text-secondary`. Secret fields have `[👁 Show]` toggle.
+
+**Test Connection button:** outline style → shows `● Connected` (green chip) or `✗ Failed` (red chip) after test.
+
+**Save Changes button:** `--accent-purple` filled, right-aligned at bottom of content area.
+
+**AI Provider tab:**
 ```
 Providers:
 ┌──────────────────────────────────────────────────────┐
@@ -682,47 +839,31 @@ Providers:
 │  Endpoint: [https://api.anthropic.com___________]    │
 │  API Key:  [•••••••••••••••]  [Clear]                │
 │  Model:    [claude-sonnet-5_____________________]    │
-│  Temperature: [───●──────────] 0.2                   │
+│  Temperature: [─────●────────] 0.2                   │
 │  Max Tokens:  [8192____]                             │
-│  Context Window: [200000__]                          │
-│  [🔌 Test Connection]  ● OK              [Remove]    │
+│  [🔌 Test Connection]  ● OK             [Remove]     │
 └──────────────────────────────────────────────────────┘
 [+ Add Provider]
 
-Default Provider: [primary ▼]
-Fallback Provider: [fallback ▼]
-Cost Alert Threshold: [$50.00__] per session
+Default Provider:   [primary ▼]
+Fallback Provider:  [fallback ▼]
+Cost Alert:         [$50.00__] per session
 ```
 
 **Sprint tab:**
 ```
-Duration:           [10___] days
-Development Days:   [7____] days
-Buffer Days:        [2____] days
-Working Hours/Day:  [8____] hours
-Workweek:           ☑ Mon  ☑ Tue  ☑ Wed  ☑ Thu  ☑ Fri  ☐ Sat  ☐ Sun
+Duration:         [10___] days
+Development Days: [7____] days
+Buffer Days:      [2____] days
+Working Hours:    [8____] hours/day
+Workweek: ☑ Mon ☑ Tue ☑ Wed ☑ Thu ☑ Fri ☐ Sat ☐ Sun
 
 Holidays:
-  2026-08-15  Independence Day   [Remove]
-  2026-10-02  Gandhi Jayanti     [Remove]
+  2026-08-15  Independence Day    [Remove]
+  2026-10-02  Gandhi Jayanti      [Remove]
   [+ Add holiday]
 
-Capacity preview: 56 working hours available in a 10-day sprint (after 2 buffer days, 0 holidays)
-```
-
-**Repos tab:**
-```
-┌──────────────────────────────────────────────────────┐
-│  Name:     payments-api                              │
-│  Kind:     [Java ▼]                                  │
-│  Provider: [GitHub ▼]                                │
-│  URL:      [https://github.com/acme/payments_]       │
-│  Local:    [D:/SprintForge/Acme/Workspaces/pay…]  [Browse] │
-│  Branch:   [main___]                                 │
-│  Token:    [•••••••••] [Clear]                       │
-│  [🔌 Test]  ● OK                       [Remove]      │
-└──────────────────────────────────────────────────────┘
-[+ Add Repository]
+Capacity preview: 56 working hours in 10-day sprint (after 2 buffer days, 0 holidays)
 ```
 
 ---
@@ -730,41 +871,57 @@ Capacity preview: 56 working hours available in a 10-day sprint (after 2 buffer 
 ## 5. Shared components
 
 ### 5.1 Status chip
-Colored pill badge. Variants:
-| Status | Color | Icon |
-|---|---|---|
-| Completed | Green | ✓ |
-| Failed | Red | ✗ |
-| Pending | Amber | ⏱ |
-| Queued | Blue | → |
-| Executing | Blue (pulsing) | ↻ |
-| Rejected | Red | ✗ |
-| Cancelled | Grey | ✕ |
-| Approved | Green | ✓ |
+Pill badge. Background: colored low-opacity tint. Border: matching color. Text: colored.
 
-### 5.2 Diff viewer
-Side-by-side panels with line numbers. `--diff-add` background for additions, `--diff-remove` for deletions. Section-level collapse (unchanged sections collapsed by default). Toggle between side-by-side and unified view.
+| Status | Text color | Background | Border |
+|---|---|---|---|
+| Completed / Connected | `--success` | `--success-bg` | `--success` |
+| In Progress | `--accent-blue` | `rgba(59,130,246,0.15)` | `--accent-blue` |
+| Pending Review | `--warning` | `--warning-bg` | `--warning` |
+| Failed / Rejected | `--error` | `--error-bg` | `--error` |
+| Queued | `--accent-purple` | `rgba(124,58,237,0.15)` | `--accent-purple` |
+| Cancelled | `--text-muted` | transparent | `--border` |
+| High Priority | `--error` | `--error-bg` | `--error` |
+
+Icon (dot or symbol) always precedes the label — color is never the sole indicator.
+
+### 5.2 Diff viewer rows
+Three row types with full-width colored backgrounds and left accent border (4px):
+- **Added:** `--diff-added-bg` bg, `--diff-added-text` border + tag pill.
+- **Removed:** `--diff-removed-bg` bg, `--diff-removed-text` border + tag pill.
+- **Modified:** `--diff-modified-bg` bg, `--diff-modified-text` border + tag pill.
+
+Tag pill: small rounded badge ("Added" / "Removed" / "Modified") in matching text color on slightly darker bg.
 
 ### 5.3 Version selector
-Dropdown showing: `v003 (latest) — 2024-12-16`, `v002 — 2024-12-15`, `v001 — 2024-12-14`. Clicking a non-latest version shows an amber banner "You are viewing a previous version. [Restore to this version]".
+Dropdown: `v003 (latest) — 2025-07-28`, `v002 — 2025-07-27`, etc. Latest marked with `★`. Viewing a non-latest shows amber banner: "You are viewing a previous version. [Restore to this version]".
 
 ### 5.4 AI explanation panel
-Collapsible, grey-bordered panel below preview content. Shows: model used, temperature, tokens, brief explanation of AI reasoning. Default collapsed; user expands on demand.
+Collapsible panel with `--bg-elevated` background and left `--accent-purple` border (4px). Header: sparkle icon `✦` + "AI Explanation" label. Content: prose explanation + model/tokens/temperature metadata. Collapsed by default; chevron toggle.
 
 ### 5.5 Audit ID link
-Small `#01ARZ…` chip in metadata rows. Clicking navigates to the Audit Dashboard filtered to that event.
+Small monospace chip `#01ARZ…` in `--bg-elevated`, `--text-muted`. `[Copy]` icon beside it. Clicking navigates to Audit Center filtered to that event.
 
 ### 5.6 Connection status indicator
-Small dot + label. `● Connected` (green), `● Disconnected` (red), `↻ Connecting` (amber animated), `⊘ Not configured` (grey).
+`● Connected` (green dot) / `● Disconnected` (red dot) / `↻ Connecting` (amber animated dot) / `⊘ Not configured` (gray).
 
 ### 5.7 NEEDS-CLARIFICATION marker
-Inline amber box inside document previews: `⚠ NEEDS-CLARIFICATION: [message]` + `[Resolve]` link that scrolls to the relevant input field or opens an inline text override. "Submit for Approval" is disabled while any unresolved markers exist.
+Amber inline block inside document previews: amber left border (4px), `--warning-bg` background, `⚠ NEEDS-CLARIFICATION: [message]` text + `[Resolve]` link. "Submit for Approval" disabled while any unresolved.
 
 ### 5.8 Progress bar (long operations)
-Full-width, below the action bar. Shows: label ("Scanning repository: 450 / 1,240 files…"), percentage, elapsed time, `[✕ Cancel]` button.
+Full-width strip below action bar. `--accent-purple` filled track. Label: "Scanning: 450 / 1,240 files…". Elapsed time right-aligned. `[✕ Cancel]` button.
 
 ### 5.9 Empty state
-Centered illustration + heading + subtext + primary action button. Example: "No approvals pending — You're all caught up" with a green checkmark illustration.
+Centered in content area: icon (large, `--text-muted`), heading (`--text-primary`), subtext (`--text-secondary`), primary action button. Example: "No approvals pending — You're all caught up" + green checkmark illustration.
+
+### 5.10 Circular progress gauge
+SVG ring chart. Track: `--border`. Fill: `--accent-purple` (or `--success` for coverage). Percentage label in center: bold, `--text-primary`. Sub-label below: `--text-secondary`. Used for sprint progress and AI coverage.
+
+### 5.11 KPI stat card
+`--bg-card` background, `--border` border, `10px` radius, `16px` padding.
+- Large number: `28–32px`, bold, `--text-primary`.
+- Sub-label: `12px`, `--text-secondary`.
+- Trend badge: small pill — green `+N ▲`, red `-N ▼`, amber `⚠ N`.
 
 ---
 
@@ -772,35 +929,34 @@ Centered illustration + heading + subtext + primary action button. Example: "No 
 
 ### 6.1 Generate → preview → approve
 1. User fills input fields.
-2. Clicks Generate / AI button.
-3. Progress spinner shows; generation is cancellable.
+2. Clicks Generate / AI button (purple, sparkle icon).
+3. Progress strip shows; cancellable via `[✕]`.
 4. Preview populates with versioned content.
-5. User reviews; resolves any NEEDS-CLARIFICATION markers.
-6. User clicks "Submit for Approval."
-7. Success toast: "Queued for approval. Visit Approvals Center."
-8. Status bar approvals badge increments.
+5. Diff viewer shows changes from previous version.
+6. User reviews; resolves NEEDS-CLARIFICATION markers.
+7. User clicks "Submit for Approval."
+8. Toast: "✓ Queued for approval. Open Approvals Center." Approvals badge increments.
 
 ### 6.2 Approvals Center workflow
-1. User clicks approvals badge or navigates to Approvals Center.
-2. Reviews each item: sees current vs proposed diff, AI explanation, affected artifacts, audit ID.
-3. Clicks Approve / Reject / Cancel per item (or Approve All).
-4. Approved items show Executing spinner, then Completed/Failed.
-5. Failed items show error + Retry option.
+1. User clicks notifications badge or navigates to Approvals Center.
+2. Reviews each card: current vs proposed diff, AI explanation, affected files, audit ID.
+3. Clicks Approve / Reject / Cancel per card (or Approve All).
+4. Approved items show Executing spinner → Completed / Failed.
+5. Failed items: error + Retry.
 
 ### 6.3 Rollback
-1. User finds a COMPLETED event in the Audit Dashboard.
-2. Clicks `[Rollback]` in the event detail pane.
-3. A new approval item is queued: "Rollback: [original action]" with the previous state as the proposed value.
-4. User approves the rollback in Approvals Center.
-5. Rollback executes; a new COMPLETED audit event records the outcome.
+1. Find COMPLETED event in Audit Center.
+2. Click `[🔁 Rollback]` in detail pane.
+3. New approval card queued: "Rollback: [original action]" with previous state as proposed.
+4. Approve rollback in Approvals Center.
+5. Rollback executes; new COMPLETED audit event records outcome.
 
 ### 6.4 Search → select → act (Jira, SDD)
-1. User enters search query and clicks Search/Run.
-2. Results populate in a virtualized list.
-3. User clicks a row to see detail pane.
-4. User selects one or more rows (bulk select with Ctrl+Click / Shift+Click).
-5. User chooses a bulk action from a dropdown.
-6. Items queue to Approvals Center.
+1. Enter query; click Search/Run.
+2. Results in virtualized list.
+3. Click row → detail pane.
+4. Multi-select with Ctrl+Click / Shift+Click.
+5. Choose bulk action from dropdown → queues to Approvals Center.
 
 ---
 
@@ -809,21 +965,22 @@ Centered illustration + heading + subtext + primary action button. Example: "No 
 - WCAG 2.1 AA compliance.
 - Full keyboard navigation: Tab order matches visual order; Enter activates; Escape closes panels.
 - Screen reader labels on all interactive elements (AutomationId + Name in WPF).
-- Focus rings visible on all focusable elements (never hidden with `outline: none`).
-- Color is never the sole indicator of state (always paired with icon or text).
+- Focus rings visible on all focusable elements — `2px solid --accent-purple`, `2px offset`.
+- Color paired with icon or text — never sole state indicator.
 - Font size configurable (Preferences tab: Small / Medium / Large / Extra Large).
-- High contrast mode support (system `SystemParameters.HighContrast` detection).
+- High contrast mode detected via `SystemParameters.HighContrast`; switches to system colors.
 
 ---
 
-## 8. Responsive / window behavior
+## 8. Window behavior
 
-- **Minimum window size:** `1024 × 768`.
-- **Default window size:** `1280 × 800`.
-- Workspace area uses available width; panels are resizable via drag handles.
-- Nav rail collapses to icon-only at window widths below `1100px` (automatic; user can override).
-- Preview zones are scrollable independently of the shell.
-- Audit list and Jira results list use WPF virtualization — no performance degradation at 10,000+ items.
+- **Minimum window size:** `1280 × 800`.
+- **Default window size:** `1440 × 900`.
+- Workspace area uses available width; panel dividers are drag-resizable.
+- Nav rail collapses to icon-only at window widths below `1200px` (automatic; user can override).
+- Three-panel layouts collapse to two panels at widths below `1100px` (rightmost panel hides; accessible via tab).
+- Preview zones scroll independently of the shell.
+- Audit list and Jira results list use WPF VirtualizingStackPanel — no degradation at 10,000+ rows.
 
 ---
 
@@ -831,6 +988,9 @@ Centered illustration + heading + subtext + primary action button. Example: "No 
 
 - Nav rail collapse/expand: `150ms ease-out` width transition.
 - Toast slide-in: `200ms ease-out` from bottom-right.
-- Status chip change (e.g., Executing → Completed): brief `300ms` background flash.
+- Status chip change (Executing → Completed): `300ms` background flash.
+- Panel slide-in (detail pane, approval panel): `200ms ease-out` from right.
+- Circular gauge fill on load: `600ms ease-in-out` ring draw animation.
 - Progress bar: smooth fill, no frame drops.
-- All other transitions: prefer instant or `< 150ms`; this is a productivity tool, not a marketing page.
+- All other transitions: `< 150ms` or instant — this is a productivity tool, not a marketing page.
+- Respect `prefers-reduced-motion`: drop all transitions except instant state changes when enabled.
