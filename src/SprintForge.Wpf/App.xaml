@@ -38,8 +38,6 @@
             <SolidColorBrush x:Key="WarningBrush"      Color="{StaticResource WarningColor}"/>
             <SolidColorBrush x:Key="ErrorBrush"        Color="{StaticResource ErrorColor}"/>
 
-            <!-- ── Converters ─────────────────────────────────────────────── -->
-            <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
             <!-- ── Global typography ──────────────────────────────────────── -->
             <Style TargetType="TextBlock">

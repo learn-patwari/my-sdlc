@@ -61,7 +61,6 @@
                                 <Button Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}"
                                         Style="{StaticResource PrimaryButton}"
-                                        Background="{Binding IsActive, Converter={x:Static BoolToVisConverter}, ConverterParameter=AccentPurpleBrush}"
                                         Margin="0,4" Padding="12,10" HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Left">
                                     <StackPanel Orientation="Horizontal">
