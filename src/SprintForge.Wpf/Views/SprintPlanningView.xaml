@@ -6,83 +6,74 @@
 
     <DockPanel>
 
-        <!-- Header: sprint selector + capacity chips -->
+        <!-- ── Header: sprint name + capacity chips + actions ────────────── -->
         <Border DockPanel.Dock="Top" Background="{StaticResource BgCardBrush}"
                 BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
-                Padding="16,12">
+                Padding="16,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
-                <!-- Sprint name + capacity chips -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- Sprint selector (static, wired to Sprint Settings in future) -->
                     <Border Background="{StaticResource BgElevatedBrush}"
                             BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
-                            CornerRadius="6" Padding="10,6" Margin="0,0,16,0">
+                            CornerRadius="6" Padding="10,5" Margin="0,0,14,0">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding SprintName}" FontSize="14" FontWeight="SemiBold"
-                                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,6,0"/>
+                            <TextBlock Text="{Binding SprintName}" FontSize="13" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,5,0"/>
                             <TextBlock Text="▾" Foreground="{StaticResource TextMutedBrush}" FontSize="10"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
-                    <StackPanel Orientation="Horizontal">
-                        <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
-                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
-                                Padding="10,4" Margin="0,0,8,0">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Capacity " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
-                                <TextBlock Text="{Binding CapacityPts, StringFormat={}{0} pts}"
-                                           FontSize="11" FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
-                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
-                                Padding="10,4" Margin="0,0,8,0">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Committed " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
-                                <TextBlock Text="{Binding CommittedPts, StringFormat={}{0} pts}"
-                                           FontSize="11" FontWeight="SemiBold"
-                                           Foreground="{StaticResource WarningBrush}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
-                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
-                                Padding="10,4" Margin="0,0,8,0">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Completed " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
-                                <TextBlock Text="{Binding CompletedPts, StringFormat={}{0} pts}"
-                                           FontSize="11" FontWeight="SemiBold"
-                                           Foreground="{StaticResource SuccessBrush}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
-                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
-                                Padding="10,4" Margin="0,0,8,0">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Remaining " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
-                                <TextBlock Text="{Binding RemainingPts, StringFormat={}{0} pts}"
-                                           FontSize="11" FontWeight="SemiBold"
-                                           Foreground="{StaticResource AccentBlueBrush}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
-                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
-                                Padding="10,4">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Utilization " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
-                                <TextBlock Text="{Binding UtilizationPct, StringFormat={}{0}%}"
-                                           FontSize="11" FontWeight="SemiBold"
-                                           Foreground="{StaticResource WarningBrush}"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
+                    <!-- Capacity chips -->
+                    <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                            Padding="8,3" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Capacity " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding CapacityPts, StringFormat={}{0} pts}" FontSize="11"
+                                       FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                            Padding="8,3" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Committed " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding CommittedPts, StringFormat={}{0} pts}" FontSize="11"
+                                       FontWeight="SemiBold" Foreground="{StaticResource WarningBrush}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                            Padding="8,3" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Completed " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding CompletedPts, StringFormat={}{0} pts}" FontSize="11"
+                                       FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                            Padding="8,3" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Remaining " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding RemainingPts, StringFormat={}{0} pts}" FontSize="11"
+                                       FontWeight="SemiBold" Foreground="{StaticResource AccentBlueBrush}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                            Padding="8,3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Utilization " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding UtilizationPct, StringFormat={}{0}%}" FontSize="11"
+                                       FontWeight="SemiBold" Foreground="{StaticResource WarningBrush}"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
-
-                <!-- Action buttons -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <Button Content="Import" Style="{StaticResource OutlineButton}"
                             Command="{Binding ImportCommand}" Margin="0,0,8,0"/>
@@ -92,335 +83,600 @@
             </Grid>
         </Border>
 
-        <!-- Status bar -->
+        <!-- ── Tab strip ──────────────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Top" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                Padding="16,0">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Sprint Plan" Command="{Binding SelectTabCommand}"
+                        CommandParameter="Plan" Padding="12,8" Margin="0,0,4,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActiveTab}" Value="Plan">
+                                    <Setter Property="Foreground"   Value="{StaticResource AccentPurpleBrush}"/>
+                                    <Setter Property="BorderBrush"  Value="{StaticResource AccentPurpleBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Task Timeline" Command="{Binding SelectTabCommand}"
+                        CommandParameter="Timeline" Padding="12,8">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActiveTab}" Value="Timeline">
+                                    <Setter Property="Foreground"   Value="{StaticResource AccentPurpleBrush}"/>
+                                    <Setter Property="BorderBrush"  Value="{StaticResource AccentPurpleBrush}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- ── Status bar ─────────────────────────────────────────────────── -->
         <Border DockPanel.Dock="Bottom" Background="{StaticResource BgCardBrush}"
                 BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,1,0,0"
-                Padding="16,6">
+                Padding="16,5">
             <TextBlock Text="{Binding StatusMessage}" FontSize="11"
                        Foreground="{StaticResource TextMutedBrush}"/>
         </Border>
 
-        <!-- Main two-panel: backlog + gantt -->
+        <!-- ══════════════════════════════════════════════════════════════════
+             TAB CONTENT — two overlapping grids, one visible at a time
+             ══════════════════════════════════════════════════════════════════ -->
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="360"/>
-                <ColumnDefinition Width="*" MinWidth="400"/>
-            </Grid.ColumnDefinitions>
 
-            <!-- Left: Sprint backlog -->
-            <Border Grid.Column="0" Background="{StaticResource BgCardBrush}"
-                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,1,0">
-                <DockPanel>
+            <!-- ── TAB 1: Sprint Plan ────────────────────────────────────── -->
+            <Grid x:Name="PlanPanel">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ActiveTab}" Value="Plan">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="340"/>
+                    <ColumnDefinition Width="*" MinWidth="380"/>
+                </Grid.ColumnDefinitions>
 
-                    <!-- Backlog header with SRS toggle -->
-                    <Border DockPanel.Dock="Top" Padding="12,8"
-                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Sprint Backlog" FontWeight="SemiBold" FontSize="13"
-                                       Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-                            <Button Grid.Column="1" Command="{Binding ToggleSrsPickerCommand}"
-                                    Padding="10,4" FontSize="11">
-                                <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
-                                        <Setter Property="Content" Value="+ Add from SRS ▾"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ShowSrsPicker}" Value="True">
-                                                <Setter Property="Content" Value="− Add from SRS ▴"/>
-                                                <Setter Property="Foreground" Value="{StaticResource AccentPurpleBrush}"/>
-                                                <Setter Property="BorderBrush" Value="{StaticResource AccentPurpleBrush}"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                        </Grid>
-                    </Border>
+                <!-- Left: Sprint backlog ─────────────────────────────────── -->
+                <Border Grid.Column="0" Background="{StaticResource BgCardBrush}"
+                        BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,1,0">
+                    <DockPanel>
 
-                    <!-- SRS requirement picker (collapsible) -->
-                    <Border DockPanel.Dock="Top" MaxHeight="220"
-                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Setter Property="Background" Value="{StaticResource BgSurfaceBrush}"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ShowSrsPicker}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <DockPanel>
-                            <Border DockPanel.Dock="Top" Padding="12,6,12,4"
-                                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
-                                <TextBlock Text="Available SRS Requirements — select to add to this sprint"
-                                           FontSize="10" Foreground="{StaticResource TextMutedBrush}"/>
-                            </Border>
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <ItemsControl ItemsSource="{Binding AvailableSrs}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type vm:SrsItem}">
-                                            <Border BorderBrush="{StaticResource BorderColorBrush}"
-                                                    BorderThickness="0,0,0,1" Padding="12,6"
-                                                    Background="Transparent">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <StackPanel VerticalAlignment="Center">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding Id}" FontSize="10"
-                                                                       Foreground="{StaticResource AccentBlueBrush}"
-                                                                       Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                                            <TextBlock Text="{Binding Title}" FontSize="12"
-                                                                       Foreground="{StaticResource TextPrimaryBrush}"
-                                                                       TextTrimming="CharacterEllipsis"/>
+                        <!-- Backlog header with SRS toggle -->
+                        <Border DockPanel.Dock="Top" Padding="12,7"
+                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Sprint Backlog" FontWeight="SemiBold" FontSize="13"
+                                           Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                <Button Grid.Column="1" Command="{Binding ToggleSrsPickerCommand}" Padding="9,3" FontSize="11">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                                            <Setter Property="Content" Value="+ Add from SRS ▾"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ShowSrsPicker}" Value="True">
+                                                    <Setter Property="Content"      Value="− Add from SRS ▴"/>
+                                                    <Setter Property="Foreground"   Value="{StaticResource AccentPurpleBrush}"/>
+                                                    <Setter Property="BorderBrush"  Value="{StaticResource AccentPurpleBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </Grid>
+                        </Border>
+
+                        <!-- SRS requirement picker (collapsible) -->
+                        <Border DockPanel.Dock="Top" MaxHeight="210"
+                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Setter Property="Background" Value="{StaticResource BgSurfaceBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowSrsPicker}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <DockPanel>
+                                <Border DockPanel.Dock="Top" Padding="12,5,12,4"
+                                        BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                                    <TextBlock Text="SRS Requirements — Add to schedule tasks automatically"
+                                               FontSize="10" Foreground="{StaticResource TextMutedBrush}"/>
+                                </Border>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding AvailableSrs}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type vm:SrsItem}">
+                                                <Border BorderBrush="{StaticResource BorderColorBrush}"
+                                                        BorderThickness="0,0,0,1" Padding="12,5">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel VerticalAlignment="Center">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="{Binding Id}" FontSize="10"
+                                                                           Foreground="{StaticResource AccentBlueBrush}"
+                                                                           Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding Title}" FontSize="12"
+                                                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                                                           TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+                                                            <TextBlock Text="{Binding ServicesDisplay}" FontSize="10"
+                                                                       Foreground="{StaticResource TextMutedBrush}" Margin="0,2,0,0"/>
                                                         </StackPanel>
-                                                        <TextBlock Text="{Binding ServicesDisplay}" FontSize="10"
-                                                                   Foreground="{StaticResource TextMutedBrush}"
-                                                                   Margin="0,2,0,0"/>
-                                                    </StackPanel>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal"
-                                                                VerticalAlignment="Center" Margin="8,0,0,0">
-                                                        <TextBlock Text="{Binding SuggestedPts, StringFormat={}{0}pt}"
-                                                                   FontSize="11" FontWeight="SemiBold"
-                                                                   Foreground="{StaticResource TextMutedBrush}"
-                                                                   Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                                        <Button Content="Add" Padding="10,3" FontSize="11"
-                                                                Style="{StaticResource PrimaryButton}"
-                                                                Command="{Binding DataContext.AddSrsToSprintCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                CommandParameter="{Binding}"/>
-                                                    </StackPanel>
-                                                </Grid>
+                                                        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                                                    VerticalAlignment="Center" Margin="8,0,0,0">
+                                                            <TextBlock Text="{Binding SuggestedPts, StringFormat={}{0}pt}"
+                                                                       FontSize="11" FontWeight="SemiBold"
+                                                                       Foreground="{StaticResource TextMutedBrush}"
+                                                                       Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                            <Button Content="Add" Padding="10,3" FontSize="11"
+                                                                    Style="{StaticResource PrimaryButton}"
+                                                                    Command="{Binding DataContext.AddSrsToSprintCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    CommandParameter="{Binding}"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Column headers -->
+                        <Border DockPanel.Dock="Top" Padding="12,5"
+                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                                Background="{StaticResource BgCardBrush}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="88"/>
+                                    <ColumnDefinition Width="46"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="56"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Task / Subtask" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="1" Text="Type" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="2" Text="Assignee" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="3" Text="Est." FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Column="4" Text="Status" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="5" Text="Edit" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Work item list -->
+                        <ListBox ItemsSource="{Binding WorkItems}" Background="Transparent" BorderThickness="0"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Background"       Value="Transparent"/>
+                                    <Setter Property="BorderThickness"  Value="0"/>
+                                    <Setter Property="Padding"          Value="0"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource BgElevatedBrush}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:WorkItemRow}">
+                                    <Border BorderBrush="{StaticResource BorderColorBrush}"
+                                            BorderThickness="0,0,0,1" Padding="12,4">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="88"/>
+                                                <ColumnDefinition Width="46"/>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="56"/>
+                                            </Grid.ColumnDefinitions>
+                                            <!-- Name + date hint -->
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border Width="{Binding IndentWidth}" Background="Transparent"/>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock x:Name="NameLabel" Text="{Binding Name}"
+                                                               FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                    <!-- Date badge for tasks with scheduled dates -->
+                                                    <TextBlock x:Name="DateHint"
+                                                               Text="{Binding DateRangeLabel}"
+                                                               FontSize="10" Foreground="{StaticResource AccentBlueBrush}">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding DurationDays}" Value="0">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <!-- Type chip -->
+                                            <Border Grid.Column="1" CornerRadius="3" Padding="4,2"
+                                                    HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#1A2235"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Type}" Value="Epic">
+                                                                <Setter Property="Background" Value="#2D1B69"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Type}" Value="Story">
+                                                                <Setter Property="Background" Value="#1d4ed8"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Type}" Value="SubTask">
+                                                                <Setter Property="Background" Value="#064e3b"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding Type}" FontSize="10"
+                                                           Foreground="{StaticResource TextSecondaryBrush}"/>
                                             </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </ScrollViewer>
-                        </DockPanel>
-                    </Border>
-
-                    <!-- Column headers -->
-                    <Border DockPanel.Dock="Top" Padding="12,6"
-                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="52"/>
-                                <ColumnDefinition Width="88"/>
-                                <ColumnDefinition Width="48"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="56"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Task / Subtask" FontSize="11" FontWeight="SemiBold"
-                                       Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock Grid.Column="1" Text="Type" FontSize="11" FontWeight="SemiBold"
-                                       Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock Grid.Column="2" Text="Assignee" FontSize="11" FontWeight="SemiBold"
-                                       Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock Grid.Column="3" Text="Est." FontSize="11" FontWeight="SemiBold"
-                                       Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right"/>
-                            <TextBlock Grid.Column="4" Text="Status" FontSize="11" FontWeight="SemiBold"
-                                       Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock Grid.Column="5" Text="Actions" FontSize="11" FontWeight="SemiBold"
-                                       Foreground="{StaticResource TextMutedBrush}"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Work item list -->
-                    <ListBox ItemsSource="{Binding WorkItems}"
-                             Background="Transparent" BorderThickness="0"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Padding" Value="0"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource BgElevatedBrush}"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="{x:Type vm:WorkItemRow}">
-                                <Border BorderBrush="{StaticResource BorderColorBrush}"
-                                        BorderThickness="0,0,0,1" Padding="12,5">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="52"/>
-                                            <ColumnDefinition Width="88"/>
-                                            <ColumnDefinition Width="48"/>
-                                            <ColumnDefinition Width="80"/>
-                                            <ColumnDefinition Width="56"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <!-- Name with indent -->
-                                        <StackPanel Orientation="Horizontal">
-                                            <Border Width="{Binding IndentWidth}" Background="Transparent"/>
-                                            <TextBlock x:Name="NameLabel" Text="{Binding Name}"
-                                                       FontSize="13" VerticalAlignment="Center"
-                                                       Foreground="{StaticResource TextSecondaryBrush}"
-                                                       TextTrimming="CharacterEllipsis"/>
-                                        </StackPanel>
-
-                                        <!-- Type chip -->
-                                        <Border Grid.Column="1" CornerRadius="3" Padding="4,2"
-                                                HorizontalAlignment="Left" VerticalAlignment="Center">
-                                            <Border.Style>
-                                                <Style TargetType="Border">
-                                                    <Setter Property="Background" Value="#1A2235"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Type}" Value="Epic">
-                                                            <Setter Property="Background" Value="#2D1B69"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Type}" Value="Story">
-                                                            <Setter Property="Background" Value="#1d4ed8"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Type}" Value="SubTask">
-                                                            <Setter Property="Background" Value="#064e3b"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                            <TextBlock x:Name="TypeLabel" Text="{Binding Type}" FontSize="10"
-                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
-                                        </Border>
-
-                                        <!-- Assignee -->
-                                        <TextBlock Grid.Column="2" Text="{Binding Assignee}"
-                                                   FontSize="11" Foreground="{StaticResource TextMutedBrush}"
-                                                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
-
-                                        <!-- Estimate -->
-                                        <TextBlock Grid.Column="3" FontSize="12" FontWeight="SemiBold"
-                                                   Foreground="{StaticResource TextPrimaryBrush}"
-                                                   VerticalAlignment="Center" HorizontalAlignment="Right">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="{Binding EstimatePts, StringFormat={}{0}pt}"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding EstimatePts}" Value="0">
-                                                            <Setter Property="Text" Value="–"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-
-                                        <!-- Status chip -->
-                                        <Border Grid.Column="4" CornerRadius="999" Padding="6,2"
-                                                HorizontalAlignment="Left" VerticalAlignment="Center">
-                                            <Border.Style>
-                                                <Style TargetType="Border">
-                                                    <Setter Property="Background" Value="#1A2235"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Status}" Value="Done">
-                                                            <Setter Property="Background" Value="#052e16"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="In Progress">
-                                                            <Setter Property="Background" Value="#1e3a8a"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                            <TextBlock Text="{Binding Status}" FontSize="11">
+                                            <!-- Assignee -->
+                                            <TextBlock Grid.Column="2" Text="{Binding Assignee}" FontSize="11"
+                                                       Foreground="{StaticResource TextMutedBrush}"
+                                                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                            <!-- Estimate -->
+                                            <TextBlock Grid.Column="3" FontSize="12" FontWeight="SemiBold"
+                                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                                       VerticalAlignment="Center" HorizontalAlignment="Right">
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
-                                                        <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                                        <Setter Property="Text" Value="{Binding EstimatePts, StringFormat={}{0}pt}"/>
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Status}" Value="Done">
-                                                                <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Status}" Value="In Progress">
-                                                                <Setter Property="Foreground" Value="{StaticResource AccentBlueBrush}"/>
+                                                            <DataTrigger Binding="{Binding EstimatePts}" Value="0">
+                                                                <Setter Property="Text" Value="–"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </TextBlock.Style>
                                             </TextBlock>
-                                        </Border>
-
-                                        <!-- Actions: + child / ✕ remove -->
-                                        <StackPanel Grid.Column="5" Orientation="Horizontal"
-                                                    HorizontalAlignment="Right" VerticalAlignment="Center">
-                                            <Button x:Name="AddChildBtn" Content="+"
-                                                    ToolTip="Add child item"
-                                                    Command="{Binding DataContext.AddTaskCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}"
-                                                    Margin="0,0,2,0" Padding="5,1" FontSize="12" FontWeight="Bold">
-                                                <Button.Style>
-                                                    <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
-                                                        <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
-                                                        <Setter Property="Visibility" Value="Visible"/>
+                                            <!-- Status chip -->
+                                            <Border Grid.Column="4" CornerRadius="999" Padding="6,2"
+                                                    HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#1A2235"/>
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Type}" Value="SubTask">
-                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <DataTrigger Binding="{Binding Status}" Value="Done">
+                                                                <Setter Property="Background" Value="#052e16"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="In Progress">
+                                                                <Setter Property="Background" Value="#1e3a8a"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
-                                                </Button.Style>
-                                            </Button>
-                                            <Button Content="✕"
-                                                    ToolTip="Remove item and children"
-                                                    Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}"
-                                                    Padding="5,1" FontSize="11">
-                                                <Button.Style>
-                                                    <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
-                                                        <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                                <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding Type}" Value="Epic">
-                                        <Setter TargetName="NameLabel" Property="FontWeight" Value="SemiBold"/>
-                                        <Setter TargetName="NameLabel" Property="Foreground"
-                                                Value="{StaticResource AccentPurpleBrush}"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Type}" Value="SubTask">
-                                        <Setter TargetName="TypeLabel" Property="Foreground"
-                                                Value="{StaticResource SuccessBrush}"/>
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </DockPanel>
-            </Border>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding Status}" FontSize="11">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Status}" Value="Done">
+                                                                    <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Status}" Value="In Progress">
+                                                                    <Setter Property="Foreground" Value="{StaticResource AccentBlueBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+                                            <!-- + child / ✕ remove -->
+                                            <StackPanel Grid.Column="5" Orientation="Horizontal"
+                                                        HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <Button x:Name="AddChildBtn" Content="+"
+                                                        ToolTip="Add child item"
+                                                        Command="{Binding DataContext.AddTaskCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Margin="0,0,2,0" Padding="5,1" FontSize="12" FontWeight="Bold">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                                                            <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Type}" Value="SubTask">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <Button Content="✕" ToolTip="Remove item and children"
+                                                        Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Padding="5,1" FontSize="11">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                                                            <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="Epic">
+                                            <Setter TargetName="NameLabel" Property="FontWeight" Value="SemiBold"/>
+                                            <Setter TargetName="NameLabel" Property="Foreground"
+                                                    Value="{StaticResource AccentPurpleBrush}"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Border>
 
-            <!-- Right: Gantt chart -->
-            <Border Grid.Column="1" Background="{StaticResource BgSurfaceBrush}">
-                <DockPanel>
-                    <Border DockPanel.Dock="Top" Padding="12,8"
-                            Background="{StaticResource BgCardBrush}"
-                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Sprint Timeline" FontSize="13" FontWeight="SemiBold"
-                                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,12,0"/>
-                            <Button Content="Refresh" Style="{StaticResource OutlineButton}"
-                                    Command="{Binding RefreshGanttCommand}" Padding="10,4"/>
-                        </StackPanel>
-                    </Border>
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Width="750">
-                            <!-- Date headers -->
-                            <Border BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                <!-- Right: Gantt (Sprint Plan) ───────────────────────────── -->
+                <Border Grid.Column="1" Background="{StaticResource BgSurfaceBrush}">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top" Padding="12,7"
+                                Background="{StaticResource BgCardBrush}"
+                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Sprint Timeline" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,10,0"/>
+                                <TextBlock Text="Drag bars to reschedule" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}"
+                                           VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Button Content="Refresh" Style="{StaticResource OutlineButton}"
+                                        Command="{Binding RefreshGanttCommand}" Padding="10,3"/>
+                            </StackPanel>
+                        </Border>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Width="780">
+                                <!-- Date header row -->
+                                <Border Height="32" BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                                        Background="{StaticResource BgCardBrush}">
+                                    <ItemsControl ItemsSource="{Binding SprintDates}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate><UniformGrid Rows="1"/></ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="50" BorderBrush="{StaticResource BorderColorBrush}"
+                                                        BorderThickness="0,0,1,0" Padding="2,4">
+                                                    <TextBlock Text="{Binding}" FontSize="10" TextWrapping="Wrap"
+                                                               Foreground="{StaticResource TextMutedBrush}"
+                                                               HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Border>
+                                <!-- Gantt bars — bound to WorkItems, collapsed when DurationDays=0 -->
+                                <ItemsControl ItemsSource="{Binding WorkItems}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type vm:WorkItemRow}">
+                                            <Border x:Name="PlanGanttRow" Height="36"
+                                                    BorderBrush="{StaticResource BorderColorBrush}"
+                                                    BorderThickness="0,0,0,1">
+                                                <Canvas Height="36" Width="780" ClipToBounds="True">
+                                                    <Border x:Name="PlanBar"
+                                                            Canvas.Left="{Binding BarLeft}"
+                                                            Width="{Binding BarWidth}"
+                                                            Height="26" Canvas.Top="5"
+                                                            CornerRadius="4" Background="#1E2D45"
+                                                            Cursor="SizeWE"
+                                                            MouseLeftButtonDown="OnBarMouseDown"
+                                                            MouseMove="OnBarMouseMove"
+                                                            MouseLeftButtonUp="OnBarMouseUp">
+                                                        <TextBlock Text="{Binding Name}" FontSize="11"
+                                                                   Foreground="White" Margin="6,0"
+                                                                   VerticalAlignment="Center"
+                                                                   TextTrimming="CharacterEllipsis"/>
+                                                    </Border>
+                                                </Canvas>
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="{StaticResource BgElevatedBrush}"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+                                            <DataTemplate.Triggers>
+                                                <!-- Hide rows with no date scheduled -->
+                                                <DataTrigger Binding="{Binding DurationDays}" Value="0">
+                                                    <Setter TargetName="PlanGanttRow" Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Done">
+                                                    <Setter TargetName="PlanBar" Property="Background" Value="#166534"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="In Progress">
+                                                    <Setter TargetName="PlanBar" Property="Background" Value="#1d4ed8"/>
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Border>
+
+            </Grid>
+            <!-- END TAB 1 -->
+
+            <!-- ── TAB 2: Task Timeline ───────────────────────────────────── -->
+            <Grid x:Name="TimelinePanel">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ActiveTab}" Value="Timeline">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="310"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left: Task list with date controls ──────────────────── -->
+                <Border Grid.Column="0" Background="{StaticResource BgCardBrush}"
+                        BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,1,0">
+                    <DockPanel>
+                        <!-- Column header -->
+                        <Border DockPanel.Dock="Top" Height="32"
+                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                                Padding="12,0">
+                            <Grid VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Task / SubTask" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="1" Text="Schedule" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="2" Text="Dur." FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                            </Grid>
+                        </Border>
+                        <!-- Task list, scroll synced with right Gantt -->
+                        <ScrollViewer x:Name="TimelineLeftScroll"
+                                      VerticalScrollBarVisibility="Hidden"
+                                      HorizontalScrollBarVisibility="Disabled">
+                            <ItemsControl ItemsSource="{Binding TaskItems}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:WorkItemRow}">
+                                        <Border Height="48"
+                                                BorderBrush="{StaticResource BorderColorBrush}"
+                                                BorderThickness="0,0,0,1" Padding="12,4">
+                                            <Grid VerticalAlignment="Center">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="130"/>
+                                                    <ColumnDefinition Width="70"/>
+                                                </Grid.ColumnDefinitions>
+                                                <!-- Name + parent story -->
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding ParentName}"
+                                                               FontSize="9" Foreground="{StaticResource TextMutedBrush}"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock Text="{Binding Name}" FontSize="12"
+                                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                </StackPanel>
+                                                <!-- Date shift controls: ◁ date range ▷ -->
+                                                <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                                            VerticalAlignment="Center">
+                                                    <Button Content="◁" Padding="3,1" FontSize="10"
+                                                            ToolTip="Start 1 day earlier"
+                                                            Command="{Binding DataContext.ShiftStartLeftCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                                                                <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                    <TextBlock Text="{Binding DateRangeLabel}" FontSize="10"
+                                                               Foreground="{StaticResource AccentBlueBrush}"
+                                                               VerticalAlignment="Center" Margin="4,0"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                    <Button Content="▷" Padding="3,1" FontSize="10"
+                                                            ToolTip="Start 1 day later"
+                                                            Command="{Binding DataContext.ShiftStartRightCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                                                                <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                </StackPanel>
+                                                <!-- Duration controls: − N days + -->
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal"
+                                                            VerticalAlignment="Center">
+                                                    <Button Content="−" Padding="3,1" FontSize="11"
+                                                            ToolTip="Shorten by 1 day"
+                                                            Command="{Binding DataContext.ShrinkDurationCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                                                                <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                    <TextBlock Text="{Binding DurationDays, StringFormat={}{0}d}"
+                                                               FontSize="11" FontWeight="SemiBold"
+                                                               Foreground="{StaticResource TextPrimaryBrush}"
+                                                               VerticalAlignment="Center" Margin="4,0"
+                                                               Width="20" TextAlignment="Center"/>
+                                                    <Button Content="+" Padding="3,1" FontSize="11"
+                                                            ToolTip="Extend by 1 day"
+                                                            Command="{Binding DataContext.ExtendDurationCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button" BasedOn="{StaticResource OutlineButton}">
+                                                                <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Border>
+
+                <!-- Right: Gantt with drag ───────────────────────────────── -->
+                <Border Grid.Column="1" Background="{StaticResource BgSurfaceBrush}">
+                    <ScrollViewer x:Name="TimelineRightScroll"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  ScrollChanged="OnTimelineRightScrollChanged">
+                        <StackPanel Width="780">
+                            <!-- Date header row -->
+                            <Border Height="32"
+                                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                                    Background="{StaticResource BgCardBrush}">
                                 <ItemsControl ItemsSource="{Binding SprintDates}">
                                     <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <UniformGrid Rows="1"/>
-                                        </ItemsPanelTemplate>
+                                        <ItemsPanelTemplate><UniformGrid Rows="1"/></ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
@@ -434,23 +690,49 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </Border>
-
-                            <!-- Gantt bars -->
-                            <ItemsControl ItemsSource="{Binding GanttBars}">
+                            <!-- Gantt rows — one per TaskItem, height=48 to match left -->
+                            <ItemsControl ItemsSource="{Binding TaskItems}">
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type vm:GanttBar}">
-                                        <Border BorderBrush="{StaticResource BorderColorBrush}"
-                                                BorderThickness="0,0,0,1" Height="36">
-                                            <Canvas Height="36" Width="750" ClipToBounds="True">
-                                                <Border x:Name="BarBg"
+                                    <DataTemplate DataType="{x:Type vm:WorkItemRow}">
+                                        <Border x:Name="TlGanttRow" Height="48"
+                                                BorderBrush="{StaticResource BorderColorBrush}"
+                                                BorderThickness="0,0,0,1">
+                                            <Canvas Height="48" Width="780" ClipToBounds="True">
+                                                <!-- Day grid lines (every 50px) - subtle vertical lines -->
+                                                <Rectangle Canvas.Left="50"  Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="100" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="150" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="200" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="250" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="300" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="350" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="400" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="450" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="500" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="550" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="600" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="650" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <Rectangle Canvas.Left="700" Width="1" Height="48" Fill="{StaticResource BorderColorBrush}" Opacity="0.4"/>
+                                                <!-- Draggable Gantt bar -->
+                                                <Border x:Name="TlBar"
                                                         Canvas.Left="{Binding BarLeft}"
                                                         Width="{Binding BarWidth}"
-                                                        Height="24" Canvas.Top="6"
-                                                        CornerRadius="4" Background="#1E2D45">
-                                                    <TextBlock Text="{Binding Label}" FontSize="11"
-                                                               Foreground="White" Margin="6,0"
-                                                               VerticalAlignment="Center"
-                                                               TextTrimming="CharacterEllipsis"/>
+                                                        Height="30" Canvas.Top="9"
+                                                        CornerRadius="4" Background="#1E2D45"
+                                                        Cursor="SizeWE"
+                                                        MouseLeftButtonDown="OnBarMouseDown"
+                                                        MouseMove="OnBarMouseMove"
+                                                        MouseLeftButtonUp="OnBarMouseUp">
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                                                Margin="6,0">
+                                                        <TextBlock Text="{Binding Name}" FontSize="11"
+                                                                   Foreground="White"
+                                                                   TextTrimming="CharacterEllipsis"
+                                                                   VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding DateRangeLabel}"
+                                                                   FontSize="9" Foreground="#A0B4D0"
+                                                                   VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                                    </StackPanel>
                                                 </Border>
                                             </Canvas>
                                             <Border.Style>
@@ -466,10 +748,13 @@
                                         </Border>
                                         <DataTemplate.Triggers>
                                             <DataTrigger Binding="{Binding Status}" Value="Done">
-                                                <Setter TargetName="BarBg" Property="Background" Value="#166534"/>
+                                                <Setter TargetName="TlBar" Property="Background" Value="#166534"/>
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding Status}" Value="In Progress">
-                                                <Setter TargetName="BarBg" Property="Background" Value="#1d4ed8"/>
+                                                <Setter TargetName="TlBar" Property="Background" Value="#1d4ed8"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Type}" Value="SubTask">
+                                                <Setter TargetName="TlBar" Property="Background" Value="#065f46"/>
                                             </DataTrigger>
                                         </DataTemplate.Triggers>
                                     </DataTemplate>
@@ -477,8 +762,13 @@
                             </ItemsControl>
                         </StackPanel>
                     </ScrollViewer>
-                </DockPanel>
-            </Border>
+                </Border>
+
+            </Grid>
+            <!-- END TAB 2 -->
+
         </Grid>
+        <!-- END TAB CONTENT -->
+
     </DockPanel>
 </UserControl>
