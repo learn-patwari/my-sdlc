@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SprintForge.Infrastructure;
 using SprintForge.Wpf.ViewModels;
+using System.IO;
 using System.Windows;
 
 namespace SprintForge.Wpf;
