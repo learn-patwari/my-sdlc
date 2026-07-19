@@ -25,10 +25,12 @@
                                 <TextBlock Text="{Binding Value}" FontSize="28"
                                            FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"
                                            Margin="0,0,0,8"/>
-                                <Border Background="{Binding BadgeColor, Converter={x:Static BoolToVis}}"
+                                <Border Background="{StaticResource BgElevatedBrush}"
+                                        BorderBrush="{StaticResource BorderColorBrush}"
+                                        BorderThickness="1"
                                         CornerRadius="4" Padding="8,4" HorizontalAlignment="Fit">
                                     <TextBlock Text="{Binding Badge}" FontSize="11"
-                                               Foreground="White" FontWeight="Medium"/>
+                                               Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Medium"/>
                                 </Border>
                             </StackPanel>
                         </Border>
