@@ -6,6 +6,7 @@ using SprintForge.Application.Ai;
 using SprintForge.Application.Approval;
 using SprintForge.Application.Audit;
 using SprintForge.Application.Configuration;
+using SprintForge.Application.Documents;
 using SprintForge.Application.Security;
 using SprintForge.Application.Sdlc;
 using SprintForge.Infrastructure.Ai;
@@ -13,6 +14,7 @@ using SprintForge.Infrastructure.Approval;
 using SprintForge.Infrastructure.Audit;
 using SprintForge.Infrastructure.Configuration;
 using SprintForge.Infrastructure.Data;
+using SprintForge.Infrastructure.Documents;
 using SprintForge.Infrastructure.Security;
 using SprintForge.Infrastructure.Sdlc;
 
@@ -31,7 +33,8 @@ public static class ServiceCollectionExtensions
         string auditJsonlPath,
         string secretIndexPath,
         string auditDbPath,
-        string profilesRootPath)
+        string profilesRootPath,
+        string workingDirectory = ".")
     {
         // ── Audit — the write-gate chain ──────────────────────────────────────
         services.AddSingleton(sp =>
@@ -66,6 +69,17 @@ public static class ServiceCollectionExtensions
         // ── AI orchestrator (providers resolved dynamically from active profile) ──
         services.AddHttpClient(); // registers IHttpClientFactory
         services.AddScoped<IAiOrchestrator, AiOrchestrator>();
+
+        // ── Document engine ────────────────────────────────────────────────────
+        services.AddSingleton<IDocumentVersionStore>(sp =>
+            new FileSystemDocumentVersionStore(workingDirectory, sp.GetRequiredService<ILogger<FileSystemDocumentVersionStore>>()));
+
+        services.AddScoped<IDocumentGenerator, SrsDocumentGenerator>();
+        services.AddScoped<ISrsService>(sp => new SrsService(
+            sp.GetRequiredService<IDocumentGenerator>(),
+            sp.GetRequiredService<IDocumentVersionStore>(),
+            sp.GetRequiredService<IApprovalGate>(),
+            sp.GetRequiredService<AuditedOperationRunner>()));
 
         return services;
     }

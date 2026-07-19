@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sprintforge.dev/schemas/profile.schema.json",
+  "title": "SprintForge Beta Profile",
+  "description": "Configuration profile. All credential fields MUST store only dpapi:handle references — never plaintext secrets.",
+  "type": "object",
+  "required": ["id", "name", "version", "jira", "ai", "sprint", "workingDirectory", "audit", "logging"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique profile identifier (UUID v4)."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Human-readable profile name."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Profile schema version; increment on breaking changes."
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lastModifiedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "jira": {
+      "type": "object",
+      "required": ["baseUrl", "userName", "apiTokenRef"],
+      "additionalProperties": false,
+      "properties": {
+        "baseUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Jira base URL, e.g. https://your-org.atlassian.net"
+        },
+        "userName": {
+          "type": "string",
+          "format": "email",
+          "description": "Jira account email address."
+        },
+        "apiTokenRef": {
+          "type": "string",
+          "pattern": "^dpapi:[A-Za-z0-9+/=]+$",
+          "description": "DPAPI-encrypted Jira API token handle. Never store the raw token."
+        },
+        "projectKeys": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9]{1,9}$" },
+          "uniqueItems": true,
+          "description": "Jira project keys this profile targets, e.g. [\"RBP\", \"FNT\"]."
+        },
+        "fieldMappings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "storyPoints": {
+              "type": "string",
+              "description": "Custom field ID for story points, e.g. customfield_10016."
+            },
+            "epicLink": {
+              "type": "string",
+              "description": "Custom field ID for epic link, e.g. customfield_10014."
+            },
+            "sprint": {
+              "type": "string",
+              "description": "Custom field ID for sprint, e.g. customfield_10020."
+            }
+          }
+        }
+      }
+    },
+    "ai": {
+      "type": "object",
+      "required": ["defaultProviderId", "providers"],
+      "additionalProperties": false,
+      "properties": {
+        "defaultProviderId": {
+          "type": "string",
+          "description": "ID of the default AI provider in the providers array."
+        },
+        "fallbackProviderId": {
+          "type": "string",
+          "description": "Optional fallback provider used if the default is unavailable."
+        },
+        "providers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "vendor", "model", "apiKeyRef"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "vendor": {
+                "type": "string",
+                "enum": ["OpenAI", "AzureOpenAI", "Anthropic", "Ollama", "Gemini"],
+                "description": "AI provider vendor name."
+              },
+              "model": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Model identifier, e.g. gpt-4o or claude-sonnet-5."
+              },
+              "apiKeyRef": {
+                "type": "string",
+                "pattern": "^dpapi:[A-Za-z0-9+/=]+$",
+                "description": "DPAPI-encrypted API key handle."
+              },
+              "baseUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "Override base URL (required for AzureOpenAI, Ollama, and compatible endpoints)."
+              },
+              "apiVersion": {
+                "type": "string",
+                "description": "API version string (required for AzureOpenAI deployments)."
+              },
+              "maxTokens": {
+                "type": "integer",
+                "minimum": 256,
+                "maximum": 131072,
+                "default": 8192
+              },
+              "temperatureDefault": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 2.0,
+                "default": 0.2
+              },
+              "seedDefault": {
+                "type": ["integer", "null"],
+                "description": "Optional default seed for reproducible completions."
+              }
+            }
+          }
+        }
+      }
+    },
+    "sprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultSprintLengthDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30,
+          "default": 14
+        },
+        "maxDeveloperDaysPerSprint": {
+          "type": "number",
+          "minimum": 1,
+          "description": "Max working days a single developer is assigned per sprint."
+        },
+        "velocityStoryPoints": {
+          "type": "number",
+          "minimum": 1,
+          "description": "Team average velocity in story points per sprint."
+        },
+        "includeWeekends": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "workingDirectory": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute path to the local working directory."
+        },
+        "autoCreateSubfolders": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically create Documents/, Audit/, etc. on first run."
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "jsonlPath": {
+          "type": "string",
+          "description": "Path to the immutable hash-chained JSONL audit log. Defaults to {workingDirectory}/Audit/audit.jsonl."
+        },
+        "sqliteIndexPath": {
+          "type": "string",
+          "description": "Path to the SQLite audit index database. Defaults to {workingDirectory}/Audit/audit-index.db."
+        },
+        "enableDigitalSignature": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, each audit record is signed with the configured X.509 certificate."
+        },
+        "signingCertThumbprint": {
+          "type": ["string", "null"],
+          "description": "Thumbprint of the X.509 signing certificate in the CurrentUser\\My store."
+        },
+        "retentionDays": {
+          "type": "integer",
+          "minimum": 30,
+          "default": 365,
+          "description": "Audit records older than this are archived (never deleted)."
+        }
+      }
+    },
+    "logging": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "minimumLevel": {
+          "type": "string",
+          "enum": ["Verbose", "Debug", "Information", "Warning", "Error", "Fatal"],
+          "default": "Information"
+        },
+        "filePath": {
+          "type": "string",
+          "description": "Serilog rolling file path, e.g. {workingDirectory}/Logs/sprintforge-.log."
+        },
+        "rollingInterval": {
+          "type": "string",
+          "enum": ["Infinite", "Year", "Month", "Day", "Hour", "Minute"],
+          "default": "Day"
+        },
+        "retainedFileCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 365,
+          "default": 31
+        }
+      }
+    }
+  }
+}
