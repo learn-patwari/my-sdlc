@@ -76,6 +76,12 @@ public partial class App : System.Windows.Application
         services.AddTransient<SrsGeneratorViewModel>();
         services.AddTransient<ApprovalsViewModel>();
         services.AddTransient<AuditCenterViewModel>();
+        services.AddTransient<SadViewModel>();
+        services.AddTransient<SddViewModel>();
+        services.AddTransient<SprintPlanningViewModel>();
+        services.AddTransient<RepoAnalyzerViewModel>();
+        services.AddTransient<JiraViewModel>();
+        services.AddTransient<DocumentsViewModel>();
         services.AddTransient<PlaceholderViewModel>();
     }
 }

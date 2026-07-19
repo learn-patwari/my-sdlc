@@ -176,6 +176,24 @@
             <DataTemplate DataType="{x:Type vm:AuditCenterViewModel}">
                 <views:AuditCenterView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SadViewModel}">
+                <views:SadView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SddViewModel}">
+                <views:SddView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SprintPlanningViewModel}">
+                <views:SprintPlanningView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:RepoAnalyzerViewModel}">
+                <views:RepoAnalyzerView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:JiraViewModel}">
+                <views:JiraView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:DocumentsViewModel}">
+                <views:DocumentsView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type vm:PlaceholderViewModel}">
                 <views:PlaceholderView/>
             </DataTemplate>
