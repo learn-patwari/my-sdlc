@@ -477,76 +477,147 @@
                         <TextBlock Text="AI Provider" FontSize="16" FontWeight="SemiBold"
                                    Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
 
+                        <!-- Model & credentials — opencode field names -->
                         <Border Style="{StaticResource Card}">
                             <StackPanel>
-                                <TextBlock Text="Provider Configuration" FontSize="13" FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <TextBlock Text="Model" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,16"
+                                           Text="Use  provider/model  format — same as opencode config (e.g. anthropic/claude-sonnet-5)"/>
                                 <Grid Margin="0,0,0,12">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Text="Vendor" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                    <ComboBox Grid.Column="1" ItemsSource="{Binding AiVendors}"
-                                              SelectedItem="{Binding AiVendor}"
-                                              Background="{StaticResource BgCardBrush}"
-                                              Foreground="{StaticResource TextPrimaryBrush}"
-                                              BorderBrush="{StaticResource BorderColorBrush}"
-                                              BorderThickness="1" Padding="10,8" FontSize="13"/>
-                                </Grid>
-                                <Grid Margin="0,0,0,12">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Text="Endpoint URL" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="1" Text="{Binding AiEndpoint, UpdateSourceTrigger=PropertyChanged}"
-                                             ToolTip="Leave default for Anthropic/OpenAI; set base URL for Azure or Ollama"/>
-                                </Grid>
-                                <Grid Margin="0,0,0,12">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Text="API Key" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                    <PasswordBox Grid.Column="1" ToolTip="Stored encrypted via Windows DPAPI"/>
-                                </Grid>
-                                <Grid Margin="0,0,0,12">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Text="Model" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="model" FontFamily="Consolas" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="1" Text="{Binding AiModel, UpdateSourceTrigger=PropertyChanged}"
-                                             ToolTip="e.g. claude-sonnet-5, gpt-4o, llama3"/>
+                                             FontFamily="Consolas"
+                                             ToolTip="provider/model — e.g. anthropic/claude-sonnet-5  |  openai/gpt-4o  |  ollama/llama3.3"/>
                                 </Grid>
                                 <Grid Margin="0,0,0,12">
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Text="Temperature" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="1" Text="{Binding AiTemperature, UpdateSourceTrigger=PropertyChanged}"
-                                             ToolTip="0.0 (deterministic) — 1.0 (creative)"/>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="base_url" FontFamily="Consolas" FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBlock Text="optional" FontSize="10"
+                                                   Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                    <TextBox Grid.Column="1" Text="{Binding AiBaseUrl, UpdateSourceTrigger=PropertyChanged}"
+                                             FontFamily="Consolas"
+                                             ToolTip="Leave blank for Anthropic / OpenAI / Google. Required for Ollama (http://localhost:11434) or Azure OpenAI endpoints."/>
                                 </Grid>
                                 <Grid>
-                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Text="Max Tokens" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="1" Text="{Binding AiMaxTokens, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="api_key" FontFamily="Consolas" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <PasswordBox Grid.Column="1" ToolTip="Stored encrypted via Windows DPAPI — never written in plaintext"/>
                                 </Grid>
                             </StackPanel>
                         </Border>
 
-                        <!-- Quick model reference -->
+                        <!-- Inference parameters -->
                         <Border Style="{StaticResource Card}">
                             <StackPanel>
-                                <TextBlock Text="Anthropic Models" FontSize="13" FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+                                <TextBlock Text="Inference Parameters" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="temperature" FontFamily="Consolas" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding AiTemperature, UpdateSourceTrigger=PropertyChanged}"
+                                             FontFamily="Consolas"
+                                             ToolTip="0.0 (deterministic) — 1.0 (creative). Default 0.7"/>
+                                </Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="max_tokens" FontFamily="Consolas" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding AiMaxTokens, UpdateSourceTrigger=PropertyChanged}"
+                                             FontFamily="Consolas"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Supported models quick-reference (opencode provider/model format) -->
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Supported Models" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Click any model to copy into the model field above"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Anthropic" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentPurpleBrush}" Margin="0,0,0,6"/>
                                 <ItemsControl ItemsSource="{Binding AnthropicModels}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding}" FontSize="12"
-                                                       Foreground="{StaticResource TextMutedBrush}"
-                                                       Margin="0,2"/>
+                                            <Button Content="{Binding}"
+                                                    Command="{Binding DataContext.SetModelCommand,
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="Consolas" FontSize="12"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    HorizontalAlignment="Left" Cursor="Hand"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Padding="0,2"/>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                <TextBlock Text="OpenAI Models" FontSize="13" FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,16,0,12"/>
+
+                                <TextBlock Text="OpenAI" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentPurpleBrush}" Margin="0,12,0,6"/>
                                 <ItemsControl ItemsSource="{Binding OpenAiModels}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding}" FontSize="12"
-                                                       Foreground="{StaticResource TextMutedBrush}"
-                                                       Margin="0,2"/>
+                                            <Button Content="{Binding}"
+                                                    Command="{Binding DataContext.SetModelCommand,
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="Consolas" FontSize="12"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    HorizontalAlignment="Left" Cursor="Hand"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Padding="0,2"/>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
+
+                                <TextBlock Text="Google" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentPurpleBrush}" Margin="0,12,0,6"/>
+                                <ItemsControl ItemsSource="{Binding GoogleModels}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Content="{Binding}"
+                                                    Command="{Binding DataContext.SetModelCommand,
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="Consolas" FontSize="12"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    HorizontalAlignment="Left" Cursor="Hand"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Padding="0,2"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <TextBlock Text="Ollama (local)" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentPurpleBrush}" Margin="0,12,0,6"/>
+                                <ItemsControl ItemsSource="{Binding OllamaModels}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Content="{Binding}"
+                                                    Command="{Binding DataContext.SetModelCommand,
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="Consolas" FontSize="12"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    HorizontalAlignment="Left" Cursor="Hand"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Padding="0,2"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <TextBlock Text="Set base_url to http://localhost:11434 when using Ollama"
+                                           FontSize="11" Foreground="{StaticResource TextMutedBrush}"
+                                           Margin="0,6,0,0" FontStyle="Italic"/>
                             </StackPanel>
                         </Border>
 

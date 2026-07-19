@@ -37,17 +37,41 @@ public sealed partial class SettingsViewModel : ObservableObject
     public IReadOnlyList<string> JiraIssueTypes { get; } = ["Story", "Task", "Sub-task", "Bug", "Epic"];
     public IReadOnlyList<string> JiraPriorities  { get; } = ["Highest", "High", "Medium", "Low", "Lowest"];
 
-    // ── AI Provider ─────────────────────────────────────────────────────────
-    [ObservableProperty] private string _aiVendor      = "Anthropic";
-    [ObservableProperty] private string _aiEndpoint    = "https://api.anthropic.com";
+    // ── AI Provider (opencode format) ───────────────────────────────────────
+    // Model is specified as  provider/model-id  matching the opencode config schema.
+    // base_url is optional — leave blank for cloud providers; set for Ollama/custom.
+    [ObservableProperty] private string _aiModel       = "anthropic/claude-sonnet-5";
+    [ObservableProperty] private string _aiBaseUrl     = "";
     [ObservableProperty] private string _aiApiKey      = "";
-    [ObservableProperty] private string _aiModel       = "claude-sonnet-5";
     [ObservableProperty] private double _aiTemperature = 0.7;
     [ObservableProperty] private int    _aiMaxTokens   = 8192;
 
-    public IReadOnlyList<string> AiVendors       { get; } = ["Anthropic", "OpenAI", "Azure OpenAI", "Gemini", "Ollama"];
-    public IReadOnlyList<string> AnthropicModels { get; } = ["claude-sonnet-5", "claude-opus-4-8", "claude-haiku-4-5-20251001"];
-    public IReadOnlyList<string> OpenAiModels    { get; } = ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "o1-preview"];
+    // Grouped by provider in  provider/model  format — mirrors opencode's model list.
+    public IReadOnlyList<string> AnthropicModels { get; } =
+    [
+        "anthropic/claude-sonnet-5",
+        "anthropic/claude-opus-4-8",
+        "anthropic/claude-haiku-4-5-20251001",
+        "anthropic/claude-fable-5",
+    ];
+    public IReadOnlyList<string> OpenAiModels { get; } =
+    [
+        "openai/gpt-4o",
+        "openai/gpt-4o-mini",
+        "openai/o3",
+        "openai/o4-mini",
+    ];
+    public IReadOnlyList<string> GoogleModels { get; } =
+    [
+        "google/gemini-2.5-pro",
+        "google/gemini-2.5-flash",
+    ];
+    public IReadOnlyList<string> OllamaModels { get; } =
+    [
+        "ollama/llama3.3",
+        "ollama/qwen2.5-coder",
+        "ollama/deepseek-r1",
+    ];
 
     // ── Repositories ────────────────────────────────────────────────────────
     public ObservableCollection<RepositoryEntry> Repositories { get; } = [];
@@ -116,6 +140,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand] private void SetTab(string tab) => ActiveTab = tab;
+
+    [RelayCommand] private void SetModel(string model) => AiModel = model;
 
     [RelayCommand]
     private async Task TestJiraConnection()
