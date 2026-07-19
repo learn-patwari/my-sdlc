@@ -11,6 +11,9 @@ public sealed partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private object? _currentPage;
 
+    [ObservableProperty]
+    private bool _isNavExpanded = true;
+
     public IReadOnlyList<NavigationItem> NavItems { get; }
 
     public MainWindowViewModel(IServiceProvider services)
@@ -35,6 +38,9 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
         Navigate(NavItems[0]);
     }
+
+    [RelayCommand]
+    private void ToggleNav() => IsNavExpanded = !IsNavExpanded;
 
     [RelayCommand]
     private void Navigate(NavigationItem item)
