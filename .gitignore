@@ -1,0 +1,25 @@
+# Build outputs
+bin/
+obj/
+artifacts/
+*.binlog
+
+# IDE
+.vs/
+.idea/
+*.user
+*.suo
+
+# Test results
+TestResults/
+coverage/
+*.trx
+
+# Packages
+*.nupkg
+packages/
+
+# Local settings / secrets — never commit
+appsettings.local.json
+*.pfx
+*.snk
