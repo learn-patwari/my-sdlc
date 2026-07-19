@@ -630,14 +630,12 @@
                                 <Grid Margin="0,0,0,12">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="140"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Text="Name" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="1" Text="{Binding NewRepoName, UpdateSourceTrigger=PropertyChanged}"
-                                             PlaceholderText="e.g. payment-service"/>
+                                    <TextBox Grid.Column="1" Text="{Binding NewRepoName, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                                 <Grid Margin="0,0,0,12">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="140"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Text="URL" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="1" Text="{Binding NewRepoUrl, UpdateSourceTrigger=PropertyChanged}"
-                                             PlaceholderText="https://github.com/org/repo"/>
+                                    <TextBox Grid.Column="1" Text="{Binding NewRepoUrl, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                                 <Grid Margin="0,0,0,12">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="140"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
@@ -703,8 +701,7 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Text="Default Project" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="1" Text="{Binding SrsDefaultProject, UpdateSourceTrigger=PropertyChanged}"
-                                             PlaceholderText="e.g. RBP"/>
+                                    <TextBox Grid.Column="1" Text="{Binding SrsDefaultProject, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                         </Border>
@@ -732,7 +729,6 @@
                                            FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,12"/>
                                 <TextBox Text="{Binding SrsInvolvedServices, UpdateSourceTrigger=PropertyChanged}"
                                          TextWrapping="Wrap" AcceptsReturn="True"
-                                         PlaceholderText="Account Service&#x0a;Payment Service&#x0a;Notification Service"
                                          MinHeight="80" VerticalScrollBarVisibility="Auto"/>
                             </StackPanel>
                         </Border>
@@ -829,7 +825,6 @@
                                                Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
                                     <TextBox Text="{Binding SprintPlanText, UpdateSourceTrigger=PropertyChanged}"
                                              TextWrapping="Wrap" AcceptsReturn="True"
-                                             PlaceholderText="Paste sprint plan content here — user stories, epics, tasks, @mentions, etc."
                                              MinHeight="120" VerticalScrollBarVisibility="Auto"/>
                                 </StackPanel>
 
@@ -848,8 +843,7 @@
                                     <Grid Margin="0,0,0,12">
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                         <TextBlock Text="Confluence URL" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                        <TextBox Grid.Column="1" Text="{Binding ConfluenceUrl, UpdateSourceTrigger=PropertyChanged}"
-                                                 PlaceholderText="https://yourorg.atlassian.net/wiki"/>
+                                        <TextBox Grid.Column="1" Text="{Binding ConfluenceUrl, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                     <Grid Margin="0,0,0,12">
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
@@ -864,8 +858,7 @@
                                     <Grid>
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="160"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                         <TextBlock Text="Space Key" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-                                        <TextBox Grid.Column="1" Text="{Binding ConfluenceSpaceKey, UpdateSourceTrigger=PropertyChanged}"
-                                                 PlaceholderText="e.g. TEAM"/>
+                                        <TextBox Grid.Column="1" Text="{Binding ConfluenceSpaceKey, UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                 </StackPanel>
 
