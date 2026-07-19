@@ -74,6 +74,7 @@
 
                 <!-- Profile / user -->
                 <Button ToolTip="Profile" Cursor="Hand"
+                        Command="{Binding NavigateToSettingsCommand}"
                         Background="Transparent" BorderThickness="0"
                         Padding="8,4"
                         Foreground="{StaticResource TextSecondaryBrush}">

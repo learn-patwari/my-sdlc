@@ -43,6 +43,9 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private void ToggleNav() => IsNavExpanded = !IsNavExpanded;
 
     [RelayCommand]
+    private void NavigateToSettings() => Navigate(NavItems.First(n => n.ViewModelType == typeof(SettingsViewModel)));
+
+    [RelayCommand]
     private void Navigate(NavigationItem item)
     {
         foreach (var nav in NavItems)
