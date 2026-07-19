@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>SprintForge.Wpf</RootNamespace>
+    <AssemblyName>SprintForge</AssemblyName>
+    <!-- Documentation suppressed for WPF partial classes -->
+    <NoWarn>$(NoWarn);CS1591;CS0162</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SprintForge.Infrastructure\SprintForge.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

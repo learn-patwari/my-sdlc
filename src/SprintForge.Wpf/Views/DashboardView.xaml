@@ -1,0 +1,88 @@
+<UserControl x:Class="SprintForge.Wpf.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <!-- ── KPI cards row ──────────────────────────────────────── -->
+            <TextBlock Text="Dashboard" FontSize="24" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,20"/>
+
+            <ItemsControl ItemsSource="{Binding KpiCards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3" HorizontalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{StaticResource BgCardBrush}"
+                                BorderBrush="{StaticResource BorderColorBrush}"
+                                BorderThickness="1" CornerRadius="8"
+                                Margin="0,0,16,16" Padding="16">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Title}" FontSize="12"
+                                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Text="{Binding Value}" FontSize="28"
+                                           FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"
+                                           Margin="0,0,0,8"/>
+                                <Border Background="{Binding BadgeColor, Converter={x:Static BoolToVis}}"
+                                        CornerRadius="4" Padding="8,4" HorizontalAlignment="Fit">
+                                    <TextBlock Text="{Binding Badge}" FontSize="11"
+                                               Foreground="White" FontWeight="Medium"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- ── Recommendations ───────────────────────────────────── -->
+            <TextBlock Text="AI Recommendations" FontSize="16" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,24,0,12"/>
+
+            <ItemsControl ItemsSource="{Binding Recommendations}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding StringFormat=• {0}}" FontSize="13"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Margin="0,0,0,8" TextWrapping="Wrap"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- ── Recent activity ───────────────────────────────────── -->
+            <TextBlock Text="Recent Activity" FontSize="16" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,24,0,12"/>
+
+            <ItemsControl ItemsSource="{Binding RecentActivity}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{StaticResource BgCardBrush}"
+                                BorderBrush="{StaticResource BorderColorBrush}"
+                                BorderThickness="1" CornerRadius="6"
+                                Margin="0,0,0,8" Padding="12,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{Binding Description}" FontSize="13"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <TextBlock Text="{Binding TimeAgo}" FontSize="11"
+                                               Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0"/>
+                                </StackPanel>
+                                <Border Grid.Column="1" Background="{StaticResource BgElevatedBrush}"
+                                        CornerRadius="4" Padding="8,4" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Module}" FontSize="11"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

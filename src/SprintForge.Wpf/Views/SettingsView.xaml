@@ -1,0 +1,69 @@
+<UserControl x:Class="SprintForge.Wpf.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="0,0,24,24">
+            <TextBlock Text="Settings" FontSize="24" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,24"/>
+
+            <!-- ── Tabs ──────────────────────────────────────────────── -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                <Button Content="General" Style="{StaticResource OutlineButton}" Padding="12,8" Margin="0,0,8,0"/>
+                <Button Content="Integrations" Style="{StaticResource PrimaryButton}" Padding="12,8" Margin="0,0,8,0"/>
+                <Button Content="Preferences" Style="{StaticResource OutlineButton}" Padding="12,8"/>
+            </StackPanel>
+
+            <!-- ── Jira Integration ──────────────────────────────────── -->
+            <TextBlock Text="Jira Configuration" FontSize="16" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+            <Border Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}"
+                    BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,24">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Jira URL -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Jira URL" FontSize="13"
+                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding JiraUrl}" Margin="0,0,0,16"/>
+
+                    <!-- Username -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Username" FontSize="13"
+                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding JiraUsername}" Margin="0,0,0,16"/>
+
+                    <!-- API Token -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="API Token" FontSize="13"
+                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <PasswordBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,16"/>
+
+                    <!-- Test button -->
+                    <Button Grid.Row="3" Grid.Column="1" Content="Test Connection"
+                            Command="{Binding TestJiraConnectionCommand}"
+                            Style="{StaticResource OutlineButton}" Width="140" HorizontalAlignment="Left" Margin="0,0,0,12"/>
+
+                    <!-- Connection status -->
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="Status: " Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                        <TextBlock Text="{Binding ConnectionStatus}" Foreground="{Binding IsConnected, Converter={x:Static BoolToVis}, ConverterParameter=SuccessBrush}" FontSize="12"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── Save button ───────────────────────────────────────── -->
+            <Button Content="Save Changes" Command="{Binding SaveChangesCommand}"
+                    Style="{StaticResource PrimaryButton}" Width="160" HorizontalAlignment="Right" Padding="24,10"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
