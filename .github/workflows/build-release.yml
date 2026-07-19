@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: SprintForge-win-x64
-          path: publish/SprintForge-win-x64/SprintForge.Wpf.exe
+          path: publish/SprintForge-win-x64/SprintForge.exe
           if-no-files-found: error
 
       - name: Upload test results
