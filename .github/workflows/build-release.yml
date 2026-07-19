@@ -55,8 +55,8 @@ jobs:
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SprintForge-Setup
-          path: installer/output/SprintForge-Setup.exe
+          name: SprintForge-Installer
+          path: installer/output/Setup.exe
           if-no-files-found: error
 
       - name: Upload test results
@@ -84,7 +84,7 @@ jobs:
       - name: Download installer
         uses: actions/download-artifact@v4
         with:
-          name: SprintForge-Setup
+          name: SprintForge-Installer
           path: dist/installer
 
       - name: Create GitHub Release
@@ -92,5 +92,5 @@ jobs:
         with:
           files: |
             dist/portable/SprintForge.exe
-            dist/installer/SprintForge-Setup.exe
+            dist/installer/Setup.exe
           generate_release_notes: true

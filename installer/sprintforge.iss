@@ -1,5 +1,5 @@
 ; SprintForge Beta — Inno Setup 6 installer script
-; Produces: SprintForge-Setup.exe (single-file, self-contained)
+; Produces: Setup.exe (single-file, self-contained)
 
 #define AppName      "SprintForge Beta"
 #define AppPublisher "SprintForge"
@@ -19,7 +19,7 @@ DefaultDirName={autopf}\{#AppName}
 DefaultGroupName={#AppName}
 AllowNoIcons=yes
 OutputDir=output
-OutputBaseFilename=SprintForge-Setup
+OutputBaseFilename=Setup
 SetupIconFile={#AppIcon}
 Compression=lzma2/ultra64
 SolidCompression=yes
