@@ -7,6 +7,8 @@ using SprintForge.Application.Approval;
 using SprintForge.Application.Audit;
 using SprintForge.Application.Configuration;
 using SprintForge.Application.Documents;
+using SprintForge.Application.Planning;
+using SprintForge.Application.Repositories;
 using SprintForge.Application.Security;
 using SprintForge.Application.Sdlc;
 using SprintForge.Infrastructure.Ai;
@@ -15,6 +17,8 @@ using SprintForge.Infrastructure.Audit;
 using SprintForge.Infrastructure.Configuration;
 using SprintForge.Infrastructure.Data;
 using SprintForge.Infrastructure.Documents;
+using SprintForge.Infrastructure.Planning;
+using SprintForge.Infrastructure.Repositories;
 using SprintForge.Infrastructure.Security;
 using SprintForge.Infrastructure.Sdlc;
 
@@ -100,6 +104,25 @@ public static class ServiceCollectionExtensions
             sp.GetRequiredService<IDocumentVersionStore>(),
             sp.GetRequiredService<IApprovalGate>(),
             sp.GetRequiredService<AuditedOperationRunner>()));
+
+        // ── Sprint Planning ────────────────────────────────────────────────────
+        // Multiple parsers: register all, ISprintPlanningService resolves the right one
+        services.AddScoped<ISprintPlanParser, MarkdownSprintPlanParser>();
+        services.AddScoped<SprintValidator>();
+        services.AddScoped<ISprintPlanningService>(sp => new SprintPlanningService(
+            sp.GetServices<ISprintPlanParser>().ToList(),
+            sp.GetRequiredService<SprintValidator>(),
+            sp.GetRequiredService<IAiOrchestrator>(),
+            sp.GetRequiredService<ISdlcTool>(),
+            sp.GetRequiredService<IApprovalGate>(),
+            sp.GetRequiredService<AuditedOperationRunner>()));
+
+        // ── Repository integration ─────────────────────────────────────────────
+        services.AddScoped<IRepositoryAnalyzer, FileSystemRepositoryAnalyzer>();
+        // LocalRepositoryProvider registered as concrete type; callers resolve by concrete type
+        // or by name/key if multiple providers are needed in future.
+        services.AddScoped<LocalRepositoryProvider>(sp =>
+            new LocalRepositoryProvider(workingDirectory, sp.GetRequiredService<ILogger<LocalRepositoryProvider>>()));
 
         return services;
     }
