@@ -145,14 +145,14 @@
                         <!-- account-service -->
                         <Border Canvas.Left="160" Canvas.Top="90" Width="130" Height="36"
                                 Background="#1A2235" BorderBrush="#1E2D45" BorderThickness="1" CornerRadius="6">
-                            <TextBlock Text="account-service" Foreground="{StaticResource TextSecondaryColor}"
+                            <TextBlock Text="account-service" Foreground="{StaticResource TextSecondaryBrush}"
                                        FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
 
                         <!-- notification-service -->
                         <Border Canvas.Left="300" Canvas.Top="90" Width="115" Height="36"
                                 Background="#1A2235" BorderBrush="#1E2D45" BorderThickness="1" CornerRadius="6">
-                            <TextBlock Text="notification" Foreground="{StaticResource TextSecondaryColor}"
+                            <TextBlock Text="notification" Foreground="{StaticResource TextSecondaryBrush}"
                                        FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
 

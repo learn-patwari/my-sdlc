@@ -174,7 +174,7 @@
 
                                 <!-- Payment Service (highlighted) -->
                                 <Border Canvas.Left="20" Canvas.Top="90" Width="150" Height="36"
-                                        Background="#2D1B69" BorderBrush="{StaticResource AccentPurpleColor}"
+                                        Background="#2D1B69" BorderBrush="{StaticResource AccentPurpleBrush}"
                                         BorderThickness="1.5" CornerRadius="6">
                                     <TextBlock Text="Payment Service" Foreground="White"
                                                FontWeight="SemiBold" FontSize="12"
@@ -185,7 +185,7 @@
                                 <Border Canvas.Left="290" Canvas.Top="90" Width="150" Height="36"
                                         Background="#1A2235" BorderBrush="#1E2D45"
                                         BorderThickness="1" CornerRadius="6">
-                                    <TextBlock Text="Notification Service" Foreground="{StaticResource TextSecondaryColor}"
+                                    <TextBlock Text="Notification Service" Foreground="{StaticResource TextSecondaryBrush}"
                                                FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
 
@@ -193,7 +193,7 @@
                                 <Border Canvas.Left="20" Canvas.Top="170" Width="150" Height="36"
                                         Background="#1A2235" BorderBrush="#1E2D45"
                                         BorderThickness="1" CornerRadius="6">
-                                    <TextBlock Text="Account Service" Foreground="{StaticResource TextSecondaryColor}"
+                                    <TextBlock Text="Account Service" Foreground="{StaticResource TextSecondaryBrush}"
                                                FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
 
