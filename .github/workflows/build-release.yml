@@ -1,0 +1,54 @@
+name: Build & Package SprintForge
+
+on:
+  push:
+    branches: [ "claude/sdlc-copilot-architecture-a65lfd", "main" ]
+    tags:     [ "v*" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore SprintForge.sln
+
+      - name: Build (all projects)
+        run: dotnet build SprintForge.sln -c Release --no-restore
+
+      - name: Test (cross-platform projects)
+        run: dotnet test tests/SprintForge.Tests/SprintForge.Tests.csproj -c Release --no-build --logger "trx;LogFileName=test-results.trx"
+
+      - name: Publish self-contained EXE (win-x64)
+        run: |
+          dotnet publish src/SprintForge.Wpf/SprintForge.Wpf.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true `
+            -o publish/SprintForge-win-x64
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SprintForge-win-x64
+          path: publish/SprintForge-win-x64/SprintForge.Wpf.exe
+          if-no-files-found: error
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: "**/*.trx"
