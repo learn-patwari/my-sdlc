@@ -21,7 +21,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="SDD" FontSize="16" FontWeight="SemiBold"
+                    <TextBlock Text="Design Document" FontSize="16" FontWeight="SemiBold"
                                Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,16,0"/>
                     <TextBlock Text="&amp; Unit Test Generator" FontSize="16"
                                Foreground="{StaticResource TextMutedBrush}"/>

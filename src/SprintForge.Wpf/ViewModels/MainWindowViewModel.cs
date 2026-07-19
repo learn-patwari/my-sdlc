@@ -22,18 +22,18 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
         NavItems =
         [
-            new NavigationItem { Label = "Dashboard",       Icon = "⊞",  ViewModelType = typeof(DashboardViewModel) },
-            new NavigationItem { Label = "SRS Generator",   Icon = "📄",  ViewModelType = typeof(SrsGeneratorViewModel) },
-            new NavigationItem { Label = "SAD",             Icon = "🏗",  ViewModelType = typeof(SadViewModel) },
-            new NavigationItem { Label = "SDD",             Icon = "📐",  ViewModelType = typeof(SddViewModel) },
-            new NavigationItem { Label = "Sprint Planning", Icon = "📅",  ViewModelType = typeof(SprintPlanningViewModel) },
-            new NavigationItem { Label = "Repository",      Icon = "🗂",  ViewModelType = typeof(RepoAnalyzerViewModel) },
-            new NavigationItem { Label = "Unit Tests",      Icon = "✓",   ViewModelType = typeof(SddViewModel) },
-            new NavigationItem { Label = "Jira",            Icon = "🎯",  ViewModelType = typeof(JiraViewModel) },
-            new NavigationItem { Label = "Documents",       Icon = "📁",  ViewModelType = typeof(DocumentsViewModel) },
-            new NavigationItem { Label = "Approvals",       Icon = "✅",  ViewModelType = typeof(ApprovalsViewModel) },
-            new NavigationItem { Label = "Audit Center",    Icon = "🔍",  ViewModelType = typeof(AuditCenterViewModel) },
-            new NavigationItem { Label = "Settings",        Icon = "⚙",   ViewModelType = typeof(SettingsViewModel) },
+            new NavigationItem { Label = "Dashboard",        Icon = "⊞",  ViewModelType = typeof(DashboardViewModel) },
+            new NavigationItem { Label = "Requirements",     Icon = "📄",  ViewModelType = typeof(SrsGeneratorViewModel) },
+            new NavigationItem { Label = "Architecture",     Icon = "🏗",  ViewModelType = typeof(SadViewModel) },
+            new NavigationItem { Label = "Design Document",  Icon = "📐",  ViewModelType = typeof(SddViewModel) },
+            new NavigationItem { Label = "Sprint Builder",   Icon = "📅",  ViewModelType = typeof(SprintPlanningViewModel) },
+            new NavigationItem { Label = "Repository",       Icon = "🗂",  ViewModelType = typeof(RepoAnalyzerViewModel) },
+            new NavigationItem { Label = "Unit Tests",       Icon = "✓",   ViewModelType = typeof(SddViewModel) },
+            new NavigationItem { Label = "Jira",             Icon = "🎯",  ViewModelType = typeof(JiraViewModel) },
+            new NavigationItem { Label = "Documents",        Icon = "📁",  ViewModelType = typeof(DocumentsViewModel) },
+            new NavigationItem { Label = "Approvals",        Icon = "✅",  ViewModelType = typeof(ApprovalsViewModel) },
+            new NavigationItem { Label = "Audit Center",     Icon = "🔍",  ViewModelType = typeof(AuditCenterViewModel) },
+            new NavigationItem { Label = "Settings",         Icon = "⚙",   ViewModelType = typeof(SettingsViewModel) },
         ];
 
         Navigate(NavItems[0]);

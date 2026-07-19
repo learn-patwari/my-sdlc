@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel>
-                <TextBlock Text="SRS Generator" FontSize="22" FontWeight="Bold"
+                <TextBlock Text="Requirements" FontSize="22" FontWeight="Bold"
                            Foreground="{StaticResource TextPrimaryBrush}"/>
                 <TextBlock Text="Retail Banking Platform  ›  Account Management"
                            FontSize="13" Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0"/>

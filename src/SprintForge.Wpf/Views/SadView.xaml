@@ -21,7 +21,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="SAD" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
+                    <TextBlock Text="Architecture" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
                     <TextBlock Text=" › " Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
                     <TextBlock Text="{Binding ProjectName}" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
                     <TextBlock Text=" › " Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
