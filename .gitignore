@@ -23,3 +23,7 @@ packages/
 appsettings.local.json
 *.pfx
 *.snk
+
+# Build outputs
+publish/
+installer/output/

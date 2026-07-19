@@ -39,11 +39,24 @@ jobs:
             -p:EnableCompressionInSingleFile=true `
             -o publish/SprintForge-win-x64
 
+      - name: Build installer (Inno Setup)
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          & $iscc installer\sprintforge.iss
+        shell: powershell
+
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SprintForge-win-x64
+          name: SprintForge-win-x64-portable
           path: publish/SprintForge-win-x64/SprintForge.exe
+          if-no-files-found: error
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SprintForge-Setup
+          path: installer/output/SprintForge-Setup.exe
           if-no-files-found: error
 
       - name: Upload test results
@@ -52,3 +65,32 @@ jobs:
         with:
           name: test-results
           path: "**/*.trx"
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download portable EXE
+        uses: actions/download-artifact@v4
+        with:
+          name: SprintForge-win-x64-portable
+          path: dist/portable
+
+      - name: Download installer
+        uses: actions/download-artifact@v4
+        with:
+          name: SprintForge-Setup
+          path: dist/installer
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/portable/SprintForge.exe
+            dist/installer/SprintForge-Setup.exe
+          generate_release_notes: true
