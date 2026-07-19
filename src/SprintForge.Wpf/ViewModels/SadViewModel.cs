@@ -16,10 +16,10 @@ public sealed partial class SadViewModel : ObservableObject
     private readonly ISadService _sadService;
 
     [ObservableProperty] private string _activeTab = "Architecture";
-    [ObservableProperty] private string _projectName = "Retail Banking Platform";
-    [ObservableProperty] private string _serviceName = "Payment Service";
+    [ObservableProperty] private string _projectName = string.Empty;
+    [ObservableProperty] private string _serviceName = string.Empty;
     [ObservableProperty] private string _documentPreview = string.Empty;
-    [ObservableProperty] private string _statusMessage = "Select a component to view details.";
+    [ObservableProperty] private string _statusMessage = "Click Generate SAD to analyse this service.";
     [ObservableProperty] private ComponentNode? _selectedComponent;
     [ObservableProperty] private bool _isGenerating;
 
@@ -28,8 +28,6 @@ public sealed partial class SadViewModel : ObservableObject
     public SadViewModel(ISadService sadService)
     {
         _sadService = sadService;
-        BuildDemoTree();
-        BuildDemoDocument();
     }
 
     [RelayCommand]
@@ -59,45 +57,6 @@ public sealed partial class SadViewModel : ObservableObject
         StatusMessage = $"Selected: {node.Name} ({node.NodeType})";
     }
 
-    private void BuildDemoTree()
-    {
-        FlatTree.Add(new FlatNode("retail-banking-platform", "root", 0));
-        FlatTree.Add(new FlatNode("API Gateway", "gateway", 1, isExpanded: true));
-        FlatTree.Add(new FlatNode("Payment Service", "service", 1, isExpanded: true, isHighlighted: true));
-        FlatTree.Add(new FlatNode("Controller", "layer", 2));
-        FlatTree.Add(new FlatNode("Service", "layer", 2));
-        FlatTree.Add(new FlatNode("Repository", "layer", 2));
-        FlatTree.Add(new FlatNode("Payment Processor", "service", 2));
-        FlatTree.Add(new FlatNode("Adapter", "layer", 3));
-        FlatTree.Add(new FlatNode("Account Service", "service", 1));
-        FlatTree.Add(new FlatNode("Notification Service", "service", 1));
-        FlatTree.Add(new FlatNode("Database", "db", 1));
-        FlatTree.Add(new FlatNode("PostgreSQL", "db", 2));
-        FlatTree.Add(new FlatNode("Redis Cache", "cache", 1));
-        FlatTree.Add(new FlatNode("Kafka", "messaging", 1));
-    }
-
-    private void BuildDemoDocument()
-    {
-        DocumentPreview =
-            "# SAD — Retail Banking Platform\n" +
-            "**Service:** Payment Service  |  **Version:** 1.0\n\n" +
-            "---\n\n" +
-            "## 1. Overview\n" +
-            "The Payment Service is responsible for processing fund transfers, " +
-            "validating account balances, and publishing payment events to downstream consumers.\n\n" +
-            "## 2. Architecture Diagram\n" +
-            "See center panel for interactive diagram.\n\n" +
-            "## 3. Components\n" +
-            "- **PaymentController** — REST API entry point\n" +
-            "- **PaymentService** — Core business logic\n" +
-            "- **PaymentRepository** — Data access layer\n" +
-            "- **PaymentProcessor** — External payment gateway adapter\n\n" +
-            "## 4. Dependencies\n" +
-            "- PostgreSQL (primary datastore)\n" +
-            "- Redis (idempotency cache)\n" +
-            "- Kafka (event streaming)";
-    }
 }
 
 public sealed partial class FlatNode : ObservableObject

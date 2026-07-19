@@ -53,13 +53,13 @@ public sealed partial class SprintPlanningViewModel : ObservableObject
 {
     private readonly ISprintPlanningService _planningService;
 
-    [ObservableProperty] private string _sprintName     = "SPR-34 (Jul 14 – Jul 27)";
-    [ObservableProperty] private int    _capacityPts    = 160;
-    [ObservableProperty] private int    _committedPts   = 142;
-    [ObservableProperty] private int    _completedPts   = 38;
-    [ObservableProperty] private int    _remainingPts   = 104;
-    [ObservableProperty] private int    _utilizationPct = 89;
-    [ObservableProperty] private string _statusMessage  = string.Empty;
+    [ObservableProperty] private string _sprintName     = string.Empty;
+    [ObservableProperty] private int    _capacityPts    = 0;
+    [ObservableProperty] private int    _committedPts   = 0;
+    [ObservableProperty] private int    _completedPts   = 0;
+    [ObservableProperty] private int    _remainingPts   = 0;
+    [ObservableProperty] private int    _utilizationPct = 0;
+    [ObservableProperty] private string _statusMessage  = "Configure sprint settings, then add requirements from the SRS picker.";
     [ObservableProperty] private bool   _isValidating;
     [ObservableProperty] private bool   _showSrsPicker;
     [ObservableProperty] private string _activeTab      = "Plan";   // Plan | Timeline
@@ -76,7 +76,6 @@ public sealed partial class SprintPlanningViewModel : ObservableObject
     public SprintPlanningViewModel(ISprintPlanningService planningService)
     {
         _planningService = planningService;
-        LoadDemoData();
     }
 
     // ── Tabs ──────────────────────────────────────────────────────────────
@@ -179,7 +178,13 @@ public sealed partial class SprintPlanningViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void RefreshGantt() => LoadDemoData();
+    private void RefreshGantt()
+    {
+        WorkItems.Clear();
+        SyncTaskItems();
+        RefreshCapacityMetrics();
+        StatusMessage = "Sprint cleared.";
+    }
 
     // ── Helpers ───────────────────────────────────────────────────────────
     private int FindInsertPoint(WorkItemRow parent)
@@ -207,29 +212,4 @@ public sealed partial class SprintPlanningViewModel : ObservableObject
         UtilizationPct = CapacityPts > 0 ? (int)Math.Round(CommittedPts * 100.0 / CapacityPts) : 0;
     }
 
-    private void LoadDemoData()
-    {
-        WorkItems.Clear();
-        // Fund Transfer Epic
-        WorkItems.Add(new WorkItemRow { Name = "Fund Transfer Epic",      Type = "Epic",    Indent = 0, Status = "In Progress", JiraKey = "RB-100" });
-        WorkItems.Add(new WorkItemRow { Name = "Implement fund transfer", Type = "Story",   Indent = 1, EstimatePts = 15, Status = "In Progress", JiraKey = "RB-101" });
-        WorkItems.Add(new WorkItemRow { Name = "Develop API",             Type = "Task",    Indent = 2, EstimatePts = 5,  Status = "Done",        JiraKey = "RB-102", Assignee = "Rahul Sharma",  StartDay = 0, DurationDays = 3, ParentName = "Implement fund transfer" });
-        WorkItems.Add(new WorkItemRow { Name = "Develop API (FE)",        Type = "Task",    Indent = 2, EstimatePts = 5,  Status = "In Progress", JiraKey = "RB-103", Assignee = "Priya Singh",   StartDay = 2, DurationDays = 4, ParentName = "Implement fund transfer" });
-        WorkItems.Add(new WorkItemRow { Name = "Unit Tests",              Type = "Task",    Indent = 2, EstimatePts = 3,  Status = "In Progress", JiraKey = "RB-104", Assignee = "Neha Verma",    StartDay = 4, DurationDays = 3, ParentName = "Implement fund transfer" });
-        WorkItems.Add(new WorkItemRow { Name = "Code Review",             Type = "SubTask", Indent = 3, EstimatePts = 2,  Status = "To Do",       JiraKey = "RB-105", Assignee = "Arjun Patel",   StartDay = 6, DurationDays = 2, ParentName = "Implement fund transfer" });
-        // Account Management Epic
-        WorkItems.Add(new WorkItemRow { Name = "Account Management Epic", Type = "Epic",    Indent = 0, Status = "In Progress", JiraKey = "RB-200" });
-        WorkItems.Add(new WorkItemRow { Name = "Balance Enquiry API",     Type = "Story",   Indent = 1, EstimatePts = 8,  Status = "To Do",       JiraKey = "RB-201" });
-        WorkItems.Add(new WorkItemRow { Name = "REST endpoint",           Type = "Task",    Indent = 2, EstimatePts = 3,  Status = "To Do",       JiraKey = "RB-202", Assignee = "Rahul Sharma",  StartDay = 7, DurationDays = 3, ParentName = "Balance Enquiry API" });
-        WorkItems.Add(new WorkItemRow { Name = "DB query optimization",   Type = "SubTask", Indent = 3, EstimatePts = 2,  Status = "To Do",       JiraKey = "RB-203", Assignee = "Neha Verma",    StartDay = 9, DurationDays = 2, ParentName = "Balance Enquiry API" });
-
-        AvailableSrs.Clear();
-        AvailableSrs.Add(new SrsItem("SRS-001", "User Authentication & Authorization", ["Account Service", "Security Service"], 13));
-        AvailableSrs.Add(new SrsItem("SRS-002", "Transaction History & Reporting",     ["Payment Service", "Reporting Service"], 8));
-        AvailableSrs.Add(new SrsItem("SRS-003", "Notification & Alerts Engine",        ["Notification Service", "Kafka"], 5));
-        AvailableSrs.Add(new SrsItem("SRS-004", "Audit Log & Compliance Reporting",    ["Audit Service"], 8));
-        AvailableSrs.Add(new SrsItem("SRS-005", "Multi-currency Support",              ["Payment Service", "FX Service"], 13));
-
-        SyncTaskItems();
-    }
 }

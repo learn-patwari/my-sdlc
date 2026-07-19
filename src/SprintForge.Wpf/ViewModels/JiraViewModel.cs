@@ -19,19 +19,18 @@ public sealed partial class JiraViewModel : ObservableObject
     private readonly ISdlcTool _sdlcTool;
     private readonly List<JiraIssueRow> _allIssues = [];
 
-    [ObservableProperty] private string _projectKey = "RBP";
+    [ObservableProperty] private string _projectKey = string.Empty;
     [ObservableProperty] private string _searchText = string.Empty;
-    [ObservableProperty] private string _activeSprint = "SPR-34";
+    [ObservableProperty] private string _activeSprint = string.Empty;
     [ObservableProperty] private JiraIssueRow? _selectedIssue;
     [ObservableProperty] private bool _isLoading;
-    [ObservableProperty] private string _statusMessage = "Loaded demo data.";
+    [ObservableProperty] private string _statusMessage = "Configure Jira in Settings → Integrations, then click Refresh.";
 
     public ObservableCollection<JiraIssueRow> Issues { get; } = [];
 
     public JiraViewModel(ISdlcTool sdlcTool)
     {
         _sdlcTool = sdlcTool;
-        LoadDemoData();
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter(value);
@@ -99,19 +98,4 @@ public sealed partial class JiraViewModel : ObservableObject
         foreach (var r in src) Issues.Add(r);
     }
 
-    private void LoadDemoData()
-    {
-        _allIssues.Clear();
-        _allIssues.Add(new JiraIssueRow("RB-100", "Fund Transfer Epic",          "Epic",  "High",   "In Progress", "-",           0));
-        _allIssues.Add(new JiraIssueRow("RB-101", "Implement fund transfer",      "Story", "High",   "In Progress", "Rahul Sharma", 15));
-        _allIssues.Add(new JiraIssueRow("RB-102", "Develop API",                  "Task",  "High",   "Done",        "Rahul Sharma", 5));
-        _allIssues.Add(new JiraIssueRow("RB-103", "Develop API (FE)",             "Task",  "Medium", "In Progress", "Priya Singh",  5));
-        _allIssues.Add(new JiraIssueRow("RB-104", "Unit Tests",                   "Task",  "Medium", "In Progress", "Neha Verma",   3));
-        _allIssues.Add(new JiraIssueRow("RB-105", "Code Review",                  "Task",  "Low",    "To Do",       "Arjun Patel",  2));
-        _allIssues.Add(new JiraIssueRow("RB-200", "Account Management Epic",      "Epic",  "High",   "In Progress", "-",            0));
-        _allIssues.Add(new JiraIssueRow("RB-201", "Balance Enquiry API",          "Story", "High",   "To Do",       "-",            8));
-        _allIssues.Add(new JiraIssueRow("RB-202", "REST endpoint",                "Task",  "Medium", "To Do",       "Rahul Sharma", 3));
-        _allIssues.Add(new JiraIssueRow("RB-203", "DB query optimization",        "Task",  "Low",    "To Do",       "Neha Verma",   2));
-        ApplyFilter(string.Empty);
-    }
 }

@@ -15,16 +15,7 @@ public sealed partial class SrsGeneratorViewModel : ObservableObject
     private readonly IApprovalGate _approvalGate;
 
     [ObservableProperty]
-    private string _inputText =
-        "# Account Management Requirements\n\n" +
-        "## FR-01: User Authentication\n" +
-        "The system shall allow users to authenticate via username and password.\n\n" +
-        "## FR-02: Account Creation\n" +
-        "The system shall allow bank staff to create new customer accounts.\n\n" +
-        "## FR-03: Balance Enquiry\n" +
-        "Users shall be able to view current account balance in real time.\n\n" +
-        "## FR-04: Transaction History\n" +
-        "Users shall be able to view the last 90 days of transactions.";
+    private string _inputText = string.Empty;
 
     [ObservableProperty]
     private string _generatedPreview = string.Empty;
@@ -36,10 +27,10 @@ public sealed partial class SrsGeneratorViewModel : ObservableObject
     private bool _isGenerating;
 
     [ObservableProperty]
-    private string _statusMessage = "Enter requirements and click Generate.";
+    private string _statusMessage = "Paste or type your requirements, then click Generate.";
 
     [ObservableProperty]
-    private string _jiraProjectKey = "RBP";
+    private string _jiraProjectKey = string.Empty;
 
     [ObservableProperty]
     private DocumentDraft? _currentDraft;
