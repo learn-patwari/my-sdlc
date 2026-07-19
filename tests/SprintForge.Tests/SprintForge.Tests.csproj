@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="7.*" />
+    <PackageReference Include="JsonSchema.Net" Version="7.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <PackageReference Include="NSubstitute" Version="5.*" />
