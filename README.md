@@ -47,27 +47,41 @@ SprintForge automates the complete Software Development Life Cycle: AI-assisted 
 ### Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [Inno Setup 6](https://jrsoftware.org/isdl.php) *(installer only)*
 - Windows 10 or 11 (WPF requires Windows)
 
-### Build
+### All commands
 
 ```powershell
+# ── Restore ────────────────────────────────────────────────────────────────
+dotnet restore SprintForge.sln
+
+# ── Build ──────────────────────────────────────────────────────────────────
 dotnet build SprintForge.sln
-```
 
-### Run tests
-
-```powershell
+# ── Test ───────────────────────────────────────────────────────────────────
 dotnet test tests/SprintForge.Tests/SprintForge.Tests.csproj
+
+# ── Run (debug) ────────────────────────────────────────────────────────────
+dotnet run --project src/SprintForge.Wpf/SprintForge.Wpf.csproj
+
+# ── Publish portable EXE ───────────────────────────────────────────────────
+dotnet publish src/SprintForge.Wpf/SprintForge.Wpf.csproj `
+    -c Release -r win-x64 --self-contained true `
+    -p:PublishSingleFile=true `
+    -p:IncludeNativeLibrariesForSelfExtract=true `
+    -p:EnableCompressionInSingleFile=true `
+    -o publish\SprintForge-win-x64
+# Output: publish\SprintForge-win-x64\SprintForge.exe
+
+# ── Build installer (Setup.exe) ────────────────────────────────────────────
+.\installer\build-installer.ps1
+# Output: installer\output\Setup.exe
+
+# ── Tag a GitHub Release (CI builds + attaches both files automatically) ───
+git tag v1.0.0
+git push origin v1.0.0
 ```
-
-### Publish a self-contained EXE
-
-```powershell
-dotnet publish src/SprintForge.Wpf/SprintForge.Wpf.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o %USERPROFILE%\SprintForge
-```
-
-The output is a single `SprintForge.exe` (~80–120 MB) that runs on any Windows 10/11 x64 machine without requiring .NET to be installed.
 
 > The WPF project targets `net8.0-windows` and compiles on Windows only.  
 > Domain, Application, Infrastructure, and Tests target `net8.0` and are cross-platform.
