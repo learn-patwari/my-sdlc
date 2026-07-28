@@ -1,0 +1,12 @@
+{
+  "solution": {
+    "path": "SprintForge.sln",
+    "projects": [
+      "src\\SprintForge.Domain\\SprintForge.Domain.csproj",
+      "src\\SprintForge.Application\\SprintForge.Application.csproj",
+      "src\\SprintForge.Infrastructure\\SprintForge.Infrastructure.csproj",
+      "src\\SprintForge.Avalonia\\SprintForge.Avalonia.csproj",
+      "tests\\SprintForge.Tests\\SprintForge.Tests.csproj"
+    ]
+  }
+}
