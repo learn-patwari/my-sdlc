@@ -1,0 +1,240 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:views="using:SprintForge.Avalonia.Views"
+             xmlns:conv="using:SprintForge.Avalonia.Converters"
+             x:Class="SprintForge.Avalonia.App">
+
+    <Application.Styles>
+        <FluentTheme />
+        <!-- Inter font embedded via WithInterFont() in Program.cs; no StyleInclude needed -->
+
+        <!-- Global TextBlock -->
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Inter,Segoe UI,sans-serif"/>
+        </Style>
+
+        <!-- Global TextBox (dark) -->
+        <Style Selector="TextBox">
+            <Setter Property="Background"   Value="{DynamicResource BgCardBrush}"/>
+            <Setter Property="Foreground"   Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="BorderBrush"  Value="{DynamicResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"      Value="10,8"/>
+            <Setter Property="FontSize"     Value="14"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="FontFamily"   Value="Inter,Segoe UI,sans-serif"/>
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentPurpleBrush}"/>
+        </Style>
+
+        <!-- Global ComboBox (dark) -->
+        <Style Selector="ComboBox">
+            <Setter Property="Background"   Value="{DynamicResource BgCardBrush}"/>
+            <Setter Property="Foreground"   Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="BorderBrush"  Value="{DynamicResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"      Value="10,8"/>
+            <Setter Property="FontSize"     Value="13"/>
+            <Setter Property="CornerRadius" Value="6"/>
+        </Style>
+        <Style Selector="ComboBoxItem">
+            <Setter Property="Foreground"  Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="Background"  Value="Transparent"/>
+            <Setter Property="FontSize"    Value="13"/>
+            <Setter Property="Padding"     Value="10,7"/>
+        </Style>
+        <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentPurpleBrush}"/>
+        </Style>
+        <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="#4C1D95"/>
+        </Style>
+
+        <!-- Button.primary (purple CTA) -->
+        <Style Selector="Button.primary">
+            <Setter Property="Background"   Value="{DynamicResource AccentPurpleBrush}"/>
+            <Setter Property="Foreground"   Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding"      Value="16,10"/>
+            <Setter Property="FontSize"     Value="14"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor"       Value="Hand"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#6D28D9"/>
+        </Style>
+        <Style Selector="Button.primary:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#5B21B6"/>
+        </Style>
+        <Style Selector="Button.primary:disabled">
+            <Setter Property="Opacity" Value="0.5"/>
+        </Style>
+
+        <!-- Button.outline -->
+        <Style Selector="Button.outline">
+            <Setter Property="Background"   Value="Transparent"/>
+            <Setter Property="Foreground"   Value="{DynamicResource TextSecondaryBrush}"/>
+            <Setter Property="BorderBrush"  Value="{DynamicResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"      Value="16,10"/>
+            <Setter Property="FontSize"     Value="14"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor"       Value="Hand"/>
+        </Style>
+        <Style Selector="Button.outline:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BgElevatedBrush}"/>
+        </Style>
+
+        <!-- Button.ghost (transparent, no border) -->
+        <Style Selector="Button.ghost">
+            <Setter Property="Background"     Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding"        Value="8,4"/>
+            <Setter Property="Cursor"         Value="Hand"/>
+        </Style>
+        <Style Selector="Button.ghost:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BgElevatedBrush}"/>
+        </Style>
+
+        <!-- Button.tab-btn (used for tab strips) -->
+        <Style Selector="Button.tab-btn">
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="Foreground"      Value="{DynamicResource TextSecondaryBrush}"/>
+            <Setter Property="BorderBrush"     Value="{DynamicResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"         Value="14,7"/>
+            <Setter Property="CornerRadius"    Value="6"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+        </Style>
+        <Style Selector="Button.tab-btn.active">
+            <Setter Property="Background"  Value="{DynamicResource AccentPurpleBrush}"/>
+            <Setter Property="Foreground"  Value="White"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentPurpleBrush}"/>
+        </Style>
+        <Style Selector="Button.tab-btn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BgElevatedBrush}"/>
+        </Style>
+        <Style Selector="Button.tab-btn.active:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#6D28D9"/>
+        </Style>
+
+        <!-- Button.settings-tab-btn (left-rail variant for Settings) -->
+        <Style Selector="Button.settings-tab-btn">
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="Foreground"      Value="{DynamicResource TextSecondaryBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding"         Value="12,9"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="CornerRadius"    Value="6"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+        </Style>
+        <Style Selector="Button.settings-tab-btn.active">
+            <Setter Property="Background" Value="{DynamicResource AccentPurpleBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.settings-tab-btn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BgElevatedBrush}"/>
+        </Style>
+        <Style Selector="Button.settings-tab-btn.active:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#6D28D9"/>
+        </Style>
+
+        <!-- Border.settings-card -->
+        <Style Selector="Border.settings-card">
+            <Setter Property="Background"     Value="{DynamicResource BgCardBrush}"/>
+            <Setter Property="BorderBrush"    Value="{DynamicResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius"   Value="8"/>
+            <Setter Property="Padding"        Value="16"/>
+            <Setter Property="Margin"         Value="0,0,0,12"/>
+        </Style>
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- ── Color tokens (dark theme) ──────────────────────────────── -->
+            <Color x:Key="BgBaseColor">#080C18</Color>
+            <Color x:Key="BgSurfaceColor">#0D1117</Color>
+            <Color x:Key="BgCardColor">#111827</Color>
+            <Color x:Key="BgElevatedColor">#1A2235</Color>
+            <Color x:Key="BgSidebarColor">#0B1120</Color>
+            <Color x:Key="BorderColor">#1E2D45</Color>
+            <Color x:Key="AccentPurpleColor">#7C3AED</Color>
+            <Color x:Key="AccentBlueColor">#3B82F6</Color>
+            <Color x:Key="TextPrimaryColor">#F1F5F9</Color>
+            <Color x:Key="TextSecondaryColor">#94A3B8</Color>
+            <Color x:Key="TextMutedColor">#64748B</Color>
+            <Color x:Key="SuccessColor">#22C55E</Color>
+            <Color x:Key="WarningColor">#F59E0B</Color>
+            <Color x:Key="ErrorColor">#EF4444</Color>
+
+            <!-- ── Brushes ────────────────────────────────────────────────── -->
+            <SolidColorBrush x:Key="BgBaseBrush"        Color="{StaticResource BgBaseColor}"/>
+            <SolidColorBrush x:Key="BgSurfaceBrush"     Color="{StaticResource BgSurfaceColor}"/>
+            <SolidColorBrush x:Key="BgCardBrush"        Color="{StaticResource BgCardColor}"/>
+            <SolidColorBrush x:Key="BgElevatedBrush"    Color="{StaticResource BgElevatedColor}"/>
+            <SolidColorBrush x:Key="BgSidebarBrush"     Color="{StaticResource BgSidebarColor}"/>
+            <SolidColorBrush x:Key="BorderColorBrush"   Color="{StaticResource BorderColor}"/>
+            <SolidColorBrush x:Key="AccentPurpleBrush"  Color="{StaticResource AccentPurpleColor}"/>
+            <SolidColorBrush x:Key="AccentBlueBrush"    Color="{StaticResource AccentBlueColor}"/>
+            <SolidColorBrush x:Key="TextPrimaryBrush"   Color="{StaticResource TextPrimaryColor}"/>
+            <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}"/>
+            <SolidColorBrush x:Key="TextMutedBrush"     Color="{StaticResource TextMutedColor}"/>
+            <SolidColorBrush x:Key="SuccessBrush"       Color="{StaticResource SuccessColor}"/>
+            <SolidColorBrush x:Key="WarningBrush"       Color="{StaticResource WarningColor}"/>
+            <SolidColorBrush x:Key="ErrorBrush"         Color="{StaticResource ErrorColor}"/>
+
+            <!-- ── Value converters ───────────────────────────────────────── -->
+            <conv:HexToBrushConverter      x:Key="HexToBrush"/>
+            <conv:LeftToThicknessConverter x:Key="LeftToThickness"/>
+            <conv:NullToVisibleConverter   x:Key="NullToVisible"/>
+            <conv:NotNullToVisibleConverter x:Key="NotNullToVisible"/>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <!-- ── ViewModel → View DataTemplate routing ────────────────────────── -->
+    <Application.DataTemplates>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <views:SettingsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SrsGeneratorViewModel}">
+            <views:SrsGeneratorView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ApprovalsViewModel}">
+            <views:ApprovalsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AuditCenterViewModel}">
+            <views:AuditCenterView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SadViewModel}">
+            <views:SadView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SddViewModel}">
+            <views:SddView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SprintPlanningViewModel}">
+            <views:SprintPlanningView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RepoAnalyzerViewModel}">
+            <views:RepoAnalyzerView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:JiraViewModel}">
+            <views:JiraView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DocumentsViewModel}">
+            <views:DocumentsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PlaceholderViewModel}">
+            <views:PlaceholderView/>
+        </DataTemplate>
+    </Application.DataTemplates>
+
+</Application>

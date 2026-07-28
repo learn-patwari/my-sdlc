@@ -1,0 +1,96 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SprintForge.Avalonia.Views.DashboardView"
+             Padding="24">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="Dashboard" FontSize="24" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,20"/>
+
+            <!-- ── KPI cards ───────────────────────────────────────────── -->
+            <ItemsControl ItemsSource="{Binding KpiCards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{StaticResource BgCardBrush}"
+                                BorderBrush="{StaticResource BorderColorBrush}"
+                                BorderThickness="1" CornerRadius="8"
+                                Margin="0,0,16,16" Padding="16" MinWidth="180">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Title}" FontSize="12"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="{Binding Value}" FontSize="28"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Margin="0,0,0,8"/>
+                                <Border Background="{StaticResource BgElevatedBrush}"
+                                        BorderBrush="{StaticResource BorderColorBrush}"
+                                        BorderThickness="1" CornerRadius="4" Padding="8,4"
+                                        HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding Badge}" FontSize="11"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontWeight="Medium"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- ── Recommendations ────────────────────────────────────── -->
+            <TextBlock Text="AI Recommendations" FontSize="16" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,24,0,12"/>
+
+            <ItemsControl ItemsSource="{Binding Recommendations}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="•" FontSize="13" Margin="0,0,8,0"
+                                       Foreground="{StaticResource AccentPurpleBrush}"/>
+                            <TextBlock Text="{Binding}" FontSize="13"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- ── Recent activity ────────────────────────────────────── -->
+            <TextBlock Text="Recent Activity" FontSize="16" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,24,0,12"/>
+
+            <ItemsControl ItemsSource="{Binding RecentActivity}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{StaticResource BgCardBrush}"
+                                BorderBrush="{StaticResource BorderColorBrush}"
+                                BorderThickness="1" CornerRadius="6"
+                                Margin="0,0,0,8" Padding="12,10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{Binding Description}" FontSize="13"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <TextBlock Text="{Binding TimeAgo}" FontSize="11"
+                                               Foreground="{StaticResource TextMutedBrush}"
+                                               Margin="0,4,0,0"/>
+                                </StackPanel>
+                                <Border Grid.Column="1"
+                                        Background="{StaticResource BgElevatedBrush}"
+                                        CornerRadius="4" Padding="8,4"
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Module}" FontSize="11"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

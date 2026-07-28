@@ -1,0 +1,175 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:conv="using:SprintForge.Avalonia.Converters"
+             x:Class="SprintForge.Avalonia.Views.JiraView">
+
+    <DockPanel>
+
+        <!-- ── Toolbar ─────────────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Top"
+                Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                Padding="16,10">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Jira" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,16,0"/>
+                    <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                            Padding="8,3" Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Project: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding ProjectKey}" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                        </StackPanel>
+                    </Border>
+                    <TextBox Text="{Binding SearchText}"
+                             Watermark="Search issues..."
+                             Width="200" Margin="0,0,8,0"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="↻ Refresh" Classes="outline"
+                            Command="{Binding RefreshCommand}" Margin="0,0,8,0"/>
+                    <Button Content="+ Create Issue" Classes="primary"
+                            Command="{Binding CreateIssueCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ── Status bar ─────────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Bottom"
+                Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,1,0,0"
+                Padding="16,6">
+            <TextBlock Text="{Binding StatusMessage}" FontSize="11"
+                       Foreground="{StaticResource TextMutedBrush}"/>
+        </Border>
+
+        <!-- ── Main: issues list + detail ─────────────────────────────── -->
+        <Grid ColumnDefinitions="*,320">
+
+            <!-- Left: Issues list -->
+            <Border Grid.Column="0" Background="{StaticResource BgCardBrush}">
+                <DockPanel>
+                    <!-- Column headers -->
+                    <Border DockPanel.Dock="Top" Padding="12,8"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                        <Grid ColumnDefinitions="80,*,60,70,90,110,40">
+                            <TextBlock Text="Key"      FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Grid.Column="1" Text="Summary"  FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Grid.Column="2" Text="Type"     FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Grid.Column="3" Text="Priority" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Grid.Column="4" Text="Status"   FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Grid.Column="5" Text="Assignee" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Grid.Column="6" Text="Pts"      FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Border>
+
+                    <ListBox ItemsSource="{Binding Issues}"
+                             SelectedItem="{Binding SelectedIssue, Mode=TwoWay}"
+                             Background="Transparent"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:JiraIssueRow}">
+                                <Border BorderBrush="{StaticResource BorderColorBrush}"
+                                        BorderThickness="0,0,0,1" Padding="12,8">
+                                    <Grid ColumnDefinitions="80,*,60,70,90,110,40">
+                                        <TextBlock Text="{Binding Key}" FontSize="12" FontWeight="SemiBold"
+                                                   Foreground="{StaticResource AccentBlueBrush}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Summary}"
+                                                   FontSize="13" Foreground="{StaticResource TextPrimaryBrush}"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                        <!-- Type chip -->
+                                        <Border Grid.Column="2" CornerRadius="3" Padding="4,2"
+                                                HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                Background="{Binding TypeBgHex, Converter={StaticResource HexToBrush}}">
+                                            <TextBlock Text="{Binding IssueType}" FontSize="10"
+                                                       Foreground="{Binding TypeFgHex, Converter={StaticResource HexToBrush}}"/>
+                                        </Border>
+                                        <!-- Priority chip -->
+                                        <Border Grid.Column="3" CornerRadius="3" Padding="4,2"
+                                                HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                Background="{Binding PriorityBgHex, Converter={StaticResource HexToBrush}}">
+                                            <TextBlock Text="{Binding Priority}" FontSize="10"
+                                                       Foreground="{Binding PriorityFgHex, Converter={StaticResource HexToBrush}}"/>
+                                        </Border>
+                                        <!-- Status chip -->
+                                        <Border Grid.Column="4" CornerRadius="999" Padding="6,2"
+                                                HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                Background="{Binding StatusBgHex, Converter={StaticResource HexToBrush}}">
+                                            <TextBlock Text="{Binding Status}" FontSize="11"
+                                                       Foreground="{Binding StatusFgHex, Converter={StaticResource HexToBrush}}"/>
+                                        </Border>
+                                        <TextBlock Grid.Column="5" Text="{Binding Assignee}"
+                                                   FontSize="11" Foreground="{StaticResource TextMutedBrush}"
+                                                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Grid.Column="6" Text="{Binding StoryPointsText}"
+                                                   FontSize="12" Foreground="{StaticResource TextPrimaryBrush}"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Right: Issue detail panel -->
+            <Border Grid.Column="1" Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1,0,0,0"
+                    Padding="16">
+                <Grid>
+                <!-- Empty state -->
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Text="Select an issue to view details"
+                           Foreground="{StaticResource TextMutedBrush}" FontSize="13"
+                           IsVisible="{Binding SelectedIssue, Converter={x:Static conv:NullToVisibleConverter.Instance}}"/>
+
+                <!-- Detail content -->
+                <StackPanel IsVisible="{Binding SelectedIssue, Converter={x:Static conv:NotNullToVisibleConverter.Instance}}">
+                    <TextBlock Text="{Binding SelectedIssue.Key}" FontSize="12"
+                               Foreground="{StaticResource AccentBlueBrush}" FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
+                    <TextBlock Text="{Binding SelectedIssue.Summary}" FontSize="14" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap"
+                               Margin="0,0,0,16"/>
+                    <Separator Background="{StaticResource BorderColorBrush}" Margin="0,0,0,12"/>
+
+                    <Grid ColumnDefinitions="90,*" Margin="0,0,0,8">
+                        <TextBlock Text="Status" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding SelectedIssue.Status}" FontSize="12"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="90,*" Margin="0,0,0,8">
+                        <TextBlock Text="Priority" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding SelectedIssue.Priority}" FontSize="12"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="90,*" Margin="0,0,0,8">
+                        <TextBlock Text="Assignee" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding SelectedIssue.Assignee}" FontSize="12"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="90,*" Margin="0,0,0,8">
+                        <TextBlock Text="Story Points" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding SelectedIssue.StoryPoints}" FontSize="12"
+                                   FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="90,*" Margin="0,0,0,16">
+                        <TextBlock Text="Type" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding SelectedIssue.IssueType}" FontSize="12"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </Grid>
+                    <Separator Background="{StaticResource BorderColorBrush}" Margin="0,0,0,12"/>
+                    <Button Content="Edit via Approvals" Classes="outline"
+                            HorizontalAlignment="Stretch" Margin="0,0,0,8"/>
+                    <Button Content="Transition Status" Classes="primary"
+                            HorizontalAlignment="Stretch"/>
+                </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </DockPanel>
+</UserControl>

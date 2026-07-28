@@ -1,0 +1,201 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:conv="using:SprintForge.Avalonia.Converters"
+             x:Class="SprintForge.Avalonia.Views.AuditCenterView"
+             Padding="24">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!-- ── Header ─────────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" Margin="0,0,0,16" ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0" Text="Audit Center" FontSize="22" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+            <Button Grid.Column="1" Content="↻ Refresh"
+                    Command="{Binding RefreshCommand}"
+                    Classes="outline" Padding="12,8"/>
+        </Grid>
+
+        <!-- ── Search + tab strip ─────────────────────────────────────── -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,16">
+            <TextBox Text="{Binding SearchText}"
+                     Watermark="Search audit logs..."
+                     Margin="0,0,0,12"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Classes="tab-btn" Classes.active="{Binding IsTimelineTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="Timeline"
+                        Padding="14,7" Margin="0,0,6,0">
+                    <TextBlock Text="Timeline"/>
+                </Button>
+                <Button Classes="tab-btn" Classes.active="{Binding IsJiraTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="Jira"
+                        Padding="14,7" Margin="0,0,6,0">
+                    <TextBlock Text="Jira"/>
+                </Button>
+                <Button Classes="tab-btn" Classes.active="{Binding IsAiTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="AI"
+                        Padding="14,7" Margin="0,0,6,0">
+                    <TextBlock Text="AI Prompts"/>
+                </Button>
+                <Button Classes="tab-btn" Classes.active="{Binding IsFilesTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="Files"
+                        Padding="14,7" Margin="0,0,6,0">
+                    <TextBlock Text="Files"/>
+                </Button>
+                <Button Classes="tab-btn" Classes.active="{Binding IsApprovalsTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="Approvals"
+                        Padding="14,7" Margin="0,0,6,0">
+                    <TextBlock Text="Approvals"/>
+                </Button>
+                <Button Classes="tab-btn" Classes.active="{Binding IsSessionsTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="Sessions"
+                        Padding="14,7">
+                    <TextBlock Text="Sessions"/>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- ── Table + detail ─────────────────────────────────────────── -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,16,340">
+
+            <!-- Table -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}"
+                    BorderThickness="1" CornerRadius="8">
+                <DockPanel>
+                    <!-- Column headers -->
+                    <Grid DockPanel.Dock="Top" Background="{StaticResource BgElevatedBrush}"
+                          ColumnDefinitions="155,110,145,100,*">
+                        <TextBlock Grid.Column="0" Text="Timestamp" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="12,8"/>
+                        <TextBlock Grid.Column="1" Text="User" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="8"/>
+                        <TextBlock Grid.Column="2" Text="Action" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="8"/>
+                        <TextBlock Grid.Column="3" Text="Module" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="8"/>
+                        <TextBlock Grid.Column="4" Text="Status" FontSize="12" FontWeight="Medium"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Padding="8"/>
+                    </Grid>
+
+                    <ListBox ItemsSource="{Binding Records}"
+                             SelectedItem="{Binding SelectedRecord, Mode=TwoWay}"
+                             Background="Transparent"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type x:Object}">
+                                <Grid ColumnDefinitions="155,110,145,100,*">
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding UtcTimestamp, StringFormat='{}{0:dd MMM HH:mm:ss}'}"
+                                               FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"
+                                               Padding="12,8" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding UserName}"
+                                               FontSize="12" Foreground="{StaticResource TextPrimaryBrush}"
+                                               Padding="8" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Action}"
+                                               FontSize="12" Foreground="{StaticResource TextPrimaryBrush}"
+                                               Padding="8" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding Module}"
+                                               FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"
+                                               Padding="8" VerticalAlignment="Center"/>
+                                    <Border Grid.Column="4" Margin="8,4" Padding="8,3" CornerRadius="4"
+                                            HorizontalAlignment="Left" VerticalAlignment="Center"
+                                            Background="{Binding Status, Converter={x:Static conv:AuditStatusBgConverter.Instance}}">
+                                        <TextBlock Text="{Binding Status}" FontSize="11"
+                                                   Foreground="{Binding Status, Converter={x:Static conv:AuditStatusFgConverter.Instance}}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Detail pane -->
+            <Border Grid.Column="2"
+                    Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}"
+                    BorderThickness="1" CornerRadius="8">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="16">
+                    <StackPanel>
+                        <!-- Empty state -->
+                        <TextBlock Text="Select a record to view details."
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   HorizontalAlignment="Center" Margin="0,40,0,0"
+                                   IsVisible="{Binding SelectedRecord, Converter={x:Static conv:NullToVisibleConverter.Instance}}"/>
+
+                        <!-- Record detail -->
+                        <StackPanel IsVisible="{Binding SelectedRecord, Converter={x:Static conv:NotNullToVisibleConverter.Instance}}">
+
+                            <TextBlock Text="{Binding SelectedRecord.Action}"
+                                       FontSize="15" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                            <Grid ColumnDefinitions="90,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                                  Margin="0,0,0,8">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Audit ID"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1"
+                                           Text="{Binding SelectedRecord.AuditId}"
+                                           FontSize="11" FontFamily="Cascadia Code,Consolas,monospace"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           Margin="0,0,0,8" TextWrapping="Wrap"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Module"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedRecord.Module}"
+                                           FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Status"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedRecord.Status}"
+                                           FontSize="12" Foreground="{StaticResource SuccessBrush}" Margin="0,0,0,8"/>
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Time"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="3" Grid.Column="1"
+                                           Text="{Binding SelectedRecord.UtcTimestamp, StringFormat='{}{0:dd MMM yyyy HH:mm:ss}'}"
+                                           FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Duration"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="4" Grid.Column="1"
+                                           Text="{Binding SelectedRecord.DurationMs, StringFormat='{}{0} ms'}"
+                                           FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="User"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding SelectedRecord.UserName}"
+                                           FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+                            </Grid>
+
+                            <TextBlock Text="Inputs" FontSize="12" FontWeight="Medium"
+                                       Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,6"/>
+                            <Border Background="{StaticResource BgElevatedBrush}"
+                                    BorderBrush="{StaticResource BorderColorBrush}"
+                                    BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,12">
+                                <TextBlock Text="{Binding SelectedRecord.InputsJson}"
+                                           FontSize="11" FontFamily="Cascadia Code,Consolas,monospace"
+                                           Foreground="{StaticResource TextMutedBrush}" TextWrapping="Wrap"/>
+                            </Border>
+
+                            <!-- Error panel — shown only when Status == Failed -->
+                            <Border Background="#2D0707" BorderBrush="{StaticResource ErrorBrush}"
+                                    BorderThickness="1" CornerRadius="6" Padding="10"
+                                    IsVisible="{Binding SelectedRecord.ErrorMessage, Converter={x:Static conv:NotNullToVisibleConverter.Instance}}">
+                                <TextBlock Text="{Binding SelectedRecord.ErrorMessage}"
+                                           FontSize="12" Foreground="{StaticResource ErrorBrush}" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- ── Status bar ─────────────────────────────────────────────── -->
+        <TextBlock Grid.Row="3" Text="{Binding StatusMessage}"
+                   Foreground="{StaticResource TextMutedBrush}"
+                   FontSize="12" Margin="0,12,0,0"/>
+    </Grid>
+</UserControl>

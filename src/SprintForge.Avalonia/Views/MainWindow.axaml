@@ -1,0 +1,129 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+        xmlns:conv="using:SprintForge.Avalonia.Converters"
+        x:Class="SprintForge.Avalonia.Views.MainWindow"
+        Title="SprintForge Beta"
+        Height="768" Width="1280"
+        Background="{StaticResource BgBaseBrush}"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid RowDefinitions="56,*">
+
+        <!-- ── Top bar ──────────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" Background="{StaticResource BgSurfaceBrush}"
+              ColumnDefinitions="Auto,*,Auto">
+
+            <!-- Brand wordmark -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="16,0" VerticalAlignment="Center">
+                <Border Background="{StaticResource AccentPurpleBrush}" CornerRadius="6"
+                        Width="28" Height="28" Margin="0,0,8,0">
+                    <TextBlock Text="S" Foreground="White" FontWeight="Bold" FontSize="16"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="SprintForge"
+                           Foreground="{StaticResource TextPrimaryBrush}"
+                           FontWeight="Bold" FontSize="15" VerticalAlignment="Center"
+                           IsVisible="{Binding IsNavExpanded}"/>
+            </StackPanel>
+
+            <!-- Centre: search hint -->
+            <TextBlock Grid.Column="1" Text="Ctrl+F to search…"
+                       Foreground="{StaticResource TextMutedBrush}" FontSize="12"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <!-- Right: notification + profile -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal"
+                        VerticalAlignment="Center" Margin="0,0,12,0">
+                <Button Classes="ghost" ToolTip.Tip="Notifications"
+                        Margin="0,0,4,0" Foreground="{StaticResource TextSecondaryBrush}">
+                    <TextBlock Text="🔔" FontSize="18"/>
+                </Button>
+                <Button Classes="ghost" ToolTip.Tip="Settings"
+                        Command="{Binding NavigateToSettingsCommand}"
+                        Foreground="{StaticResource TextSecondaryBrush}">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="{StaticResource AccentPurpleBrush}" CornerRadius="999"
+                                Width="26" Height="26" Margin="0,0,6,0">
+                            <TextBlock Text="A" Foreground="White" FontSize="12" FontWeight="SemiBold"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Akshay" FontSize="13"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- ── Main shell (nav + content) ────────────────────────────────── -->
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+
+            <!-- Left nav rail -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource BgSidebarBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}"
+                    BorderThickness="0,0,1,0"
+                    Width="{Binding NavWidth}">
+
+                <Grid RowDefinitions="*,Auto">
+
+                    <!-- Nav items -->
+                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0,8,0,0">
+                        <ItemsControl ItemsSource="{Binding NavItems}" Margin="8,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:NavigationItem}">
+                                    <Button Command="{Binding $parent[Window].DataContext.NavigateCommand}"
+                                            CommandParameter="{Binding}"
+                                            Margin="0,2" Padding="10,9"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Left"
+                                            ToolTip.Tip="{Binding Label}"
+                                            BorderThickness="0"
+                                            CornerRadius="6"
+                                            Background="{Binding NavBgHex, Converter={StaticResource HexToBrush}}"
+                                            Foreground="{Binding NavFgHex, Converter={StaticResource HexToBrush}}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Icon}" FontSize="15"
+                                                       VerticalAlignment="Center" Width="22"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Label}" FontSize="13"
+                                                       VerticalAlignment="Center" Margin="8,0,0,0"
+                                                       IsVisible="{Binding $parent[Window].DataContext.IsNavExpanded}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!-- Collapse toggle at bottom -->
+                    <Button Grid.Row="1"
+                            Command="{Binding ToggleNavCommand}"
+                            Margin="8,4,8,8" Padding="10,8"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            BorderThickness="1"
+                            BorderBrush="{StaticResource BorderColorBrush}"
+                            CornerRadius="6"
+                            Background="Transparent"
+                            Foreground="{StaticResource TextMutedBrush}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding IsNavExpanded, Converter={x:Static conv:CollapseIconConverter.Instance}}"
+                                       FontSize="13" VerticalAlignment="Center" Width="22"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Collapse" FontSize="12" VerticalAlignment="Center"
+                                       Margin="8,0,0,0"
+                                       IsVisible="{Binding IsNavExpanded}"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Content area -->
+            <Border Grid.Column="1" Background="{StaticResource BgSurfaceBrush}">
+                <ContentControl Content="{Binding CurrentPage}"/>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

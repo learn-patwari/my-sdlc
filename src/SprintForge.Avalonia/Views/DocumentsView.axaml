@@ -1,0 +1,134 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:conv="using:SprintForge.Avalonia.Converters"
+             x:Class="SprintForge.Avalonia.Views.DocumentsView"
+             Background="{StaticResource BgSurfaceBrush}">
+
+    <DockPanel>
+
+        <!-- ── Toolbar ───────────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Top" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                Padding="16,10">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Text="Documents" FontSize="16" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="Refresh" Classes="outline"
+                            Command="{Binding RefreshCommand}" Margin="0,0,8,0"/>
+                    <Button Content="Export" Classes="outline"
+                            Command="{Binding ExportDocumentCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ── Status bar ────────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Bottom" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,1,0,0"
+                Padding="16,6">
+            <TextBlock Text="{Binding StatusMessage}" FontSize="11"
+                       Foreground="{StaticResource TextMutedBrush}"/>
+        </Border>
+
+        <!-- ── Main: document list + preview ─────────────────────────── -->
+        <Grid ColumnDefinitions="300,*">
+
+            <!-- Left: Document list -->
+            <Border Grid.Column="0" Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,1,0">
+                <DockPanel>
+                    <Border DockPanel.Dock="Top" Padding="12,10"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                        <TextBlock Text="Generated Documents" FontWeight="SemiBold" FontSize="13"
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                    </Border>
+                    <ListBox ItemsSource="{Binding Documents}"
+                             SelectedItem="{Binding SelectedDocument, Mode=TwoWay}"
+                             Background="Transparent" BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:DocumentItem}">
+                                <Border BorderBrush="{StaticResource BorderColorBrush}"
+                                        BorderThickness="0,0,0,1" Padding="12,10">
+                                    <StackPanel>
+                                        <!-- Title row -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                            <!-- Kind badge -->
+                                            <Border CornerRadius="3" Padding="5,2" Margin="0,0,8,0"
+                                                    VerticalAlignment="Center"
+                                                    Background="{Binding KindBgHex, Converter={StaticResource HexToBrush}}">
+                                                <TextBlock Text="{Binding Kind}" FontSize="10" FontWeight="SemiBold"
+                                                           Foreground="{Binding KindFgHex, Converter={StaticResource HexToBrush}}"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding Title}" FontSize="13" FontWeight="SemiBold"
+                                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                        <!-- Version + Status row -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                            <TextBlock Text="{Binding Version}" FontSize="11"
+                                                       Foreground="{StaticResource TextMutedBrush}"
+                                                       Margin="0,0,8,0"/>
+                                            <Border CornerRadius="999" Padding="6,1" VerticalAlignment="Center"
+                                                    Background="{Binding StatusBgHex, Converter={StaticResource HexToBrush}}">
+                                                <TextBlock Text="{Binding Status}" FontSize="10"
+                                                           Foreground="{Binding StatusFgHex, Converter={StaticResource HexToBrush}}"/>
+                                            </Border>
+                                        </StackPanel>
+                                        <!-- Date row -->
+                                        <TextBlock Text="{Binding GeneratedAt}" FontSize="10"
+                                                   Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Right: Document preview -->
+            <Border Grid.Column="1" Background="{StaticResource BgSurfaceBrush}" Padding="20">
+                <Grid>
+                    <!-- Empty state -->
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Text="Select a document to preview"
+                               Foreground="{StaticResource TextMutedBrush}" FontSize="13"
+                               IsVisible="{Binding SelectedDocument, Converter={x:Static conv:NullToVisibleConverter.Instance}}"/>
+
+                    <!-- Preview content -->
+                    <DockPanel IsVisible="{Binding SelectedDocument, Converter={x:Static conv:NotNullToVisibleConverter.Instance}}">
+                        <!-- Header -->
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                <TextBlock Text="{Binding SelectedDocument.Title}" FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Margin="0,0,12,0"/>
+                                <TextBlock Text="{Binding SelectedDocument.Version}" FontSize="12"
+                                           Foreground="{StaticResource TextMutedBrush}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                <TextBlock Text="{Binding SelectedDocument.Kind}" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}" Margin="0,0,12,0"/>
+                                <TextBlock Text="{Binding SelectedDocument.Status}" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}" Margin="0,0,12,0"/>
+                                <TextBlock Text="{Binding SelectedDocument.GeneratedAt}" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                            </StackPanel>
+                            <Separator Background="{StaticResource BorderColorBrush}"/>
+                        </StackPanel>
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <TextBlock Text="{Binding SelectedDocument.Preview}"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       FontFamily="Cascadia Code,Consolas,monospace"
+                                       FontSize="13" TextWrapping="Wrap" Padding="0,16,0,0"/>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </DockPanel>
+</UserControl>

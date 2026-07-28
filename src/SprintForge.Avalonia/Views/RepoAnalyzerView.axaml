@@ -1,0 +1,242 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:conv="using:SprintForge.Avalonia.Converters"
+             x:Class="SprintForge.Avalonia.Views.RepoAnalyzerView"
+             Background="{StaticResource BgSurfaceBrush}">
+
+    <DockPanel>
+
+        <!-- ── Header bar ────────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Top" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                Padding="16,12">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding RepoName}" FontSize="15" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,12,0"/>
+                    <Border Background="{StaticResource BgElevatedBrush}" CornerRadius="4"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                            Padding="8,3" Margin="0,0,12,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Branch: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding Branch}" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock FontSize="11" Foreground="{StaticResource TextMutedBrush}"
+                               VerticalAlignment="Center">
+                        <Run Text="Scan: "/>
+                        <Run Text="{Binding LastScanned}"/>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="Pause" Classes="outline"
+                            Command="{Binding PauseCommand}" Margin="0,0,8,0"/>
+                    <Button Content="Rescan" Classes="primary"
+                            Command="{Binding RescanCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ── Status bar ────────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Bottom" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,1,0,0"
+                Padding="16,6">
+            <TextBlock Text="{Binding StatusMessage}" FontSize="11"
+                       Foreground="{StaticResource TextMutedBrush}"/>
+        </Border>
+
+        <!-- ── Main 3-panel ──────────────────────────────────────────── -->
+        <Grid ColumnDefinitions="210,*,280">
+
+            <!-- Left: Project / file tree -->
+            <Border Grid.Column="0" Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,1,0">
+                <DockPanel>
+                    <Border DockPanel.Dock="Top" Padding="12,10"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                        <TextBlock Text="Project Explorer" FontWeight="SemiBold" FontSize="13"
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                    </Border>
+                    <ListBox ItemsSource="{Binding FileTree}"
+                             SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+                             Background="Transparent" BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:RepoFileNode}">
+                                <Border Padding="8,5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="{Binding IndentWidth}" Background="Transparent"/>
+                                        <TextBlock Text="{Binding Icon}" FontSize="12"
+                                                   Foreground="{StaticResource TextMutedBrush}"
+                                                   Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Name}" FontSize="13"
+                                                   Foreground="{Binding LabelFgHex, Converter={StaticResource HexToBrush}}"
+                                                   VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Center: Dependency graph diagram -->
+            <Border Grid.Column="1" Background="{StaticResource BgSurfaceBrush}" Padding="16">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Dependency Graph" FontSize="13" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextMutedBrush}"
+                               HorizontalAlignment="Center" Margin="0,0,0,24"/>
+                    <Canvas Width="420" Height="260">
+                        <!-- Edges -->
+                        <Line StartPoint="210,36" EndPoint="80,90"   Stroke="#1E2D45" StrokeThickness="1.5"/>
+                        <Line StartPoint="210,36" EndPoint="200,90"  Stroke="#1E2D45" StrokeThickness="1.5"/>
+                        <Line StartPoint="210,36" EndPoint="300,90"  Stroke="#1E2D45" StrokeThickness="1.5"/>
+                        <Line StartPoint="210,36" EndPoint="370,90"  Stroke="#1E2D45" StrokeThickness="1.5"/>
+                        <!-- External: notification → AWS SES (dashed) -->
+                        <Line StartPoint="370,126" EndPoint="390,210" Stroke="#1E2D45" StrokeThickness="1"
+                              StrokeDashArray="4,3"/>
+
+                        <!-- API Gateway (entry) -->
+                        <Border Canvas.Left="135" Canvas.Top="10" Width="150" Height="36"
+                                Background="#134e4a" BorderBrush="#0f766e"
+                                BorderThickness="1" CornerRadius="6">
+                            <TextBlock Text="api-gateway" Foreground="#2dd4bf" FontSize="12"
+                                       FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- payment-service -->
+                        <Border Canvas.Left="10" Canvas.Top="90" Width="140" Height="36"
+                                Background="#2D1B69" BorderBrush="#7C3AED"
+                                BorderThickness="1.5" CornerRadius="6">
+                            <TextBlock Text="payment-service" Foreground="White" FontSize="12"
+                                       FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- account-service -->
+                        <Border Canvas.Left="160" Canvas.Top="90" Width="130" Height="36"
+                                Background="{StaticResource BgElevatedBrush}"
+                                BorderBrush="{StaticResource BorderColorBrush}"
+                                BorderThickness="1" CornerRadius="6">
+                            <TextBlock Text="account-service"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- notification-service -->
+                        <Border Canvas.Left="300" Canvas.Top="90" Width="115" Height="36"
+                                Background="{StaticResource BgElevatedBrush}"
+                                BorderBrush="{StaticResource BorderColorBrush}"
+                                BorderThickness="1" CornerRadius="6">
+                            <TextBlock Text="notification"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- AWS SES (external) -->
+                        <Border Canvas.Left="330" Canvas.Top="210" Width="90" Height="36"
+                                Background="#1c1206" BorderBrush="#92400e"
+                                BorderThickness="1" CornerRadius="6">
+                            <TextBlock Text="AWS SES" Foreground="#f59e0b" FontSize="11"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- Legend -->
+                        <StackPanel Canvas.Left="10" Canvas.Top="220">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                <Rectangle Width="24" Height="2" Fill="#1E2D45"
+                                           Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="sync" FontSize="10"
+                                           Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="- - -" FontSize="10" Foreground="#1E2D45"
+                                           Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="async / external" FontSize="10"
+                                           Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Canvas>
+                </StackPanel>
+            </Border>
+
+            <!-- Right: Impacted files + code insights -->
+            <Border Grid.Column="2" Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1,0,0,0"
+                    Padding="16">
+                <DockPanel>
+                    <!-- Code insights panel at bottom -->
+                    <Border DockPanel.Dock="Bottom" Margin="0,12,0,0"
+                            Background="{StaticResource BgSurfaceBrush}" CornerRadius="8"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                            Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="Code Insights" FontWeight="SemiBold" FontSize="12"
+                                       Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,6">
+                                <TextBlock Text="Complexity" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Complexity, StringFormat='{}{0:F1}'}"
+                                           FontSize="14" FontWeight="Bold"
+                                           Foreground="{StaticResource ErrorBrush}"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,6">
+                                <TextBlock Text="Duplication" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding DuplicationPct, StringFormat='{}{0:F1}%'}"
+                                           FontSize="14" FontWeight="Bold"
+                                           Foreground="{StaticResource WarningBrush}"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,6">
+                                <TextBlock Text="Test Coverage" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding CoverageStatus}"
+                                           FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource WarningBrush}"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Tech Debt" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding TechDebtDays, StringFormat='{}{0:F1} days'}"
+                                           FontSize="14" FontWeight="Bold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock DockPanel.Dock="Top" Text="Impacted Files" FontWeight="SemiBold" FontSize="13"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+                    <TextBlock DockPanel.Dock="Top" FontSize="11"
+                               Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8">
+                        <Run Text="{Binding ImpactedFiles.Count}"/>
+                        <Run Text=" files affected by changes"/>
+                    </TextBlock>
+                    <ListBox ItemsSource="{Binding ImpactedFiles}"
+                             Background="Transparent" BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:ImpactedFileItem}">
+                                <Border BorderBrush="{StaticResource BorderColorBrush}"
+                                        BorderThickness="0,0,0,1" Padding="4,6">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Width="6" Height="6"
+                                                 Fill="{StaticResource ErrorBrush}"
+                                                 VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBlock Text="{Binding FileName}" FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,724 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:conv="using:SprintForge.Avalonia.Converters"
+             x:Class="SprintForge.Avalonia.Views.SettingsView"
+             x:Name="root"
+             Background="{StaticResource BgSurfaceBrush}">
+
+    <DockPanel>
+
+        <!-- ── Header ────────────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Top" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                Padding="24,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Settings" FontSize="18" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Content="Save Changes" Classes="primary"
+                        Command="{Binding SaveChangesCommand}" Padding="20,8"/>
+            </Grid>
+        </Border>
+
+        <!-- ── Two-column: left rail | right content ─────────────────── -->
+        <Grid ColumnDefinitions="210,*">
+
+            <!-- Left: tab rail -->
+            <Border Grid.Column="0" Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,1,0">
+                <StackPanel Margin="0,12,0,0">
+
+                    <Button Classes="settings-tab-btn" Classes.active="{Binding IsGeneralTabActive}"
+                            Command="{Binding SetTabCommand}" CommandParameter="General">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚙ " FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="General" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="settings-tab-btn" Classes.active="{Binding IsJiraTabActive}"
+                            Command="{Binding SetTabCommand}" CommandParameter="Jira">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🎯 " FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Jira" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="settings-tab-btn" Classes.active="{Binding IsAiTabActive}"
+                            Command="{Binding SetTabCommand}" CommandParameter="AI">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🤖 " FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="AI Provider" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="settings-tab-btn" Classes.active="{Binding IsRepositoriesTabActive}"
+                            Command="{Binding SetTabCommand}" CommandParameter="Repositories">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗂 " FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Repositories" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="settings-tab-btn" Classes.active="{Binding IsSrsTabActive}"
+                            Command="{Binding SetTabCommand}" CommandParameter="SRS">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📄 " FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="SRS Config" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="settings-tab-btn" Classes.active="{Binding IsSprintTabActive}"
+                            Command="{Binding SetTabCommand}" CommandParameter="Sprint">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📅 " FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Sprint" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="settings-tab-btn" Classes.active="{Binding IsTestingTabActive}"
+                            Command="{Binding SetTabCommand}" CommandParameter="Testing">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="✓ " FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Testing" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="settings-tab-btn" Classes.active="{Binding IsPreferencesTabActive}"
+                            Command="{Binding SetTabCommand}" CommandParameter="Preferences">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🎨 " FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Preferences" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Right: content area -->
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="24,20,24,24">
+
+                    <!-- ═══════════════ GENERAL ═══════════════ -->
+                    <StackPanel IsVisible="{Binding IsGeneralTabActive}">
+                        <TextBlock Text="General" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                        <!-- Profile -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Profile" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="180,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Profile Name" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding ProfileName}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="180,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Display Name" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding UserDisplayName}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="180,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Email" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding UserEmail}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="180,*,Auto">
+                                    <TextBlock Text="Working Directory" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding WorkingDirectory}" Margin="0,0,8,0"/>
+                                    <Button Grid.Column="2" Content="Browse…" Classes="outline"
+                                            Command="{Binding BrowseWorkingDirectoryCommand}" Padding="12,8"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Audit -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Audit Retention" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="180,120,*">
+                                    <TextBlock Text="Retention (days)" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding RetentionDays}"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- ═══════════════ JIRA ═══════════════ -->
+                    <StackPanel IsVisible="{Binding IsJiraTabActive}">
+                        <TextBlock Text="Jira" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                        <!-- Connection -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                    <TextBlock Text="Connection" FontSize="13" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <Border CornerRadius="4" Padding="8,2" Margin="12,0,0,0" VerticalAlignment="Center"
+                                            Background="{Binding ConnectionBgHex, Converter={StaticResource HexToBrush}}">
+                                        <TextBlock Text="{Binding ConnectionStatus}" FontSize="11"
+                                                   Foreground="{Binding ConnectionFgHex, Converter={StaticResource HexToBrush}}"/>
+                                    </Border>
+                                </StackPanel>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Jira URL" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding JiraUrl}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Username" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding JiraUsername}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,16">
+                                    <TextBlock Text="API Token" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" PasswordChar="•"
+                                             ToolTip.Tip="Stored encrypted — never written in plaintext"/>
+                                </Grid>
+                                <Button Content="Test Connection" Classes="outline"
+                                        Command="{Binding TestJiraConnectionCommand}"
+                                        Width="140" HorizontalAlignment="Left"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Projects & Defaults -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Projects &amp; Defaults" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Project Keys" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding JiraProjectKeys}"
+                                             ToolTip.Tip="Comma-separated, e.g. RBP, FNT, NOT"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Default Issue Type" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding JiraIssueTypes}"
+                                              SelectedItem="{Binding JiraDefaultIssueType}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Default Priority" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding JiraPriorities}"
+                                              SelectedItem="{Binding JiraDefaultPriority}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Default Labels" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding JiraDefaultLabels}"
+                                             ToolTip.Tip="Comma-separated label names"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*">
+                                    <TextBlock Text="Default Components" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding JiraDefaultComponents}"
+                                             ToolTip.Tip="Comma-separated component names"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Field Mappings -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Field Mappings" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Custom field IDs used when creating or updating issues"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Story Points" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding JiraStoryPointsField}"
+                                             ToolTip.Tip="e.g. customfield_10016"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Sprint" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding JiraSprintField}"
+                                             ToolTip.Tip="e.g. customfield_10020"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*">
+                                    <TextBlock Text="Epic Link" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding JiraEpicLinkField}"
+                                             ToolTip.Tip="e.g. customfield_10014"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- ═══════════════ AI PROVIDER ═══════════════ -->
+                    <StackPanel IsVisible="{Binding IsAiTabActive}">
+                        <TextBlock Text="AI Provider" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                        <!-- Model & credentials -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Model" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,16"
+                                           Text="Use  provider/model  format — same as opencode config (e.g. anthropic/claude-sonnet-5)"/>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="model" FontFamily="Consolas" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding AiModel}" FontFamily="Consolas"
+                                             ToolTip.Tip="provider/model — e.g. anthropic/claude-sonnet-5 | openai/gpt-4o | ollama/llama3.3"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="base_url" FontFamily="Consolas" FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBlock Text="optional" FontSize="10"
+                                                   Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                    <TextBox Grid.Column="1" Text="{Binding AiBaseUrl}" FontFamily="Consolas"
+                                             ToolTip.Tip="Leave blank for Anthropic/OpenAI/Google. Required for Ollama (http://localhost:11434) or Azure OpenAI."/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*">
+                                    <TextBlock Text="api_key" FontFamily="Consolas" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" PasswordChar="•"
+                                             ToolTip.Tip="Stored encrypted — never written in plaintext"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Inference parameters -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Inference Parameters" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="160,120,*" Margin="0,0,0,12">
+                                    <TextBlock Text="temperature" FontFamily="Consolas" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding AiTemperature}" FontFamily="Consolas"
+                                             ToolTip.Tip="0.0 (deterministic) — 1.0 (creative). Default 0.7"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,120,*">
+                                    <TextBlock Text="max_tokens" FontFamily="Consolas" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding AiMaxTokens}" FontFamily="Consolas"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Supported models quick-reference -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Supported Models" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Click any model to copy into the model field above"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Anthropic" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentPurpleBrush}" Margin="0,0,0,6"/>
+                                <ItemsControl ItemsSource="{Binding AnthropicModels}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Content="{Binding}"
+                                                    Command="{Binding $parent[UserControl].DataContext.SetModelCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="Consolas" FontSize="12"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    HorizontalAlignment="Left"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Padding="0,2"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <TextBlock Text="OpenAI" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentPurpleBrush}" Margin="0,12,0,6"/>
+                                <ItemsControl ItemsSource="{Binding OpenAiModels}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Content="{Binding}"
+                                                    Command="{Binding $parent[UserControl].DataContext.SetModelCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="Consolas" FontSize="12"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    HorizontalAlignment="Left"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Padding="0,2"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <TextBlock Text="Google" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentPurpleBrush}" Margin="0,12,0,6"/>
+                                <ItemsControl ItemsSource="{Binding GoogleModels}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Content="{Binding}"
+                                                    Command="{Binding $parent[UserControl].DataContext.SetModelCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="Consolas" FontSize="12"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    HorizontalAlignment="Left"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Padding="0,2"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <TextBlock Text="Ollama (local)" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource AccentPurpleBrush}" Margin="0,12,0,6"/>
+                                <ItemsControl ItemsSource="{Binding OllamaModels}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Content="{Binding}"
+                                                    Command="{Binding $parent[UserControl].DataContext.SetModelCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="Consolas" FontSize="12"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    HorizontalAlignment="Left"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Padding="0,2"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <TextBlock Text="Set base_url to http://localhost:11434 when using Ollama"
+                                           FontSize="11" Foreground="{StaticResource TextMutedBrush}"
+                                           Margin="0,6,0,0" FontStyle="Italic"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- ═══════════════ REPOSITORIES ═══════════════ -->
+                    <StackPanel IsVisible="{Binding IsRepositoriesTabActive}">
+                        <TextBlock Text="Repositories" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                        <!-- Repo list -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Configured Repositories" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+                                <TextBlock Text="Repositories used for SRS generation and code analysis"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,16"/>
+
+                                <ItemsControl ItemsSource="{Binding Repositories}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type vm:RepositoryEntry}">
+                                            <Border Background="{StaticResource BgElevatedBrush}"
+                                                    BorderBrush="{StaticResource BorderColorBrush}"
+                                                    BorderThickness="1" CornerRadius="6"
+                                                    Padding="12,10" Margin="0,0,0,8">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                            <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold"
+                                                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                                                            <Border Background="{StaticResource BgCardBrush}" CornerRadius="4"
+                                                                    Padding="6,2" Margin="8,0,0,0" VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding TechStack}" FontSize="11"
+                                                                           Foreground="{StaticResource AccentPurpleBrush}"/>
+                                                            </Border>
+                                                            <Border Background="{StaticResource BgCardBrush}" CornerRadius="4"
+                                                                    Padding="6,2" Margin="4,0,0,0" VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding Type}" FontSize="11"
+                                                                           Foreground="{StaticResource TextMutedBrush}"/>
+                                                            </Border>
+                                                        </StackPanel>
+                                                        <TextBlock FontSize="12" Foreground="{StaticResource TextMutedBrush}">
+                                                            <Run Text="{Binding Url}"/>
+                                                            <Run Text=" @"/>
+                                                            <Run Text="{Binding Branch}"/>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                    <Button Grid.Column="1" Content="Remove" Classes="outline"
+                                                            Command="{Binding $parent[UserControl].DataContext.RemoveRepositoryCommand}"
+                                                            CommandParameter="{Binding}"
+                                                            Padding="10,6" VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Add repo form -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Add Repository" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="140,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Name" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding NewRepoName}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="140,*" Margin="0,0,0,12">
+                                    <TextBlock Text="URL" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding NewRepoUrl}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="140,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Default Branch" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding NewRepoBranch}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="140,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Tech Stack" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding TechStacks}"
+                                              SelectedItem="{Binding NewRepoTechStack}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="140,*" Margin="0,0,0,16">
+                                    <TextBlock Text="Host Type" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding RepoTypes}"
+                                              SelectedItem="{Binding NewRepoType}"/>
+                                </Grid>
+                                <Button Content="Add Repository" Classes="primary"
+                                        Command="{Binding AddRepositoryCommand}"
+                                        Width="160" HorizontalAlignment="Left" Padding="16,8"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- ═══════════════ SRS CONFIG ═══════════════ -->
+                    <StackPanel IsVisible="{Binding IsSrsTabActive}">
+                        <TextBlock Text="SRS Configuration" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Naming &amp; Identification" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                    <TextBlock Text="SRS ID Format" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding SrsIdFormat}"
+                                             ToolTip.Tip="Tokens: {PROJECT} {NUMBER:D4} {DATE}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="160,*">
+                                    <TextBlock Text="Default Project" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding SrsDefaultProject}"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Description Template" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Format received from user. Tokens: {description} {services} {requirements} {limitations}"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,12"/>
+                                <TextBox Text="{Binding SrsDescriptionTemplate}"
+                                         TextWrapping="Wrap" AcceptsReturn="True"
+                                         FontFamily="Consolas" FontSize="12"
+                                         MinHeight="120"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Involved Services" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Default list of services/components impacted by SRS documents (one per line)"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,12"/>
+                                <TextBox Text="{Binding SrsInvolvedServices}"
+                                         TextWrapping="Wrap" AcceptsReturn="True" MinHeight="80"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Limitations &amp; Out of Scope Template" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Template appended to every SRS document under 'Out of Scope'. Token: {item}"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,12"/>
+                                <TextBox Text="{Binding SrsLimitationsTemplate}"
+                                         TextWrapping="Wrap" AcceptsReturn="True"
+                                         FontFamily="Consolas" FontSize="12" MinHeight="80"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- ═══════════════ SPRINT ═══════════════ -->
+                    <StackPanel IsVisible="{Binding IsSprintTabActive}">
+                        <TextBlock Text="Sprint Settings" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                        <!-- Duration & Capacity -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Duration &amp; Capacity" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="200,100,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Sprint Duration (days)" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding SprintDurationDays}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="200,100,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Development Days" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding SprintDevelopmentDays}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="200,100,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Buffer Days" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding SprintBufferDays}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="200,100,*">
+                                    <TextBlock Text="Working Hours / Day" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding SprintWorkingHoursPerDay}"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Sprint Plan Source -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Sprint Plan Source" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="160,*" Margin="0,0,0,16">
+                                    <TextBlock Text="Source Type" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding SprintPlanSources}"
+                                              SelectedItem="{Binding SprintPlanSource}"/>
+                                </Grid>
+
+                                <!-- Text input (visible when Source = Text) -->
+                                <StackPanel IsVisible="{Binding IsSprintPlanTextSource}">
+                                    <TextBlock Text="Sprint Plan (paste or type here)" FontSize="12"
+                                               Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                    <TextBox Text="{Binding SprintPlanText}"
+                                             TextWrapping="Wrap" AcceptsReturn="True" MinHeight="120"/>
+                                </StackPanel>
+
+                                <!-- Confluence (visible when Source = Confluence) -->
+                                <StackPanel IsVisible="{Binding IsSprintPlanConfluenceSource}">
+                                    <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                        <TextBlock Text="Confluence URL" FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Column="1" Text="{Binding ConfluenceUrl}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                        <TextBlock Text="Username" FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Column="1" Text="{Binding ConfluenceUsername}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="160,*" Margin="0,0,0,12">
+                                        <TextBlock Text="API Token" FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Column="1" PasswordChar="•"
+                                                 ToolTip.Tip="Stored encrypted — never written in plaintext"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="160,*">
+                                        <TextBlock Text="Space Key" FontSize="13"
+                                                   Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Column="1" Text="{Binding ConfluenceSpaceKey}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Deliverables -->
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Task &amp; Subtask Deliverables" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="200,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Auto-create Subtasks" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <CheckBox Grid.Column="1" IsChecked="{Binding AutoCreateSubtasks}"
+                                              VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="200,*">
+                                    <TextBlock Text="Default Subtask Types" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding DefaultSubtaskTypes}"
+                                             ToolTip.Tip="Comma-separated subtask types created per story"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- ═══════════════ TESTING ═══════════════ -->
+                    <StackPanel IsVisible="{Binding IsTestingTabActive}">
+                        <TextBlock Text="Unit Test Settings" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Coverage Targets (%)" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="200,100,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Global (all services)" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding GlobalCoverageTarget}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="200,100,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Java Services" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding JavaCoverageTarget}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="200,100,*" Margin="0,0,0,12">
+                                    <TextBlock Text="Python Services" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding PythonCoverageTarget}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="200,100,*" Margin="0,0,0,16">
+                                    <TextBlock Text="UI / Frontend" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding UiCoverageTarget}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="200,*">
+                                    <TextBlock Text="Fail if target missed" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <CheckBox Grid.Column="1" IsChecked="{Binding FailBuildOnCoverageMiss}"
+                                              VerticalAlignment="Center"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- ═══════════════ PREFERENCES ═══════════════ -->
+                    <StackPanel IsVisible="{Binding IsPreferencesTabActive}">
+                        <TextBlock Text="Preferences" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Logging" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="180,*">
+                                    <TextBlock Text="Minimum Level" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding LogLevels}"
+                                              SelectedItem="{Binding MinimumLogLevel}"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Classes="settings-card">
+                            <StackPanel>
+                                <TextBlock Text="Behavior" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Grid ColumnDefinitions="180,*">
+                                    <TextBlock Text="Auto-save drafts" FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <CheckBox Grid.Column="1" IsChecked="{Binding AutoSave}"
+                                              VerticalAlignment="Center"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,214 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:conv="using:SprintForge.Avalonia.Converters"
+             x:Class="SprintForge.Avalonia.Views.SddView"
+             Background="{StaticResource BgSurfaceBrush}">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- ── Header ────────────────────────────────────────────────── -->
+        <Border Grid.Row="0" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                Padding="16,12">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Design Document" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,8,0"/>
+                    <TextBlock Text="&amp; Unit Test Generator" FontSize="16"
+                               Foreground="{StaticResource TextMutedBrush}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="Generate" Classes="primary"
+                            Command="{Binding GenerateCommand}" Margin="0,0,8,0"/>
+                    <Button Content="Submit for Approval" Classes="outline"
+                            Command="{Binding SubmitForApprovalCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ── Tab strip ─────────────────────────────────────────────── -->
+        <Border Grid.Row="1" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                Padding="16,0">
+            <StackPanel Orientation="Horizontal">
+                <Button Classes="tab-btn" Classes.active="{Binding IsSddTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="SDD"
+                        Padding="14,8" Margin="0,0,4,0">
+                    <TextBlock Text="SDD"/>
+                </Button>
+                <Button Classes="tab-btn" Classes.active="{Binding IsUnitTestsTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="UnitTests"
+                        Padding="14,8">
+                    <TextBlock Text="Unit Test Generator"/>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- ── Main 3-panel ──────────────────────────────────────────── -->
+        <Grid Grid.Row="2" ColumnDefinitions="200,*,280">
+
+            <!-- Left: Service selector -->
+            <Border Grid.Column="0" Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,1,0">
+                <DockPanel>
+                    <Border DockPanel.Dock="Top" Padding="12,10"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                        <TextBlock Text="Services" FontWeight="SemiBold" FontSize="13"
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                    </Border>
+                    <ListBox ItemsSource="{Binding Services}"
+                             SelectedItem="{Binding SelectedService, Mode=TwoWay}"
+                             Background="Transparent" BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:ServiceItem}">
+                                <Border Padding="12,9">
+                                    <TextBlock Text="{Binding Name}" FontSize="13"
+                                               Foreground="{Binding LabelFgHex, Converter={StaticResource HexToBrush}}"
+                                               FontWeight="{Binding LabelFontWeight}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Center: SDD or Unit Tests content -->
+            <Border Grid.Column="1" Background="{StaticResource BgSurfaceBrush}" Padding="16">
+                <Grid>
+                    <!-- SDD Preview -->
+                    <ScrollViewer IsVisible="{Binding IsSddTabActive}"
+                                  VerticalScrollBarVisibility="Auto">
+                        <TextBlock Text="{Binding SddPreview}"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontFamily="Cascadia Code,Consolas,monospace"
+                                   FontSize="13" TextWrapping="Wrap" Padding="4"/>
+                    </ScrollViewer>
+
+                    <!-- Unit Tests -->
+                    <DockPanel IsVisible="{Binding IsUnitTestsTabActive}">
+                        <!-- Coverage stats at bottom -->
+                        <Border DockPanel.Dock="Bottom" Margin="0,16,0,0"
+                                Background="{StaticResource BgCardBrush}" CornerRadius="8"
+                                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                                Padding="16">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Border Background="#052e16" CornerRadius="999"
+                                        Width="80" Height="80" Margin="0,0,16,0">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding CoveragePercent, StringFormat='{}{0}%'}"
+                                                   FontSize="20" FontWeight="Bold"
+                                                   Foreground="{StaticResource SuccessBrush}"
+                                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Good" FontSize="10"
+                                                   Foreground="{StaticResource SuccessBrush}"
+                                                   HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Coverage" FontSize="13" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <TextBlock FontSize="11" Foreground="{StaticResource TextMutedBrush}"
+                                               Margin="0,4,0,0">
+                                        <Run Text="{Binding LinesCovered}"/>
+                                        <Run Text=" lines covered  ·  "/>
+                                        <Run Text="{Binding LinesMissed}"/>
+                                        <Run Text=" missed  ·  "/>
+                                        <Run Text="{Binding LinesTotal}"/>
+                                        <Run Text=" total"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Test cases table -->
+                        <DockPanel>
+                            <!-- Column headers -->
+                            <Border DockPanel.Dock="Top" Background="{StaticResource BgCardBrush}"
+                                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                                    Padding="12,8">
+                                <Grid ColumnDefinitions="*,80,80,60">
+                                    <TextBlock Text="Test Name" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextMutedBrush}"/>
+                                    <TextBlock Grid.Column="1" Text="Priority" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextMutedBrush}"/>
+                                    <TextBlock Grid.Column="2" Text="Status" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextMutedBrush}"/>
+                                    <TextBlock Grid.Column="3" Text="Cov." FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextMutedBrush}"/>
+                                </Grid>
+                            </Border>
+
+                            <ListBox ItemsSource="{Binding TestCases}"
+                                     Background="Transparent" BorderThickness="0"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:TestCaseRow}">
+                                        <Border BorderBrush="{StaticResource BorderColorBrush}"
+                                                BorderThickness="0,0,0,1" Padding="12,8">
+                                            <Grid ColumnDefinitions="*,80,80,60">
+                                                <TextBlock Text="{Binding TestName}" FontSize="12"
+                                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                                           FontFamily="Cascadia Code,Consolas,monospace"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                                <!-- Priority chip -->
+                                                <Border Grid.Column="1" CornerRadius="999" Padding="6,2"
+                                                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                        Background="{Binding PriorityBgHex, Converter={StaticResource HexToBrush}}">
+                                                    <TextBlock Text="{Binding Priority}" FontSize="11"
+                                                               Foreground="{Binding PriorityFgHex, Converter={StaticResource HexToBrush}}"/>
+                                                </Border>
+                                                <!-- Status chip -->
+                                                <Border Grid.Column="2" CornerRadius="999" Padding="6,2"
+                                                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                        Background="{Binding StatusBgHex, Converter={StaticResource HexToBrush}}">
+                                                    <TextBlock Text="{Binding Status}" FontSize="11"
+                                                               Foreground="{Binding StatusFgHex, Converter={StaticResource HexToBrush}}"/>
+                                                </Border>
+                                                <TextBlock Grid.Column="3" Text="{Binding Coverage}"
+                                                           FontSize="16" Foreground="{StaticResource SuccessBrush}"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+                    </DockPanel>
+                </Grid>
+            </Border>
+
+            <!-- Right: Generated files + SDD preview -->
+            <Border Grid.Column="2" Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1,0,0,0"
+                    Padding="16">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="Generated Files" FontWeight="SemiBold"
+                               FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+                    <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding GeneratedFiles}" Margin="0,0,0,16">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"
+                                           Foreground="{StaticResource AccentBlueBrush}"
+                                           FontSize="12" Margin="0,2"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Separator DockPanel.Dock="Top" Background="{StaticResource BorderColorBrush}" Margin="0,0,0,12"/>
+                    <TextBlock DockPanel.Dock="Top" Text="SDD Preview" FontWeight="SemiBold"
+                               FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+                    <TextBlock DockPanel.Dock="Bottom" Text="{Binding StatusMessage}"
+                               Foreground="{StaticResource TextMutedBrush}" FontSize="11"
+                               TextWrapping="Wrap" Margin="0,12,0,0"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <TextBlock Text="{Binding SddPreview}"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontFamily="Cascadia Code,Consolas,monospace"
+                                   FontSize="11" TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,13 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SprintForge.Avalonia.Views.PlaceholderView">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="{Binding ModuleName}" FontSize="32" FontWeight="Bold"
+                       Foreground="{StaticResource AccentPurpleBrush}" TextAlignment="Center"/>
+            <TextBlock Text="Coming soon..." FontSize="16"
+                       Foreground="{StaticResource TextSecondaryBrush}"
+                       Margin="0,16,0,0" TextAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

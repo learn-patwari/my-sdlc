@@ -1,0 +1,179 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:conv="using:SprintForge.Avalonia.Converters"
+             x:Class="SprintForge.Avalonia.Views.ApprovalsView"
+             Padding="24">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!-- ── Header ─────────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" Margin="0,0,0,16" ColumnDefinitions="*,Auto,Auto">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Approvals Center" FontSize="22" FontWeight="Bold"
+                           Foreground="{StaticResource TextPrimaryBrush}"/>
+                <Border Background="#3B1F6E" CornerRadius="12" Padding="10,4"
+                        Margin="12,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding PendingCount, StringFormat='{}{0} Pending'}"
+                               FontSize="12" Foreground="{StaticResource AccentPurpleBrush}"
+                               FontWeight="Medium"/>
+                </Border>
+            </StackPanel>
+            <Button Grid.Column="1" Content="Approve All"
+                    Command="{Binding ApproveAllCommand}"
+                    Classes="primary" Padding="16,8" Margin="0,0,8,0"/>
+            <Button Grid.Column="2" Content="↻ Refresh"
+                    Command="{Binding RefreshCommand}"
+                    Classes="outline" Padding="12,8"/>
+        </Grid>
+
+        <!-- ── Tab strip ──────────────────────────────────────────────── -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,16">
+            <Button Classes="tab-btn" Classes.active="{Binding IsPendingTabActive}"
+                    Command="{Binding ShowPendingTabCommand}" Padding="16,8" Margin="0,0,8,0">
+                <TextBlock Text="Pending"/>
+            </Button>
+            <Button Classes="tab-btn" Classes.active="{Binding IsHistoryTabActive}"
+                    Command="{Binding ShowHistoryTabCommand}" Padding="16,8">
+                <TextBlock Text="History"/>
+            </Button>
+        </StackPanel>
+
+        <!-- ── Main area: list + detail ───────────────────────────────── -->
+        <Grid Grid.Row="2" ColumnDefinitions="320,16,*">
+
+            <!-- List panel -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}"
+                    BorderThickness="1" CornerRadius="8">
+                <ListBox ItemsSource="{Binding CurrentItems}"
+                         SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                         Background="Transparent"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type x:Object}">
+                            <Border Padding="12,10">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                        <Border Background="{StaticResource BgElevatedBrush}"
+                                                BorderBrush="{StaticResource BorderColorBrush}"
+                                                BorderThickness="1" CornerRadius="4" Padding="6,2">
+                                            <TextBlock Text="{Binding ModuleTag}" FontSize="11"
+                                                       Foreground="{StaticResource AccentPurpleBrush}"/>
+                                        </Border>
+                                        <Border Margin="8,0,0,0" CornerRadius="4" Padding="6,2"
+                                                Background="{Binding Status, Converter={x:Static conv:ApprovalStatusBgConverter.Instance}}">
+                                            <TextBlock Text="{Binding Status}" FontSize="11"
+                                                       Foreground="{Binding Status, Converter={x:Static conv:ApprovalStatusFgConverter.Instance}}"/>
+                                        </Border>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding OperationDescription}"
+                                               FontSize="12" Foreground="{StaticResource TextPrimaryBrush}"
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding QueuedAt, StringFormat='Queued {0:HH:mm dd MMM}'}"
+                                               FontSize="11" Foreground="{StaticResource TextMutedBrush}"
+                                               Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <!-- Detail pane -->
+            <Border Grid.Column="2"
+                    Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}"
+                    BorderThickness="1" CornerRadius="8">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20">
+                    <StackPanel>
+                        <!-- Empty state -->
+                        <TextBlock Text="Select an item from the list to review."
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   FontSize="14" HorizontalAlignment="Center" Margin="0,40,0,0"
+                                   IsVisible="{Binding SelectedItem, Converter={x:Static conv:NullToVisibleConverter.Instance}}"/>
+
+                        <!-- Detail content -->
+                        <StackPanel IsVisible="{Binding SelectedItem, Converter={x:Static conv:NotNullToVisibleConverter.Instance}}">
+                            <TextBlock Text="{Binding SelectedItem.OperationDescription}"
+                                       FontSize="15" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       TextWrapping="Wrap" Margin="0,0,0,16"/>
+
+                            <!-- Meta row -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Border Background="{StaticResource BgElevatedBrush}"
+                                        BorderBrush="{StaticResource BorderColorBrush}"
+                                        BorderThickness="1" CornerRadius="4" Padding="8,4" Margin="0,0,8,0">
+                                    <TextBlock Text="{Binding SelectedItem.ModuleTag}"
+                                               FontSize="12" Foreground="{StaticResource AccentPurpleBrush}"/>
+                                </Border>
+                                <TextBlock Text="{Binding SelectedItem.QueuedAt, StringFormat='Queued {0:dd MMM yyyy HH:mm}'}"
+                                           FontSize="12" Foreground="{StaticResource TextMutedBrush}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Proposed value -->
+                            <TextBlock Text="Proposed Value" FontSize="12" FontWeight="Medium"
+                                       Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                            <Border Background="{StaticResource BgElevatedBrush}"
+                                    BorderBrush="{StaticResource BorderColorBrush}"
+                                    BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,16">
+                                <TextBlock Text="{Binding SelectedItem.ProposedValueJson}"
+                                           FontSize="12" FontFamily="Cascadia Code,Consolas,monospace"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           TextWrapping="Wrap"/>
+                            </Border>
+
+                            <!-- AI Explanation -->
+                            <StackPanel IsVisible="{Binding SelectedItem.AiExplanation, Converter={x:Static conv:NotNullToVisibleConverter.Instance}}">
+                                <TextBlock Text="AI Explanation" FontSize="12" FontWeight="Medium"
+                                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                                <Border Background="#1A1440" BorderBrush="#3B1F6E"
+                                        BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,16">
+                                    <TextBlock Text="{Binding SelectedItem.AiExplanation}"
+                                               FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Affected files -->
+                            <TextBlock Text="Affected Files" FontSize="12" FontWeight="Medium"
+                                       Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                            <ItemsControl ItemsSource="{Binding SelectedItem.AffectedFiles}" Margin="0,0,0,20">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" FontSize="12"
+                                                   FontFamily="Cascadia Code,Consolas,monospace"
+                                                   Foreground="{StaticResource TextMutedBrush}"
+                                                   Margin="0,0,0,4"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- Action buttons -->
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="✓  Approve"
+                                        Command="{Binding ApproveCommand}"
+                                        CommandParameter="{Binding SelectedItem}"
+                                        Classes="primary" Padding="20,10" Margin="0,0,8,0"/>
+                                <Button Content="✗  Reject"
+                                        Command="{Binding RejectCommand}"
+                                        CommandParameter="{Binding SelectedItem}"
+                                        Classes="outline"
+                                        Foreground="{StaticResource ErrorBrush}"
+                                        Padding="20,10"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- ── Status bar ─────────────────────────────────────────────── -->
+        <TextBlock Grid.Row="3" Text="{Binding StatusMessage}"
+                   Foreground="{StaticResource TextMutedBrush}"
+                   FontSize="12" Margin="0,12,0,0"/>
+    </Grid>
+</UserControl>

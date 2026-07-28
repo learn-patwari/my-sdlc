@@ -1,0 +1,218 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:conv="using:SprintForge.Avalonia.Converters"
+             x:Class="SprintForge.Avalonia.Views.SadView"
+             Background="{StaticResource BgSurfaceBrush}">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- ── Breadcrumb + header ────────────────────────────────────── -->
+        <Border Grid.Row="0" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                Padding="16,10">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Architecture" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
+                    <TextBlock Text=" › " Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
+                    <TextBlock Text="{Binding ProjectName}" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
+                    <TextBlock Text=" › " Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
+                    <TextBlock Text="{Binding ServiceName}" Foreground="{StaticResource TextPrimaryBrush}"
+                               FontSize="12" FontWeight="SemiBold"/>
+                </StackPanel>
+                <Button Grid.Column="1" Content="Generate SAD" Classes="primary"
+                        Command="{Binding GenerateCommand}"/>
+            </Grid>
+        </Border>
+
+        <!-- ── Tab strip ─────────────────────────────────────────────── -->
+        <Border Grid.Row="1" Background="{StaticResource BgCardBrush}"
+                BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1"
+                Padding="16,0">
+            <StackPanel Orientation="Horizontal">
+                <Button Classes="tab-btn" Classes.active="{Binding IsArchitectureTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="Architecture"
+                        Padding="12,8" Margin="0,0,4,0">
+                    <TextBlock Text="Architecture View"/>
+                </Button>
+                <Button Classes="tab-btn" Classes.active="{Binding IsDocumentTabActive}"
+                        Command="{Binding SelectTabCommand}" CommandParameter="Document"
+                        Padding="12,8">
+                    <TextBlock Text="Document Preview"/>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- ── Main 3-panel content ───────────────────────────────────── -->
+        <Grid Grid.Row="2" ColumnDefinitions="210,*,280">
+
+            <!-- Left: Component tree -->
+            <Border Grid.Column="0" Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,1,0">
+                <DockPanel>
+                    <Border DockPanel.Dock="Top" Padding="12,10,12,8"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,0,0,1">
+                        <TextBlock Text="Component Tree" FontWeight="SemiBold" FontSize="13"
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                    </Border>
+                    <ListBox ItemsSource="{Binding FlatTree}"
+                             SelectedItem="{Binding SelectedComponent, Mode=TwoWay}"
+                             Background="Transparent" BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             Padding="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:FlatNode}">
+                                <Border Padding="8,5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="{Binding IndentWidth}" Background="Transparent"/>
+                                        <TextBlock Text="{Binding Icon}"
+                                                   Foreground="{StaticResource TextMutedBrush}"
+                                                   FontSize="12" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Name}"
+                                                   Foreground="{Binding LabelFgHex, Converter={StaticResource HexToBrush}}"
+                                                   FontSize="13" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Center: Architecture diagram / document preview -->
+            <Border Grid.Column="1" Background="{StaticResource BgSurfaceBrush}" Padding="16">
+                <Grid>
+                    <!-- Architecture tab -->
+                    <StackPanel IsVisible="{Binding IsArchitectureTabActive}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="Architecture Diagram" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   HorizontalAlignment="Center" Margin="0,0,0,24"/>
+                        <Canvas Width="460" Height="310">
+                            <!-- Connection lines -->
+                            <Line StartPoint="230,46" EndPoint="95,90"   Stroke="#1E2D45" StrokeThickness="1.5"/>
+                            <Line StartPoint="230,46" EndPoint="365,90"  Stroke="#1E2D45" StrokeThickness="1.5"/>
+                            <Line StartPoint="95,126" EndPoint="95,170"  Stroke="#1E2D45" StrokeThickness="1.5"/>
+                            <Line StartPoint="95,126" EndPoint="80,250"  Stroke="#1E2D45" StrokeThickness="1.5" StrokeDashArray="4,3"/>
+                            <Line StartPoint="155,108" EndPoint="220,250" Stroke="#1E2D45" StrokeThickness="1.5" StrokeDashArray="4,3"/>
+                            <Line StartPoint="365,126" EndPoint="360,250" Stroke="#1E2D45" StrokeThickness="1.5"/>
+
+                            <!-- API Gateway -->
+                            <Border Canvas.Left="155" Canvas.Top="10" Width="150" Height="36"
+                                    Background="#134e4a" BorderBrush="#0f766e"
+                                    BorderThickness="1" CornerRadius="6">
+                                <TextBlock Text="API Gateway" Foreground="#2dd4bf"
+                                           FontWeight="SemiBold" FontSize="12"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Payment Service (highlighted) -->
+                            <Border Canvas.Left="20" Canvas.Top="90" Width="150" Height="36"
+                                    Background="#2D1B69" BorderBrush="{StaticResource AccentPurpleBrush}"
+                                    BorderThickness="1.5" CornerRadius="6">
+                                <TextBlock Text="Payment Service" Foreground="White"
+                                           FontWeight="SemiBold" FontSize="12"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Notification Service -->
+                            <Border Canvas.Left="290" Canvas.Top="90" Width="150" Height="36"
+                                    Background="{StaticResource BgElevatedBrush}"
+                                    BorderBrush="{StaticResource BorderColorBrush}"
+                                    BorderThickness="1" CornerRadius="6">
+                                <TextBlock Text="Notification Service"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Account Service -->
+                            <Border Canvas.Left="20" Canvas.Top="170" Width="150" Height="36"
+                                    Background="{StaticResource BgElevatedBrush}"
+                                    BorderBrush="{StaticResource BorderColorBrush}"
+                                    BorderThickness="1" CornerRadius="6">
+                                <TextBlock Text="Account Service"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- PostgreSQL -->
+                            <Border Canvas.Left="20" Canvas.Top="250" Width="120" Height="36"
+                                    Background="#0f172a" BorderBrush="#334155"
+                                    BorderThickness="1" CornerRadius="6">
+                                <TextBlock Text="PostgreSQL" Foreground="#94a3b8"
+                                           FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Redis Cache -->
+                            <Border Canvas.Left="165" Canvas.Top="250" Width="110" Height="36"
+                                    Background="#0f172a" BorderBrush="#334155"
+                                    BorderThickness="1" CornerRadius="6">
+                                <TextBlock Text="Redis Cache" Foreground="#94a3b8"
+                                           FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Kafka -->
+                            <Border Canvas.Left="300" Canvas.Top="250" Width="120" Height="36"
+                                    Background="#1c1206" BorderBrush="#92400e"
+                                    BorderThickness="1" CornerRadius="6">
+                                <TextBlock Text="Kafka" Foreground="#f59e0b"
+                                           FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Canvas>
+                    </StackPanel>
+
+                    <!-- Document preview tab -->
+                    <ScrollViewer IsVisible="{Binding IsDocumentTabActive}"
+                                  VerticalScrollBarVisibility="Auto">
+                        <TextBlock Text="{Binding DocumentPreview}"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontFamily="Cascadia Code,Consolas,monospace"
+                                   FontSize="13" TextWrapping="Wrap" Padding="4"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Right: Generated files + metadata -->
+            <Border Grid.Column="2" Background="{StaticResource BgCardBrush}"
+                    BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1,0,0,0"
+                    Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Generated Files" FontWeight="SemiBold" FontSize="13"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+                    <Border Background="{StaticResource BgSurfaceBrush}" CornerRadius="6"
+                            BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1"
+                            Padding="8" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="payment-service-sad.md"
+                                       Foreground="{StaticResource AccentBlueBrush}" FontSize="12" Margin="0,2"/>
+                            <TextBlock Text="payment-service-diagram.xml"
+                                       Foreground="{StaticResource AccentBlueBrush}" FontSize="12" Margin="0,2"/>
+                            <TextBlock Text="payment-service-api.yaml"
+                                       Foreground="{StaticResource AccentBlueBrush}" FontSize="12" Margin="0,2"/>
+                            <TextBlock Text="draw-io-model.xml"
+                                       Foreground="{StaticResource AccentBlueBrush}" FontSize="12" Margin="0,2"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Separator Background="{StaticResource BorderColorBrush}" Margin="0,0,0,12"/>
+
+                    <TextBlock Text="Version" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                    <TextBlock Text="v1.0" FontSize="13" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,2,0,8"/>
+
+                    <TextBlock Text="Last updated" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                    <TextBlock Text="28 Jul 2026" FontSize="13"
+                               Foreground="{StaticResource TextSecondaryBrush}" Margin="0,2,0,16"/>
+
+                    <Button Content="Submit for Approval" Classes="primary"
+                            Command="{Binding SubmitForApprovalCommand}"
+                            HorizontalAlignment="Stretch"/>
+
+                    <TextBlock Text="{Binding StatusMessage}" Margin="0,12,0,0"
+                               Foreground="{StaticResource TextMutedBrush}" FontSize="11"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
