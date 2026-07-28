@@ -7,7 +7,53 @@ on:
   workflow_dispatch:
 
 jobs:
+  build-cross-platform:
+    name: Build (Linux — Avalonia)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore SprintForge-CrossPlatform.slnf
+
+      - name: Build
+        run: dotnet build SprintForge-CrossPlatform.slnf -c Release --no-restore
+
+      - name: Test
+        run: dotnet test tests/SprintForge.Tests/SprintForge.Tests.csproj -c Release --no-build --logger "trx;LogFileName=test-results-linux.trx"
+
+      - name: Publish linux-x64
+        run: |
+          dotnet publish src/SprintForge.Avalonia/SprintForge.Avalonia.csproj \
+            -c Release \
+            -r linux-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -o publish/SprintForge-linux-x64
+
+      - name: Upload linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SprintForge-linux-x64-portable
+          path: publish/SprintForge-linux-x64/SprintForge
+          if-no-files-found: error
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-linux
+          path: "**/*.trx"
+
   build:
+    name: Build (Windows — WPF + Avalonia)
     runs-on: windows-latest
 
     steps:
@@ -67,7 +113,7 @@ jobs:
           path: "**/*.trx"
 
   release:
-    needs: build
+    needs: [build, build-cross-platform]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
 
@@ -75,11 +121,11 @@ jobs:
       contents: write
 
     steps:
-      - name: Download portable EXE
+      - name: Download Windows EXE
         uses: actions/download-artifact@v4
         with:
           name: SprintForge-win-x64-portable
-          path: dist/portable
+          path: dist/win
 
       - name: Download installer
         uses: actions/download-artifact@v4
@@ -87,10 +133,17 @@ jobs:
           name: SprintForge-Installer
           path: dist/installer
 
+      - name: Download Linux binary
+        uses: actions/download-artifact@v4
+        with:
+          name: SprintForge-linux-x64-portable
+          path: dist/linux
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/portable/SprintForge.exe
+            dist/win/SprintForge.exe
             dist/installer/Setup.exe
+            dist/linux/SprintForge
           generate_release_notes: true
