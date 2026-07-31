@@ -65,6 +65,7 @@ public partial class App : global::Avalonia.Application
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = _appScope.ServiceProvider.GetRequiredService<MainWindow>();
+                desktop.MainWindow.Show();
 
                 desktop.ShutdownRequested += async (_, _) =>
                 {
