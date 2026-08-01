@@ -7,51 +7,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-cross-platform:
-    name: Build (Linux — Avalonia)
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "8.0.x"
-
-      - name: Restore
-        run: dotnet restore SprintForge-CrossPlatform.slnf
-
-      - name: Build
-        run: dotnet build SprintForge-CrossPlatform.slnf -c Release --no-restore
-
-      - name: Test
-        run: dotnet test tests/SprintForge.Tests/SprintForge.Tests.csproj -c Release --no-build --logger "trx;LogFileName=test-results-linux.trx"
-
-      - name: Publish linux-x64
-        run: |
-          dotnet publish src/SprintForge.Avalonia/SprintForge.Avalonia.csproj \
-            -c Release \
-            -r linux-x64 \
-            --self-contained true \
-            -p:PublishSingleFile=true \
-            -o publish/SprintForge-linux-x64
-
-      - name: Upload linux artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: SprintForge-linux-x64-portable
-          path: publish/SprintForge-linux-x64/SprintForge
-          if-no-files-found: error
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-linux
-          path: "**/*.trx"
-
   build-maui:
     name: Build (Windows — MAUI)
     runs-on: windows-latest
@@ -78,6 +33,11 @@ jobs:
             -f net8.0-windows10.0.19041.0 `
             --no-restore
 
+      - name: Test
+        run: |
+          dotnet build tests/SprintForge.Tests/SprintForge.Tests.csproj -c Release
+          dotnet test tests/SprintForge.Tests/SprintForge.Tests.csproj -c Release --no-build --logger "trx;LogFileName=test-results.trx"
+
       - name: Publish MAUI win-x64
         run: |
           dotnet publish src/SprintForge.Maui/SprintForge.Maui.csproj `
@@ -94,8 +54,15 @@ jobs:
           path: publish/SprintForge-maui-win/
           if-no-files-found: error
 
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: "**/*.trx"
+
   build:
-    name: Build (Windows — WPF + Avalonia)
+    name: Build (Windows — WPF)
     runs-on: windows-latest
 
     steps:
@@ -110,17 +77,13 @@ jobs:
       - name: Restore
         run: dotnet restore SprintForge.sln --ignore-failed-sources
 
-      - name: Build (WPF + Avalonia + shared layers)
+      - name: Build shared layers
         run: |
           dotnet build src/SprintForge.Domain/SprintForge.Domain.csproj -c Release --no-restore
           dotnet build src/SprintForge.Application/SprintForge.Application.csproj -c Release --no-restore
           dotnet build src/SprintForge.Infrastructure/SprintForge.Infrastructure.csproj -c Release --no-restore
           dotnet build src/SprintForge.ViewModels/SprintForge.ViewModels.csproj -c Release --no-restore
           dotnet build src/SprintForge.Wpf/SprintForge.Wpf.csproj -c Release --no-restore
-          dotnet build src/SprintForge.Avalonia/SprintForge.Avalonia.csproj -c Release --no-restore
-
-      - name: Test (cross-platform projects)
-        run: dotnet test tests/SprintForge.Tests/SprintForge.Tests.csproj -c Release --no-build --logger "trx;LogFileName=test-results.trx"
 
       - name: Publish self-contained EXE (win-x64)
         run: |
@@ -153,15 +116,8 @@ jobs:
           path: installer/output/Setup.exe
           if-no-files-found: error
 
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: "**/*.trx"
-
   release:
-    needs: [build, build-cross-platform, build-maui]
+    needs: [build, build-maui]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
 
@@ -169,7 +125,7 @@ jobs:
       contents: write
 
     steps:
-      - name: Download Windows EXE
+      - name: Download Windows EXE (WPF)
         uses: actions/download-artifact@v4
         with:
           name: SprintForge-win-x64-portable
@@ -181,17 +137,16 @@ jobs:
           name: SprintForge-Installer
           path: dist/installer
 
-      - name: Download Linux binary
-        uses: actions/download-artifact@v4
-        with:
-          name: SprintForge-linux-x64-portable
-          path: dist/linux
-
       - name: Download MAUI Windows build
         uses: actions/download-artifact@v4
         with:
           name: SprintForge-maui-win
           path: dist/maui-win
+
+      - name: Zip MAUI build
+        run: |
+          cd dist/maui-win
+          zip -r ../SprintForge-maui-win.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -199,5 +154,5 @@ jobs:
           files: |
             dist/win/SprintForge.exe
             dist/installer/Setup.exe
-            dist/linux/SprintForge
+            dist/SprintForge-maui-win.zip
           generate_release_notes: true
