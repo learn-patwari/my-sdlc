@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.SrsGeneratorPage"
+             Title="SRS Generator"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:SrsGeneratorViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Toolbar -->
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="SRS Generator" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <Label Text="|" TextColor="{StaticResource BorderColor}" VerticalOptions="Center" />
+                <Picker Title="Template" TextColor="{StaticResource TextPrimary}"
+                        BackgroundColor="Transparent" WidthRequest="160" />
+                <Label Text="|" TextColor="{StaticResource BorderColor}" VerticalOptions="Center" />
+                <Button Text="Analyze" Command="{Binding AnalyzeCommand}" />
+                <Button Text="Submit for Approval" Command="{Binding SubmitForApprovalCommand}"
+                        Style="{StaticResource OutlineButton}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <!-- Three-panel layout -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*,*" ColumnSpacing="1">
+
+            <!-- Panel 1: Input Requirements -->
+            <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto"
+                  BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="1. Input Requirements" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <Editor Grid.Row="1"
+                        Text="{Binding InputRequirements}"
+                        Placeholder="Enter or paste requirements here…"
+                        BackgroundColor="{StaticResource BgCard}"
+                        TextColor="{StaticResource TextPrimary}"
+                        Margin="16" />
+                <HorizontalStackLayout Grid.Row="2" Padding="16,8" Spacing="8">
+                    <Label Text="{Binding WordCount, StringFormat='{0} words'}"
+                           Style="{StaticResource MutedLabel}" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Panel 2: AI Generated Preview -->
+            <Grid Grid.Column="1" RowDefinitions="Auto,*"
+                  BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="2. AI Generated SRS (Preview)" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <ScrollView Grid.Row="1">
+                    <Label Text="{Binding GeneratedSrsPreview}"
+                           TextColor="{StaticResource TextSecondary}"
+                           Margin="16"
+                           FontSize="13"
+                           LineHeight="1.6" />
+                </ScrollView>
+            </Grid>
+
+            <!-- Panel 3: Diff Viewer -->
+            <Grid Grid.Column="2" RowDefinitions="Auto,*"
+                  BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="3. Diff Viewer" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <CollectionView Grid.Row="1" ItemsSource="{Binding DiffLines}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:DiffLine">
+                            <Grid BackgroundColor="{Binding BackgroundColor}" Padding="12,8">
+                                <Label Text="{Binding Text}"
+                                       TextColor="{Binding ForegroundColor}"
+                                       FontSize="12"
+                                       FontFamily="Courier New" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</ContentPage>

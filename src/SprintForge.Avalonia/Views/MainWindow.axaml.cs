@@ -1,5 +1,5 @@
 using Avalonia.Controls;
-using SprintForge.Avalonia.ViewModels;
+using SprintForge.ViewModels;
 
 namespace SprintForge.Avalonia.Views;
 

@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
-using SprintForge.Avalonia.ViewModels;
+using SprintForge.ViewModels;
 
 namespace SprintForge.Avalonia.Views;
 

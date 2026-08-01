@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.RepoAnalyzerPage"
+             Title="Repo Analyzer"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:RepoAnalyzerViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Repo Analyzer" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <Button Text="Scan" Command="{Binding ScanCommand}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="240,*,280" ColumnSpacing="1">
+
+            <!-- File tree -->
+            <Grid Grid.Column="0" RowDefinitions="Auto,*" BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="Project Explorer" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <CollectionView Grid.Row="1" ItemsSource="{Binding RepositoryEntries}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:RepositoryEntry">
+                            <Label Text="{Binding Name}"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="13"
+                                   Padding="16,8" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- Dependency graph placeholder -->
+            <Border Grid.Column="1" BackgroundColor="{StaticResource BgCard}" Padding="24">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="Dependency Graph"
+                           Style="{StaticResource SubHeadingLabel}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Scan a repository to visualise dependencies"
+                           Style="{StaticResource MutedLabel}"
+                           HorizontalOptions="Center" />
+                    <Button Text="Scan Repository" Command="{Binding ScanCommand}"
+                            HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Code insights -->
+            <Grid Grid.Column="2" RowDefinitions="Auto,*" BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="Code Insights" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <ScrollView Grid.Row="1">
+                    <VerticalStackLayout Spacing="16" Margin="16">
+                        <Border Style="{StaticResource Card}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Complexity" Style="{StaticResource MutedLabel}" />
+                                <Label Text="{Binding Complexity}"
+                                       FontFamily="InterBold" FontSize="24"
+                                       TextColor="{StaticResource Error}" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Style="{StaticResource Card}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Duplication" Style="{StaticResource MutedLabel}" />
+                                <Label Text="{Binding Duplication}"
+                                       FontFamily="InterBold" FontSize="24"
+                                       TextColor="{StaticResource Warning}" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Style="{StaticResource Card}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Test Coverage" Style="{StaticResource MutedLabel}" />
+                                <Label Text="{Binding TestCoverage}"
+                                       FontFamily="InterBold" FontSize="24"
+                                       TextColor="{StaticResource Success}" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Style="{StaticResource Card}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Technical Debt" Style="{StaticResource MutedLabel}" />
+                                <Label Text="{Binding TechnicalDebt}"
+                                       FontFamily="InterBold" FontSize="24"
+                                       TextColor="{StaticResource Warning}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</ContentPage>

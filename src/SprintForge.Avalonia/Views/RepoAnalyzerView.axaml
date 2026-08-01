@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:SprintForge.Avalonia.ViewModels"
+             xmlns:vm="using:SprintForge.ViewModels"
              xmlns:conv="using:SprintForge.Avalonia.Converters"
              x:Class="SprintForge.Avalonia.Views.RepoAnalyzerView"
              Background="{StaticResource BgSurfaceBrush}">

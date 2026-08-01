@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.UnitTestsPage"
+             Title="Unit Tests"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:PlaceholderViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Unit Test Generator" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <Button Text="Generate Tests" />
+                <Button Text="Submit for Approval" Style="{StaticResource OutlineButton}" />
+            </HorizontalStackLayout>
+        </Border>
+        <Border Grid.Row="1" Padding="24" BackgroundColor="{StaticResource BgSurface}">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                <Label Text="Unit Test Generator" Style="{StaticResource HeadingLabel}" HorizontalOptions="Center" />
+                <Label Text="Select a service and generate test cases with AI"
+                       Style="{StaticResource MutedLabel}" HorizontalOptions="Center" />
+                <Button Text="Generate Tests" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

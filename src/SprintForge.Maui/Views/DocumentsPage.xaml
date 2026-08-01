@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.DocumentsPage"
+             Title="Documents"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:DocumentsViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Documents" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <SearchBar Placeholder="Search documents…"
+                           BackgroundColor="Transparent"
+                           TextColor="{StaticResource TextPrimary}"
+                           WidthRequest="240" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Documents}" Margin="24">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:DocumentEntry">
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="{Binding Name}" FontFamily="InterSemiBold" FontSize="14"
+                                       TextColor="{StaticResource TextPrimary}" />
+                                <Label Text="{Binding TypeLabel}" Style="{StaticResource MutedLabel}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1" Text="{Binding ModifiedAt}"
+                                   Style="{StaticResource MutedLabel}" VerticalOptions="Center" />
+                            <Button Grid.Column="2" Text="Open"
+                                    Style="{StaticResource OutlineButton}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DocumentsViewModel}}, Path=OpenCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

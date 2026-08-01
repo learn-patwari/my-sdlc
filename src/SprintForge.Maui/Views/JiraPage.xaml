@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.JiraPage"
+             Title="Jira"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:JiraViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Jira Integration" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <Button Text="Sync" Command="{Binding RefreshCommand}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1" Padding="24">
+            <VerticalStackLayout Spacing="16">
+
+                <!-- Connection status -->
+                <Border Style="{StaticResource Card}">
+                    <HorizontalStackLayout Spacing="12">
+                        <Border Style="{StaticResource StatusChipSuccess}">
+                            <Label Text="Connected" TextColor="{StaticResource Success}" FontSize="12" />
+                        </Border>
+                        <Label Text="{Binding ServerUrl}" TextColor="{StaticResource TextSecondary}"
+                               VerticalOptions="Center" FontSize="13" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Issues list -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Issues" Style="{StaticResource SubHeadingLabel}" />
+                        <CollectionView ItemsSource="{Binding Issues}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="vm:JiraIssueViewModel">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,8" ColumnSpacing="12">
+                                        <Label Grid.Column="0" Text="{Binding Key}"
+                                               TextColor="{StaticResource AccentBlue}" FontSize="12"
+                                               FontFamily="InterSemiBold" />
+                                        <Label Grid.Column="1" Text="{Binding Summary}"
+                                               TextColor="{StaticResource TextPrimary}" FontSize="13" />
+                                        <Border Grid.Column="2" Padding="8,4"
+                                                BackgroundColor="{Binding StatusColor}"
+                                                StrokeShape="RoundRectangle 4">
+                                            <Label Text="{Binding Status}" FontSize="11" TextColor="White" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

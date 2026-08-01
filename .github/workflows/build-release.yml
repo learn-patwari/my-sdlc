@@ -52,6 +52,48 @@ jobs:
           name: test-results-linux
           path: "**/*.trx"
 
+  build-maui:
+    name: Build (Windows — MAUI)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install MAUI workload
+        run: dotnet workload install maui-windows
+
+      - name: Restore
+        run: dotnet restore src/SprintForge.Maui/SprintForge.Maui.csproj -p:TargetFrameworks=net8.0-windows10.0.19041.0
+
+      - name: Build MAUI (Windows)
+        run: |
+          dotnet build src/SprintForge.Maui/SprintForge.Maui.csproj `
+            -c Release `
+            -f net8.0-windows10.0.19041.0 `
+            --no-restore
+
+      - name: Publish MAUI win-x64
+        run: |
+          dotnet publish src/SprintForge.Maui/SprintForge.Maui.csproj `
+            -c Release `
+            -f net8.0-windows10.0.19041.0 `
+            -p:WindowsPackageType=None `
+            -p:PublishSingleFile=false `
+            -o publish/SprintForge-maui-win
+
+      - name: Upload MAUI Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SprintForge-maui-win
+          path: publish/SprintForge-maui-win/
+          if-no-files-found: error
+
   build:
     name: Build (Windows — WPF + Avalonia)
     runs-on: windows-latest
@@ -66,10 +108,16 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Restore
-        run: dotnet restore SprintForge.sln
+        run: dotnet restore SprintForge.sln --ignore-failed-sources
 
-      - name: Build (all projects)
-        run: dotnet build SprintForge.sln -c Release --no-restore
+      - name: Build (WPF + Avalonia + shared layers)
+        run: |
+          dotnet build src/SprintForge.Domain/SprintForge.Domain.csproj -c Release --no-restore
+          dotnet build src/SprintForge.Application/SprintForge.Application.csproj -c Release --no-restore
+          dotnet build src/SprintForge.Infrastructure/SprintForge.Infrastructure.csproj -c Release --no-restore
+          dotnet build src/SprintForge.ViewModels/SprintForge.ViewModels.csproj -c Release --no-restore
+          dotnet build src/SprintForge.Wpf/SprintForge.Wpf.csproj -c Release --no-restore
+          dotnet build src/SprintForge.Avalonia/SprintForge.Avalonia.csproj -c Release --no-restore
 
       - name: Test (cross-platform projects)
         run: dotnet test tests/SprintForge.Tests/SprintForge.Tests.csproj -c Release --no-build --logger "trx;LogFileName=test-results.trx"
@@ -113,7 +161,7 @@ jobs:
           path: "**/*.trx"
 
   release:
-    needs: [build, build-cross-platform]
+    needs: [build, build-cross-platform, build-maui]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
 
@@ -138,6 +186,12 @@ jobs:
         with:
           name: SprintForge-linux-x64-portable
           path: dist/linux
+
+      - name: Download MAUI Windows build
+        uses: actions/download-artifact@v4
+        with:
+          name: SprintForge-maui-win
+          path: dist/maui-win
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

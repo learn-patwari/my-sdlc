@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.AuditCenterPage"
+             Title="Audit Center"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:AuditCenterViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Search + filters -->
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <SearchBar Placeholder="Search audit logs…"
+                           Text="{Binding SearchText}"
+                           BackgroundColor="Transparent"
+                           TextColor="{StaticResource TextPrimary}"
+                           WidthRequest="300" />
+                <Picker Title="Module" TextColor="{StaticResource TextPrimary}"
+                        BackgroundColor="Transparent" WidthRequest="140"
+                        ItemsSource="{Binding ModuleFilters}"
+                        SelectedItem="{Binding SelectedModuleFilter}" />
+                <Button Text="Export" Style="{StaticResource OutlineButton}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <!-- Audit log table -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding AuditEntries}">
+            <CollectionView.Header>
+                <Grid ColumnDefinitions="*,140,140,120" Padding="16,10"
+                      BackgroundColor="{StaticResource BgElevated}">
+                    <Label Grid.Column="0" Text="Action" Style="{StaticResource MutedLabel}" />
+                    <Label Grid.Column="1" Text="Module" Style="{StaticResource MutedLabel}" />
+                    <Label Grid.Column="2" Text="Timestamp" Style="{StaticResource MutedLabel}" />
+                    <Label Grid.Column="3" Text="Status" Style="{StaticResource MutedLabel}" />
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:AuditEntryViewModel">
+                    <Grid ColumnDefinitions="*,140,140,120" Padding="16,10">
+                        <Label Grid.Column="0" Text="{Binding Action}"
+                               TextColor="{StaticResource TextPrimary}" FontSize="13" />
+                        <Label Grid.Column="1" Text="{Binding Module}"
+                               TextColor="{StaticResource AccentPurple}" FontSize="12" />
+                        <Label Grid.Column="2" Text="{Binding Timestamp}"
+                               Style="{StaticResource MutedLabel}" />
+                        <Border Grid.Column="3" Padding="8,4"
+                                BackgroundColor="{Binding StatusBg}"
+                                StrokeShape="RoundRectangle 4">
+                            <Label Text="{Binding Status}" FontSize="11" TextColor="White" />
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

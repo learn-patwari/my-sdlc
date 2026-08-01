@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.SddPage"
+             Title="Design Doc (SDD)"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:SddViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Design Doc (SDD)" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <Button Text="Generate" Command="{Binding GenerateSddCommand}" />
+                <Button Text="Submit for Approval" Command="{Binding SubmitForApprovalCommand}"
+                        Style="{StaticResource OutlineButton}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="200,*,280" ColumnSpacing="1">
+
+            <!-- Service selector -->
+            <Grid Grid.Column="0" RowDefinitions="Auto,Auto,*" BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="Services" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <SearchBar Grid.Row="1" Placeholder="Search services…"
+                           BackgroundColor="{StaticResource BgCard}"
+                           TextColor="{StaticResource TextPrimary}"
+                           Margin="8,4" />
+                <CollectionView Grid.Row="2" ItemsSource="{Binding Services}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedService}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Label Text="{Binding .}"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="13"
+                                   Padding="16,10" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- Test cases and coverage -->
+            <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="Generated Test Cases" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <CollectionView Grid.Row="1" ItemsSource="{Binding TestCases}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Label Text="{Binding .}"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="12"
+                                   Padding="16,8" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Border Grid.Row="2" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <HorizontalStackLayout Spacing="24">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Coverage" Style="{StaticResource MutedLabel}" />
+                            <Label Text="{Binding CoveragePercent, StringFormat='{0}%'}"
+                                   FontSize="24" FontFamily="InterBold"
+                                   TextColor="{StaticResource Success}" />
+                        </VerticalStackLayout>
+                        <Button Text="Generate Tests" Command="{Binding GenerateTestsCommand}" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- SDD preview -->
+            <Grid Grid.Column="2" RowDefinitions="Auto,*" BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="SDD Preview" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <ScrollView Grid.Row="1">
+                    <Label Text="{Binding SddPreview}"
+                           TextColor="{StaticResource TextSecondary}"
+                           Margin="16"
+                           FontSize="13"
+                           LineHeight="1.6" />
+                </ScrollView>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</ContentPage>

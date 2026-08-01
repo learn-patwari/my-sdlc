@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:SprintForge.Maui.Views"
+       x:Class="SprintForge.Maui.AppShell"
+       Title="SprintForge Beta"
+       FlyoutBehavior="Flyout"
+       FlyoutWidth="220"
+       FlyoutBackgroundColor="{StaticResource SidebarBg}">
+
+    <Shell.FlyoutHeader>
+        <Grid Padding="16,20,16,16" BackgroundColor="{StaticResource SidebarBg}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Text="sprintforge"
+                   Grid.Row="0"
+                   FontFamily="InterSemiBold"
+                   FontSize="18"
+                   TextColor="{StaticResource TextPrimary}" />
+            <Label Text="AI-Powered SDLC Copilot"
+                   Grid.Row="1"
+                   FontSize="11"
+                   TextColor="{StaticResource TextMuted}" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <Shell.Resources>
+        <Style TargetType="FlyoutItem">
+            <Setter Property="Shell.FlyoutItemIsVisible" Value="True" />
+        </Style>
+    </Shell.Resources>
+
+    <FlyoutItem Title="Dashboard" Icon="icon_dashboard.png" Route="dashboard">
+        <ShellContent ContentTemplate="{DataTemplate views:DashboardPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="SRS Generator" Icon="icon_srs.png" Route="srs">
+        <ShellContent ContentTemplate="{DataTemplate views:SrsGeneratorPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Architecture (SAD)" Icon="icon_sad.png" Route="sad">
+        <ShellContent ContentTemplate="{DataTemplate views:SadPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Design Doc (SDD)" Icon="icon_sdd.png" Route="sdd">
+        <ShellContent ContentTemplate="{DataTemplate views:SddPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Sprint Planning" Icon="icon_sprint.png" Route="sprint">
+        <ShellContent ContentTemplate="{DataTemplate views:SprintPlanningPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Repo Analyzer" Icon="icon_repo.png" Route="repo">
+        <ShellContent ContentTemplate="{DataTemplate views:RepoAnalyzerPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Unit Tests" Icon="icon_tests.png" Route="tests">
+        <ShellContent ContentTemplate="{DataTemplate views:UnitTestsPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Jira" Icon="icon_jira.png" Route="jira">
+        <ShellContent ContentTemplate="{DataTemplate views:JiraPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Documents" Icon="icon_docs.png" Route="documents">
+        <ShellContent ContentTemplate="{DataTemplate views:DocumentsPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Audit Center" Icon="icon_audit.png" Route="audit">
+        <ShellContent ContentTemplate="{DataTemplate views:AuditCenterPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Approvals" Icon="icon_approvals.png" Route="approvals">
+        <ShellContent ContentTemplate="{DataTemplate views:ApprovalsPage}" Route="main" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Settings" Icon="icon_settings.png" Route="settings">
+        <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="main" />
+    </FlyoutItem>
+
+</Shell>

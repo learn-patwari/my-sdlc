@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.SprintPlanningPage"
+             Title="Sprint Planning"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:SprintPlanningViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- Toolbar -->
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Sprint Planning" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <Picker Title="Select Sprint" TextColor="{StaticResource TextPrimary}"
+                        BackgroundColor="Transparent" WidthRequest="240" />
+                <Button Text="Generate Plan" Command="{Binding GeneratePlanCommand}" />
+                <Button Text="Push to Jira" Command="{Binding PushToJiraCommand}"
+                        Style="{StaticResource OutlineButton}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <!-- Capacity bar -->
+        <Border Grid.Row="1" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+            <HorizontalStackLayout Spacing="24">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Capacity" Style="{StaticResource MutedLabel}" />
+                    <Label Text="{Binding TotalCapacityPoints, StringFormat='{0} pts'}"
+                           FontFamily="InterSemiBold" TextColor="{StaticResource TextPrimary}" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Committed" Style="{StaticResource MutedLabel}" />
+                    <Label Text="{Binding CommittedPoints, StringFormat='{0} pts'}"
+                           FontFamily="InterSemiBold" TextColor="{StaticResource AccentBlue}" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Remaining" Style="{StaticResource MutedLabel}" />
+                    <Label Text="{Binding RemainingPoints, StringFormat='{0} pts'}"
+                           FontFamily="InterSemiBold" TextColor="{StaticResource TextSecondary}" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Utilization" Style="{StaticResource MutedLabel}" />
+                    <Label Text="{Binding UtilizationPercent, StringFormat='{0}%'}"
+                           FontFamily="InterSemiBold" TextColor="{StaticResource Warning}" />
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+        </Border>
+
+        <!-- Backlog tree -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,*" BackgroundColor="{StaticResource BgCard}">
+            <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                <Label Text="Sprint Backlog" Style="{StaticResource SubHeadingLabel}" />
+            </Border>
+            <CollectionView Grid.Row="1" ItemsSource="{Binding SprintItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:SprintItemViewModel">
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="16,10" ColumnSpacing="12">
+                            <BoxView Grid.Column="0" WidthRequest="{Binding IndentPx}"
+                                     BackgroundColor="Transparent" />
+                            <Label Grid.Column="1" Text="{Binding Title}"
+                                   TextColor="{StaticResource TextPrimary}" FontSize="13" />
+                            <Label Grid.Column="2" Text="{Binding Assignee}"
+                                   TextColor="{StaticResource TextMuted}" FontSize="12" />
+                            <Label Grid.Column="3" Text="{Binding Estimate, StringFormat='{0} pts'}"
+                                   TextColor="{StaticResource AccentPurple}" FontSize="12" />
+                            <Border Grid.Column="4" Padding="8,4"
+                                    BackgroundColor="{Binding StatusColor}"
+                                    StrokeShape="RoundRectangle 4">
+                                <Label Text="{Binding Status}" FontSize="11" TextColor="White" />
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.ApprovalsPage"
+             Title="Approvals"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:ApprovalsViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Approvals Center" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <Border Style="{StaticResource StatusChipWarning}">
+                    <Label Text="{Binding PendingCount, StringFormat='{0} pending'}"
+                           TextColor="{StaticResource Warning}" FontSize="12" />
+                </Border>
+                <Button Text="Approve All" Command="{Binding ApproveAllCommand}"
+                        Style="{StaticResource SuccessButton}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding PendingApprovals}" Margin="24">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:ApprovalItemViewModel">
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <VerticalStackLayout Spacing="12">
+
+                            <!-- Header -->
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                    <Label Text="{Binding Title}" FontFamily="InterSemiBold" FontSize="14"
+                                           TextColor="{StaticResource TextPrimary}" />
+                                    <Label Text="{Binding Module}" Style="{StaticResource MutedLabel}" />
+                                </VerticalStackLayout>
+                                <Border Grid.Column="1" Style="{StaticResource StatusChipWarning}"
+                                        VerticalOptions="Start">
+                                    <Label Text="Pending" TextColor="{StaticResource Warning}" FontSize="11" />
+                                </Border>
+                            </Grid>
+
+                            <!-- Diff summary -->
+                            <Label Text="{Binding AiExplanation}"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="13"
+                                   LineHeight="1.5" />
+
+                            <!-- Audit ID -->
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="Audit ID:" Style="{StaticResource MutedLabel}" />
+                                <Label Text="{Binding AuditId}" TextColor="{StaticResource AccentBlue}" FontSize="12" />
+                            </HorizontalStackLayout>
+
+                            <!-- Action buttons -->
+                            <HorizontalStackLayout Spacing="8">
+                                <Button Text="Approve"
+                                        Style="{StaticResource SuccessButton}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ApprovalsViewModel}}, Path=ApproveCommand}"
+                                        CommandParameter="{Binding .}" />
+                                <Button Text="Modify"
+                                        Style="{StaticResource OutlineButton}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ApprovalsViewModel}}, Path=ModifyCommand}"
+                                        CommandParameter="{Binding .}" />
+                                <Button Text="Reject"
+                                        Style="{StaticResource DangerButton}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ApprovalsViewModel}}, Path=RejectCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </HorizontalStackLayout>
+
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

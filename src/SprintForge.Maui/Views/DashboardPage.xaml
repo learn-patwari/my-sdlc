@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.DashboardPage"
+             Title="Dashboard"
+             BackgroundColor="{StaticResource BgSurface}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16">
+
+            <!-- Page heading -->
+            <Label Text="Dashboard"
+                   Style="{StaticResource HeadingLabel}" />
+
+            <!-- KPI Cards row -->
+            <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+
+                <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Requirements" Style="{StaticResource MutedLabel}" />
+                        <Label Text="128" Style="{StaticResource KpiValueLabel}" />
+                        <Border Style="{StaticResource StatusChipSuccess}">
+                            <Label Text="+12 This Sprint" TextColor="{StaticResource Success}" FontSize="11" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Designs" Style="{StaticResource MutedLabel}" />
+                        <Label Text="24" Style="{StaticResource KpiValueLabel}" />
+                        <Border Style="{StaticResource StatusChipSuccess}">
+                            <Label Text="+5" TextColor="{StaticResource Success}" FontSize="11" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="2" Grid.Row="0" Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Open Jira Issues" Style="{StaticResource MutedLabel}" />
+                        <Label Text="56" Style="{StaticResource KpiValueLabel}" />
+                        <Border Style="{StaticResource StatusChipError}">
+                            <Label Text="12 High Priority" TextColor="{StaticResource Error}" FontSize="11" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Code Services" Style="{StaticResource MutedLabel}" />
+                        <Label Text="36" Style="{StaticResource KpiValueLabel}" />
+                        <Border Style="{StaticResource StatusChipWarning}">
+                            <Label Text="3 Impacted" TextColor="{StaticResource Warning}" FontSize="11" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Unit Tests" Style="{StaticResource MutedLabel}" />
+                        <Label Text="1,248" Style="{StaticResource KpiValueLabel}" />
+                        <Label Text="Coverage: 82%" TextColor="{StaticResource Success}" FontSize="11" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="2" Grid.Row="1" Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Sprint Progress" Style="{StaticResource MutedLabel}" />
+                        <Label Text="68%" Style="{StaticResource KpiValueLabel}" TextColor="{StaticResource AccentPurple}" />
+                        <Border Style="{StaticResource StatusChipSuccess}">
+                            <Label Text="On Track" TextColor="{StaticResource Success}" FontSize="11" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- AI Recommendations -->
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="AI Recommendations" Style="{StaticResource SubHeadingLabel}" />
+
+                    <CollectionView ItemsSource="{Binding AiRecommendations}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,6" ColumnDefinitions="Auto,*">
+                                    <Label Grid.Column="0" Text="•" TextColor="{StaticResource AccentPurple}" Margin="0,0,8,0" />
+                                    <Label Grid.Column="1" Text="{Binding .}" TextColor="{StaticResource TextSecondary}" FontSize="13" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Recent Activity -->
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Recent Activity" Style="{StaticResource SubHeadingLabel}" />
+                    <CollectionView ItemsSource="{Binding RecentActivity}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ActivityItem">
+                                <Grid ColumnDefinitions="*,Auto" Padding="0,6">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                        <Label Text="{Binding Description}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
+                                        <Label Text="{Binding Module}" FontSize="11" TextColor="{StaticResource AccentPurple}" />
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1" Text="{Binding TimeAgo}" Style="{StaticResource MutedLabel}" VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

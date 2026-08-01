@@ -4,7 +4,7 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SprintForge.Application.Configuration;
-using SprintForge.Avalonia.ViewModels;
+using SprintForge.ViewModels;
 using SprintForge.Avalonia.Views;
 using SprintForge.Domain.Configuration;
 using SprintForge.Infrastructure;

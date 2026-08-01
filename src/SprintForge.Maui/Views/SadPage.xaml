@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.SadPage"
+             Title="Architecture (SAD)"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:SadViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Architecture (SAD)" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <Button Text="Generate" Command="{Binding GenerateCommand}" />
+                <Button Text="Submit for Approval" Command="{Binding SubmitForApprovalCommand}"
+                        Style="{StaticResource OutlineButton}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="240,*,280" ColumnSpacing="1">
+
+            <!-- Component tree -->
+            <Grid Grid.Column="0" RowDefinitions="Auto,*" BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="Components" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <CollectionView Grid.Row="1" ItemsSource="{Binding Components}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Label Text="{Binding .}"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="13"
+                                   Padding="16,8" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- Diagram canvas placeholder -->
+            <Border Grid.Column="1" BackgroundColor="{StaticResource BgCard}" Padding="24">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="Architecture Diagram"
+                           Style="{StaticResource SubHeadingLabel}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Interactive diagram rendered after generation"
+                           Style="{StaticResource MutedLabel}"
+                           HorizontalOptions="Center" />
+                    <Button Text="Generate Architecture" Command="{Binding GenerateCommand}"
+                            HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Document preview -->
+            <Grid Grid.Column="2" RowDefinitions="Auto,*" BackgroundColor="{StaticResource BgCard}">
+                <Border Grid.Row="0" BackgroundColor="{StaticResource BgElevated}" Padding="16,10">
+                    <Label Text="Document Preview" Style="{StaticResource SubHeadingLabel}" />
+                </Border>
+                <ScrollView Grid.Row="1">
+                    <Label Text="{Binding DocumentPreview}"
+                           TextColor="{StaticResource TextSecondary}"
+                           Margin="16"
+                           FontSize="13"
+                           LineHeight="1.6" />
+                </ScrollView>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</ContentPage>

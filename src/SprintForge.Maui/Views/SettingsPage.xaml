@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SprintForge.ViewModels;assembly=SprintForge.ViewModels"
+             x:Class="SprintForge.Maui.Views.SettingsPage"
+             Title="Settings"
+             BackgroundColor="{StaticResource BgSurface}">
+    <x:DataType>vm:SettingsViewModel</x:DataType>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0" BackgroundColor="{StaticResource BgCard}"
+                Stroke="{StaticResource BorderColor}" StrokeThickness="0,0,0,1" Padding="16,10">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Settings" Style="{StaticResource HeadingLabel}" VerticalOptions="Center" />
+                <Button Text="Save Changes" Command="{Binding SaveProfileCommand}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="200,*" ColumnSpacing="1">
+
+            <!-- Tab list -->
+            <VerticalStackLayout Grid.Column="0" BackgroundColor="{StaticResource BgCard}" Spacing="0">
+                <Button Text="General" Command="{Binding SwitchTabCommand}" CommandParameter="General"
+                        BackgroundColor="{Binding IsGeneralTabActive, Converter={x:Static converters:BoolToColorConverter.Instance}, ConverterParameter='general'}"
+                        HorizontalOptions="Fill" />
+                <Button Text="Jira" Command="{Binding SwitchTabCommand}" CommandParameter="Jira"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="Fill" />
+                <Button Text="AI Provider" Command="{Binding SwitchTabCommand}" CommandParameter="AI"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="Fill" />
+                <Button Text="Repositories" Command="{Binding SwitchTabCommand}" CommandParameter="Repositories"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="Fill" />
+                <Button Text="Sprint" Command="{Binding SwitchTabCommand}" CommandParameter="Sprint"
+                        BackgroundColor="Transparent"
+                        HorizontalOptions="Fill" />
+            </VerticalStackLayout>
+
+            <!-- Tab content -->
+            <ScrollView Grid.Column="1" Padding="24">
+                <VerticalStackLayout Spacing="16">
+
+                    <!-- General -->
+                    <Border Style="{StaticResource Card}"
+                            IsVisible="{Binding IsGeneralTabActive}">
+                        <VerticalStackLayout Spacing="16">
+                            <Label Text="Profile" Style="{StaticResource SubHeadingLabel}" />
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Profile Name" Style="{StaticResource MutedLabel}" />
+                                <Entry Text="{Binding ProfileName}" Placeholder="Profile name" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Working Directory" Style="{StaticResource MutedLabel}" />
+                                <Entry Text="{Binding WorkingDirectory}" Placeholder="Path…" />
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Jira -->
+                    <Border Style="{StaticResource Card}"
+                            IsVisible="{Binding IsJiraTabActive}">
+                        <VerticalStackLayout Spacing="16">
+                            <Label Text="Jira Integration" Style="{StaticResource SubHeadingLabel}" />
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Server URL" Style="{StaticResource MutedLabel}" />
+                                <Entry Text="{Binding JiraServerUrl}" Placeholder="https://your-org.atlassian.net" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Username" Style="{StaticResource MutedLabel}" />
+                                <Entry Text="{Binding JiraUsername}" Placeholder="user@example.com" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="API Token" Style="{StaticResource MutedLabel}" />
+                                <!-- Not bound to VM — token handled securely in code-behind -->
+                                <Entry x:Name="JiraApiTokenEntry" IsPassword="True"
+                                       Placeholder="••••••••••••••"
+                                       BackgroundColor="{StaticResource BgCard}"
+                                       TextColor="{StaticResource TextPrimary}" />
+                            </VerticalStackLayout>
+                            <Button Text="Test Connection" Command="{Binding TestJiraConnectionCommand}"
+                                    Style="{StaticResource OutlineButton}" HorizontalOptions="Start" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- AI Provider -->
+                    <Border Style="{StaticResource Card}"
+                            IsVisible="{Binding IsAiTabActive}">
+                        <VerticalStackLayout Spacing="16">
+                            <Label Text="AI Provider" Style="{StaticResource SubHeadingLabel}" />
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Vendor" Style="{StaticResource MutedLabel}" />
+                                <Picker Title="Select vendor"
+                                        TextColor="{StaticResource TextPrimary}"
+                                        BackgroundColor="{StaticResource BgCard}"
+                                        ItemsSource="{Binding AiVendors}"
+                                        SelectedItem="{Binding AiVendor}" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Model" Style="{StaticResource MutedLabel}" />
+                                <Entry Text="{Binding AiModel}" Placeholder="e.g. claude-sonnet-5" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="API Key" Style="{StaticResource MutedLabel}" />
+                                <!-- Not bound to VM — key handled securely in code-behind -->
+                                <Entry x:Name="AiApiKeyEntry" IsPassword="True"
+                                       Placeholder="••••••••••••••"
+                                       BackgroundColor="{StaticResource BgCard}"
+                                       TextColor="{StaticResource TextPrimary}" />
+                            </VerticalStackLayout>
+                            <Button Text="Test AI Connection" Command="{Binding TestAiConnectionCommand}"
+                                    Style="{StaticResource OutlineButton}" HorizontalOptions="Start" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+        </Grid>
+    </Grid>
+</ContentPage>
